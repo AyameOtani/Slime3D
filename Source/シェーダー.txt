@@ -1,0 +1,34 @@
+DxLib付属のTool/ShaderCompilerで変換
+
+SlimeRefractionVS.hlsl → 頂点シェーダー → SlimeRefractionVS.vso
+SlimeRefractionPS.hlsl → ピクセルシェーダー → SlimeRefractionPS.pso
+
+
+完成後の配置：
+
+Shader/
+├─ CompileShader.bat
+├─ ShaderCompiler.exe
+├─ SlimeRefractionVS.hlsl
+├─ SlimeRefractionPS.hlsl
+├─SlimeRefractionVS.vso
+└─SlimeRefractionPS.pso
+
+
+
+Visual Studioのソリューションエクスプローラーで、
+
+SlimeRefractionVS.hlsl
+SlimeRefractionPS.hlsl
+
+それぞれに以下を設定します。
+
+ファイルを右クリック
+「プロパティ」を選択
+「全般」を開く
+「項目の種類」を変更
+
+HLSL コンパイラ
+から、
+ビルドに含めない
+に設定しないとエラーが出る
