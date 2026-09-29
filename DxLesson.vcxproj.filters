@@ -66,6 +66,9 @@
     <ClCompile Include="Source\SlimeModel.cpp">
       <Filter>ソース ファイル\Slime</Filter>
     </ClCompile>
+    <ClCompile Include="Source\EffectManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Collision.h">
@@ -115,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="Source\SlimeModel.h">
       <Filter>ソース ファイル\Slime</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EffectManager.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

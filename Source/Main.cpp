@@ -15,6 +15,7 @@
 
 // Master クラスの静的メンバ変数定義
 GameManager* Master::mpGameManager = nullptr;
+EffectManager* Master::mpEffectManager = nullptr;
 
 
 /**
@@ -33,6 +34,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	// サイズを合わせる
 	SetGraphMode(Utility::SCREEN_WIDTH, Utility::SCREEN_HEIGHT, 0);  // モニター解像度に合わせる
 
+	// DirectX11を使用するようにする。(DirectX9も可、一部機能不可)
+	// Effekseerを使用するには必ず設定する。
+	SetUseDirect3DVersion(DX_DIRECT3D_11);
+
 	// DXライブラリ初期化
 	if(DxLib_Init() == -1)
 	{
@@ -42,6 +47,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	// Manager関係の初期化
 	//Master::mpGameManager->Initialize();
 	Master::mpGameManager = new GameManager();
+
+	Master::mpEffectManager = new EffectManager();
+
+
+	// ============================================
+	// エフェクトのセットアップ
+	// ============================================
+	if (!Master::mpEffectManager->Setup())
+	{
+		return -1;
+	}
+
+	int handle = Master::mpEffectManager->LoadEffect("Resource/Effect/Explosion_01.efkefc");
+	Master::mpEffectManager->SetPosEffect3D(handle, 0.0f, 1.0f, 0.0);
+	Master::mpEffectManager->SetScaleEffect3D(handle, 1.0f, 1.0f, 1.0f);
+
 
 	// 描画先画面を裏画面に設定する
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -116,6 +137,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 
 
+	// 何でもいいので画像を読み込む。
+	int grBackgroundHandle = LoadGraph(_T("Resource/Background.png"));
+
 
 	// ゲームのメインループ
 	// ProcessMessage() == 0  ウィンドウの☓ボタン押されていないかどうか
@@ -132,9 +156,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		// Managerクラスの更新
 		Master::mpGameManager->Update();
 
-
 		// SceneManagerの描画
 		Master::mpGameManager->GetSceneManager()->Draw();
+		static int count = 120;
+		count++;
+		if (count % 120 == 0)
+		{
+			Master::mpEffectManager->PlayEffect3D(handle);
+		}
+		// エフェクトの更新
+		Master::mpEffectManager->EffectUpdate3D();
+
+		// エフェクトの描画
+		Master::mpEffectManager->EffectDraw3D();
 
 
 		// 裏画面の内容を表画面に映す
@@ -162,6 +196,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	// Manager関係の終了処理
 	delete Master::mpGameManager;
 
+	// エフェクトの終了
+	Master::mpEffectManager->Release();
 
 	// DXライブラリ使用の終了
 	DxLib_End();

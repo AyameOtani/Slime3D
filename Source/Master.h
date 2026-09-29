@@ -2,6 +2,7 @@
 
 #include "ObjectManager.h"
 #include "GameManager.h"
+#include "EffectManager.h"
 
 
 //
@@ -20,5 +21,8 @@ public:
 
 	static ObjectManager* mpObjectManager;
 	static GameManager* mpGameManager; // ゲームマネージャーのポインタ
+
+
+	static EffectManager* mpEffectManager; // エフェクトマネージャーのポインタ
 
 };
