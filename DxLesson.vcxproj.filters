@@ -63,10 +63,13 @@
     <ClCompile Include="Source\TextureAnimation.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\EffectManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="Source\SlimeModel.cpp">
       <Filter>ソース ファイル\Slime</Filter>
     </ClCompile>
-    <ClCompile Include="Source\EffectManager.cpp">
+    <ClCompile Include="Source\Stage.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -116,10 +119,13 @@
     <ClInclude Include="Source\TextureAnimation.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Source\EffectManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
     <ClInclude Include="Source\SlimeModel.h">
       <Filter>ソース ファイル\Slime</Filter>
     </ClInclude>
-    <ClInclude Include="Source\EffectManager.h">
+    <ClInclude Include="Source\Stage.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

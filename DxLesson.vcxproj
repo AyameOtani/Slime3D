@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
     <ClCompile Include="Source\EffectManager.cpp" />
     <ClCompile Include="Source\FontManager.cpp" />
@@ -33,11 +34,13 @@
     <ClCompile Include="Source\SceneManager.cpp" />
     <ClCompile Include="Source\SlimeModel.cpp" />
     <ClCompile Include="Source\SoundManager.cpp" />
+    <ClCompile Include="Source\Stage.cpp" />
     <ClCompile Include="Source\Texture.cpp" />
     <ClCompile Include="Source\TextureAnimation.cpp" />
     <ClCompile Include="Source\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Collision.h" />
     <ClInclude Include="Source\EffectManager.h" />
     <ClInclude Include="Source\FontManager.h" />
@@ -51,6 +54,7 @@
     <ClInclude Include="Source\SceneManager.h" />
     <ClInclude Include="Source\SlimeModel.h" />
     <ClInclude Include="Source\SoundManager.h" />
+    <ClInclude Include="Source\Stage.h" />
     <ClInclude Include="Source\Texture.h" />
     <ClInclude Include="Source\TextureAnimation.h" />
     <ClInclude Include="Source\TitleScene.h" />
