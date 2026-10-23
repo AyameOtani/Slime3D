@@ -6,7 +6,8 @@ Camera::Camera()
     mStageZ(0.0f),
     mFollowRate(0.045f),
     mPosition(VGet(0.0f, 0.0f, 0.0f)),
-    mTarget(VGet(0.0f, 0.0f, 0.0f))
+    mTarget(VGet(0.0f, 0.0f, 0.0f)),
+    m_CameraAngle(CAMERA_ANGLE::ANGLE_A)
 {
 }
 
@@ -50,9 +51,28 @@ void Camera::Update( const VECTOR& playerPosition)
 void Camera::RebuildCamera()
 {
     // --------------------------------------------------------
+    // カメラアングル切り替え
+    // --------------------------------------------------------
+    if (CheckHitKey(KEY_INPUT_8))
+    {
+        m_CameraAngle = Camera::CAMERA_ANGLE::ANGLE_A;
+    }
+    else if (CheckHitKey(KEY_INPUT_9))
+    {
+        m_CameraAngle = Camera::CAMERA_ANGLE::ANGLE_B;
+    }
+    else if (CheckHitKey(KEY_INPUT_0))
+    {
+        m_CameraAngle = Camera::CAMERA_ANGLE::ANGLE_C;
+    }
+
+    // --------------------------------------------------------
     // カメラ位置
     // --------------------------------------------------------
-    mPosition = VGet( mCameraX + CAMERA_OFFSET_X, CAMERA_Y, mStageZ - CAMERA_DISTANCE_Z );
+    VECTOR posOffset = m_CameraAngleSettingDataList[
+        UINT_CAST(m_CameraAngle)].positionOffset;;
+    
+    mPosition = VGet( mCameraX + posOffset.x, posOffset.y, mStageZ - posOffset.z);
 
     // --------------------------------------------------------
     // カメラが見る場所
@@ -60,7 +80,10 @@ void Camera::RebuildCamera()
     // プレイヤーより少し右側を見ることで
     // 進行方向を広く表示する
     // --------------------------------------------------------
-    mTarget = VGet( mCameraX + TARGET_OFFSET_X, TARGET_Y, mStageZ );
+    VECTOR targetOffset = m_CameraAngleSettingDataList[
+        UINT_CAST(m_CameraAngle)].targetOffset;;
+
+    mTarget = VGet(mCameraX + targetOffset.x, targetOffset.y, mStageZ + targetOffset.z);
 }
 
 //*---------------------------------------------------------------------------------------
@@ -71,22 +94,55 @@ void Camera::RebuildCamera()
 //*----------------------------------------------------------------------------------------
 void Camera::SetupCameraAngleSettingData()
 {
+    /* 
+    * アングルA 
+    */
     m_CameraAngleSettingDataList[UINT_CAST(CAMERA_ANGLE::ANGLE_A)] =
     {
-        VGet(-0.80f, 10.0f, 9.0f),
-        VGet( 0.8f,  1.15f, 0.0f),
+        VGet(
+            -0.80f,     // カメラをプレイヤーより少し左へ  
+            10.0f,      // カメラの高さ
+            9.0f        // プレイヤーからカメラまでの奥行き
+        ),
+        VGet( 
+            0.8f,       // プレイヤーより少し右側を見る
+            1.15f,      // 注視点の高さ
+            0.0f        // 変更なし
+        ),
     };   
     
+    /*
+    * アングルB
+    */
     m_CameraAngleSettingDataList[UINT_CAST(CAMERA_ANGLE::ANGLE_B)] =
     {
-        VGet(-0.80f, 10.0f, 0.0f),
-        VGet(0.8f,  1.15f, 0.0f),
+        VGet(
+            -10.0f,       // カメラはプレイヤーの後ろに
+            5.0f,        // カメラの高さ
+            0.0f         // ステージと同じ軸にいる
+        ),
+        VGet(
+            0.0f,       
+            1.15f,      // 少し上見る
+            0.0f
+        ),
     };    
     
+    /*
+    * アングルC
+    */
     m_CameraAngleSettingDataList[UINT_CAST(CAMERA_ANGLE::ANGLE_C)] =
     {
-        VGet(-0.80f, 10.0f, 0.0f),
-        VGet(0.8f,  1.15f, 0.0f),
+        VGet(
+            -5.0f,       // カメラはプレイヤーと同じ軸にいる
+            15.0f,       // カメラの高さ
+            0.0f         // ステージと同じ軸にいる
+        ),
+        VGet(
+            0.0f,
+            0.15f,      // 少し上見る
+            0.0f
+        ),
     };
 }
 

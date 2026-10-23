@@ -184,7 +184,6 @@ void TitleScene::Draw()
     );
 
 
-
     // --------------------------------------------
     // 3D空間を描画する
     // --------------------------------------------
@@ -204,6 +203,38 @@ void TitleScene::Draw()
 
     // 移動とジャンプの操作説明
     DrawString(20, 20, "WASD : 移動 / SPACE : ジャンプ", GetColor(255, 255, 255));
+
+
+
+    // 操作説明
+    DrawString(20, 60, "A / D : 左右移動   W / S : 奥・手前   SPACE : ジャンプ", GetColor(255, 255, 255));
+    DrawString(20, 85, "Kを押しながら移動 : 通った部分を虹色に塗る   ESC : 終了", GetColor(255, 190, 220));
+    DrawString(20, 115, "1 : 赤色を選ぶ", GetColor(255, 110, 110));
+    DrawString(20, 140, "2 : 青色を選ぶ", GetColor(100, 180, 255));
+    DrawString(20, 165, "3 : 緑色を選ぶ", GetColor(120, 255, 150));
+    DrawString(20, 195, "Z長押し : 連続生成  X : 120体まで追加", GetColor(255, 235, 130));
+
+    // 現在選択中の色を表示する。
+    // この関数は前回のSlimeModel.hに定義している。
+    const int color = slime.GetSelectedColor();
+    const char* colorText = "選択中 : 赤";
+    unsigned int textColor = GetColor(255, 110, 110);
+    if (color == 2)
+    {
+        colorText = "選択中 : 青";
+        textColor = GetColor(100, 180, 255);
+    }
+    else if (color == 3)
+    {
+        colorText = "選択中 : 緑";
+        textColor = GetColor(120, 255, 150);
+    }
+    DrawString(20, 225, colorText, textColor);
+    DrawString(20, 255, "子供スライムが出ないときは、床のある空いた場所へ移動してください。", GetColor(210, 210, 210));
+    DrawString(20, 285, "表情 Y : a   U : b   I : c   O : d   P : e", GetColor(255, 190, 220));
+
+
+
 
     // 基底クラスの更新処理を呼びだす
     Scene::Draw();

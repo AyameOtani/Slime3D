@@ -31,12 +31,12 @@ public:
     Camera();
 
  
-    void Initialize( const VECTOR& playerPosition);   // 最初の準備    
-    void Update( const VECTOR& playerPosition);// 毎フレーム更新
-    void Apply() const; // カメラ設定をDxLibへ反映    
-    void SetFollowRate( float rate );// 追従速度変更    
-    VECTOR GetPosition() const;// カメラ位置取得   
-    VECTOR GetTarget() const;// 注視点取得
+    void Initialize( const VECTOR& playerPosition);     // 最初の準備    
+    void Update( const VECTOR& playerPosition);         // 毎フレーム更新
+    void Apply() const;                                 // カメラ設定をDxLibへ反映    
+    void SetFollowRate( float rate );                   // 追従速度変更    
+    VECTOR GetPosition() const;                         // カメラ位置取得   
+    VECTOR GetTarget() const;                           // 注視点取得
 
     void SetCameraAngle(CAMERA_ANGLE angle) { m_CameraAngle = angle; }  // カメラアングルタイプの設定
 
