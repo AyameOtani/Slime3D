@@ -7,6 +7,8 @@
 #include "ObjectManager.h"
 #include "FontManager.h"
 #include "Scene.h"
+#include "Camera.h"
+#include "Stage.h"
 #include "Utility.h"
 
 /*
@@ -58,11 +60,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	{
 		return -1;
 	}
-
-	int handle = Master::mpEffectManager->LoadEffect("Resource/Effect/Explosion_01.efkefc");
-	Master::mpEffectManager->SetPosEffect3D(handle, 0.0f, 1.0f, 0.0);
-	Master::mpEffectManager->SetScaleEffect3D(handle, 1.0f, 1.0f, 1.0f);
-
 
 	// 描画先画面を裏画面に設定する
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -136,11 +133,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	SetMaterialUseVertSpcColor(TRUE);
 
 
-
-	// 何でもいいので画像を読み込む。
-	int grBackgroundHandle = LoadGraph(_T("Resource/Background.png"));
-
-
 	// ゲームのメインループ
 	// ProcessMessage() == 0  ウィンドウの☓ボタン押されていないかどうか
 	// CheckHitKey(KEY_INPUT_ESCAPE) == 0  エスケープキーが押されていないかどうか
@@ -158,12 +150,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		// SceneManagerの描画
 		Master::mpGameManager->GetSceneManager()->Draw();
-		static int count = 120;
-		count++;
-		if (count % 120 == 0)
-		{
-			Master::mpEffectManager->PlayEffect3D(handle);
-		}
+
 		// エフェクトの更新
 		Master::mpEffectManager->EffectUpdate3D();
 

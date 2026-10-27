@@ -1,6 +1,8 @@
 #pragma once
 #include "Scene.h" // シーン継承したいからインクルード
 #include "SlimeModel.h"
+#include "Stage.h"
+#include "Camera.h"
 
 class TitleScene : public Scene
 {
@@ -29,6 +31,11 @@ private:
 	 // ============================================
 	// スライムを管理するオブジェクトを作る
 	SlimeModel slime;
+
+	// ステージ  山本
+	Stage m_Stage;
+	// カメラ  山本
+	Camera m_Camera;
 
 	// 地面や壁などに使う箱の一覧
    // 描画に加え、スライム側の処理にもこの一覧を渡す
