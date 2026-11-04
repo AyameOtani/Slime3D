@@ -3,7 +3,7 @@
 #include "Master.h"
 
 // 作成するシーンのインクルード
-#include "TitleScene.h"
+#include "GameScene.h"
 
 
 SceneManager::SceneManager()
@@ -22,7 +22,7 @@ SceneManager::~SceneManager()
 void SceneManager::Initialize()
 {
 	// 初期シーンの設定
-	mnNextSceneType = SCENE_TYPE::SCENE_TITLE;
+	mnNextSceneType = SCENE_TYPE::SCENE_GAME;
 
 	// シーン遷移をさせる
 	ChangeSceneIfNeeded();
@@ -71,8 +71,8 @@ void SceneManager::ChangeSceneIfNeeded()
 
 	switch (mnSceneType)
 	{
-	case SCENE_TYPE::SCENE_TITLE:
-		mpCurrentScene = new TitleScene();
+	case SCENE_TYPE::SCENE_GAME:
+		mpCurrentScene = new GameScene();
 		break;
 	}
 

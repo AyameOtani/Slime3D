@@ -39,7 +39,7 @@
     <ClCompile Include="Source\Stage.cpp" />
     <ClCompile Include="Source\Texture.cpp" />
     <ClCompile Include="Source\TextureAnimation.cpp" />
-    <ClCompile Include="Source\TitleScene.cpp" />
+    <ClCompile Include="Source\GameScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Camera.h" />
@@ -61,7 +61,7 @@
     <ClInclude Include="Source\Stage.h" />
     <ClInclude Include="Source\Texture.h" />
     <ClInclude Include="Source\TextureAnimation.h" />
-    <ClInclude Include="Source\TitleScene.h" />
+    <ClInclude Include="Source\GameScene.h" />
     <ClInclude Include="Source\Utility.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

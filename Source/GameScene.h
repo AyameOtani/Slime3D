@@ -4,14 +4,14 @@
 #include "Stage.h"
 #include "Camera.h"
 
-class TitleScene : public Scene
+class GameScene : public Scene
 {
 
 public:
 
-	TitleScene();
+	GameScene();
 
-	virtual ~TitleScene();
+	virtual ~GameScene();
 
 	// ƒXƒ‰ƒCƒ€‚Ìƒ‚ƒfƒ‹‚ª“Ç‚İ‚Ü‚ê‚½‚©
 	bool SlimeInitialize();

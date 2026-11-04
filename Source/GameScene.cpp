@@ -1,4 +1,4 @@
-#include "TitleScene.h"
+#include "GameScene.h"
 #include "Utility.h" // 呼び出すと、SCREEN_WIDTHとかを使える
 #include "DxLib.h"
 #include "Camera.h"
@@ -31,17 +31,17 @@ void DrawWorld(const std::vector<BoxCollider>& boxes)
 
 
 
-TitleScene::TitleScene()
+GameScene::GameScene()
 	: Scene()     // 基底クラスのコンストラクタを呼び出しておく
 {
 }
 
-TitleScene::~TitleScene()
+GameScene::~GameScene()
 {
 
 }
 
-bool TitleScene::SlimeInitialize()
+bool GameScene::SlimeInitialize()
 {
     // 形状変化（モーフィング）に使用する3つのモデルを読み込む
    // Resourceフォルダ内のMQOファイルを指定している
@@ -68,7 +68,7 @@ bool TitleScene::SlimeInitialize()
     return true;
 }
 
-void TitleScene::Initialize()
+void GameScene::Initialize()
 {
     // スライムを初期状態にする
     // 具体的な初期化処理はSlimeModel側に書かれている
@@ -131,7 +131,7 @@ void TitleScene::Initialize()
 }
 
 
-void TitleScene::Update()
+void GameScene::Update()
 {
     // --------------------------------------------
     // スライムの状態を更新する
@@ -173,7 +173,7 @@ void TitleScene::Update()
 }
 
 
-void TitleScene::Draw()
+void GameScene::Draw()
 {
     Master::mpGameManager->GetFontManager()->DrawDotString(
         0,
@@ -241,7 +241,7 @@ void TitleScene::Draw()
 }
 
 
-void TitleScene::Finalize()
+void GameScene::Finalize()
 {
 	// BGM停止
 	//Master::mpSoundManager->StopBGM();
