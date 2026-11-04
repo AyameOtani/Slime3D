@@ -8,12 +8,12 @@
 
 // コンストラクタ
 Object2D::Object2D(std::string filename, VECTOR initPos)
-	: mvPosition(initPos)
-	, mbDeleteFlag(false)
+	: Object(initPos)
 	, mpTextureAnimation(nullptr)
+	, mpTexture(nullptr)
 {
 	// 現在シーンのオブジェクトマネージジャーに自身 (this) を追加する
-	Master::mpGameManager->GetSceneManager()->GetCurrentScene()->GetObjectManager()->AddObject(this);
+	//Master::mpGameManager->GetSceneManager()->GetCurrentScene()->GetObjectManager()->AddObject(this);
 
 	// 画像生成
 	mpTexture = new Texture(filename, initPos, true);
@@ -23,13 +23,13 @@ Object2D::Object2D(std::string filename, VECTOR initPos)
 
 
 // コンストラクタ（アニメーション用）
-Object2D::Object2D(VECTOR initPos, std::string filename, int allNum, int numX, int numY, int interval)
-	: mvPosition(initPos)
-	,mbDeleteFlag(false)
-	,mpTexture(nullptr)  // テクスチャーアニメーションの場合は画像一味表示の法は使用しない
+Object2D::Object2D(VECTOR initPos, std::string filename, int allNum, int numX, int numY, int interval) 
+	: Object(initPos)
+	, mpTextureAnimation(nullptr)
+	, mpTexture(nullptr)  // テクスチャーアニメーションの場合は画像一味表示の法は使用しない
 {
 	// 現在のシーンの ObjectManager に自身（）this を追加
-	Master::mpGameManager->GetSceneManager()->GetCurrentScene()->GetObjectManager()->AddObject(this);
+	//Master::mpGameManager->GetSceneManager()->GetCurrentScene()->GetObjectManager()->AddObject(this);
 
 	// テクスチャアニメーション作成
 	mpTextureAnimation = new TextureAnimation(initPos, filename, allNum, numX, numY, interval);
@@ -38,12 +38,12 @@ Object2D::Object2D(VECTOR initPos, std::string filename, int allNum, int numX, i
 
 // コンストラクタ（アニメーション用）
 Object2D::Object2D(const VECTOR initPos)
-	: mvPosition(initPos)
-	,mbDeleteFlag(false)
-	,mpTexture(nullptr)  // テクスチャーアニメーションの場合は画像一味表示の法は使用しない
+	: Object(initPos)
+	, mpTextureAnimation(nullptr)
+	, mpTexture(nullptr)  // テクスチャーアニメーションの場合は画像一味表示の法は使用しない
 {
 	// 現在のシーンの ObjectManager に自身（）this を追加
-	Master::mpGameManager->GetSceneManager()->GetCurrentScene()->GetObjectManager()->AddObject(this);
+	//Master::mpGameManager->GetSceneManager()->GetCurrentScene()->GetObjectManager()->AddObject(this);
 }
 
 // デストラクタ
@@ -71,7 +71,7 @@ void Object2D::Update()
 		mpTexture->Update();
 		
 		// 座標設定
-	     mpTexture->SetPosition(mvPosition);
+	     mpTexture->SetPosition(mTransform.position);
 	}
 
 	// テクスチャアニメーションの更新
@@ -82,7 +82,7 @@ void Object2D::Update()
 		// 座標設定
 		// こっちでもプレイヤーの奴をやっているから
 		// プレイヤーのUp0dateに書かなくてもok
-		mpTextureAnimation->SetPosition(mvPosition);
+		mpTextureAnimation->SetPosition(mTransform.position);
 	}
 	
 }

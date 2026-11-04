@@ -172,7 +172,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		Master::mpGameManager->GetSceneManager()
 			->GetCurrentScene()
 			->GetObjectManager()
-			->DeleteAll2DIfNeeded();
+			->DeleteAllIfNeeded();
 
 
 		// ループする直前にシーン遷移チェックをいれておく
