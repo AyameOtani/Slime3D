@@ -1,40 +1,40 @@
-#pragma once
+ï»¿#pragma once
 #include <cassert>
 #include <string>
-// ƒvƒƒOƒ‰ƒ€“à‚Å‹¤’Ê‚µ‚Äg—p‚·‚éŠÖ”’è‹`‚È‚Ç‚ğ‚±‚±‚É‹Lq‚µ‚Ä‚¨‚­
-//@ŠÖ”‚È‚Ç‚à‹Lq‚µ‚Ä‚¢‚­
+// ãƒ—ãƒ­ã‚°ãƒ©ãƒ å†…ã§å…±é€šã—ã¦ä½¿ç”¨ã™ã‚‹é–¢æ•°å®šç¾©ãªã©ã‚’ã“ã“ã«è¨˜è¿°ã—ã¦ãŠã
+//ã€€é–¢æ•°ãªã©ã‚‚è¨˜è¿°ã—ã¦ã„ã
 
-#define INT_CAST(x)		(static_cast<int>(x))		// int‚ÉƒLƒƒƒXƒg
-#define UINT_CAST(x)	(static_cast<unsigned>(x))	// unsigned‚ÉƒLƒƒƒXƒg
-#define FLOAT_CAST(x)	(static_cast<float>(x))		// float‚ÉƒLƒƒƒXƒg
-#define DOUBLE_CAST(x)	(static_cast<double>(x))	// double‚ÉƒLƒƒƒXƒg
+#define INT_CAST(x)		(static_cast<int>(x))		// intã«ã‚­ãƒ£ã‚¹ãƒˆ
+#define UINT_CAST(x)	(static_cast<unsigned>(x))	// unsignedã«ã‚­ãƒ£ã‚¹ãƒˆ
+#define FLOAT_CAST(x)	(static_cast<float>(x))		// floatã«ã‚­ãƒ£ã‚¹ãƒˆ
+#define DOUBLE_CAST(x)	(static_cast<double>(x))	// doubleã«ã‚­ãƒ£ã‚¹ãƒˆ
 
 
 class Utility
 {
-public: // ’è”’è‹`
-	static const int SCREEN_WIDTH = 1920;  // ‰æ–Ê‚Ì•
-	static const int SCREEN_HEIGHT = 1080; // ‰æ–Ê‚Ì‚‚³
+public: // å®šæ•°å®šç¾©
+	static const int SCREEN_WIDTH = 1920;  // ç”»é¢ã®å¹…
+	static const int SCREEN_HEIGHT = 1080; // ç”»é¢ã®é«˜ã•
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-// [•â•ƒc[ƒ‹ŒQ]
-// ƒC[ƒWƒ“ƒOŠÖ”‚âA•¶š•ÏŠ·AƒfƒoƒbƒO—p‚Ìƒwƒ‹ƒp[‚ğ‚Ü‚Æ‚ß‚Ä‚¢‚Ü‚·B
+// [è£œåŠ©ãƒ„ãƒ¼ãƒ«ç¾¤]
+// ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°é–¢æ•°ã‚„ã€æ–‡å­—å¤‰æ›ã€ãƒ‡ãƒãƒƒã‚°ç”¨ã®ãƒ˜ãƒ«ãƒ‘ãƒ¼ã‚’ã¾ã¨ã‚ã¦ã„ã¾ã™ã€‚
 // 
 //////////////////////////////////////////////////////////////////////////////////////////
 namespace Helper
 {
     //-----------------------------------------
-    /*      ƒC[ƒWƒ“ƒOŠÖ”    */
-    // QlƒTƒCƒgFhttps://easings.net/ja
-    // In : ‰Á‘¬
-    // Out : Œ¸‘¬
+    /*      ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°é–¢æ•°    */
+    // å‚è€ƒã‚µã‚¤ãƒˆï¼šhttps://easings.net/ja
+    // In : åŠ é€Ÿ
+    // Out : æ¸›é€Ÿ
     //-----------------------------------------
     namespace Easing
     {
         /// <summary>
-        /// ƒC[ƒWƒ“ƒO‚Ìí—Ş
+        /// ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°ã®ç¨®é¡
         /// </summary>
         enum class EASE_TYPE
         {
@@ -56,59 +56,59 @@ namespace Helper
         };
 
         // --------------------------------------
-        //                  ‰Á‘¬ 
+        //                  åŠ é€Ÿ 
         // --------------------------------------
 
-        // Œy‚¢‰Á‘¬
+        // è»½ã„åŠ é€Ÿ
         inline float EaseInQuad(float _t) {
             return _t * _t;
         }
 
-        // ‹­‚¢‰Á‘¬
+        // å¼·ã„åŠ é€Ÿ
         inline float EaseInCubic(float _t) {
             return _t * _t * _t;
         }
 
-        // ‚©‚È‚è‹­‚¢‰Á‘¬
+        // ã‹ãªã‚Šå¼·ã„åŠ é€Ÿ
         inline float EaseInQuart(float _t) {
             return _t * _t * _t * _t;
         }
 
-        // ’´‹­‚¢‰Á‘¬
+        // è¶…å¼·ã„åŠ é€Ÿ
         inline float EaseInQuint(float _t) {
             return _t * _t * _t * _t * _t;
         }
 
-        // ©‘R‚È‰Á‘¬
+        // è‡ªç„¶ãªåŠ é€Ÿ
         inline float EaseInSine(float _t) {
             return 1.0f - cosf((_t * DX_PI_F) / 2.0f);
         }
 
 
         // --------------------------------------
-        //                  Œ¸‘¬
+        //                  æ¸›é€Ÿ
         // --------------------------------------
 
-        // ƒqƒ…ƒb...ƒVƒ…ƒ^ƒb‚Á‚ÄŠ´‚¶
-        // 2æ
+        // ãƒ’ãƒ¥ãƒƒ...ã‚·ãƒ¥ã‚¿ãƒƒã£ã¦æ„Ÿã˜
+        // 2ä¹—
         inline float EaseOutQuad(float _t) {
             float invT = 1.0f - _t;
             return 1.0f - (invT * invT);
         }
 
-        // 3æ
+        // 3ä¹—
         inline float EaseOutCubic(float _t) {
             float invT = 1.0f - _t;
             return 1.0f - (invT * invT * invT);
         }
 
-        // 4æ
+        // 4ä¹—
         inline float EaseOutQuart(float _t) {
             float invT = 1.0f - _t;
             return 1.0f - (invT * invT * invT * invT);
         }
 
-        // 5æ
+        // 5ä¹—
         inline float EaseOutQuint(float _t) {
             float invT = 1.0f - _t;
             return 1.0f - (invT * invT * invT * invT * invT);
@@ -120,20 +120,20 @@ namespace Helper
 
 
         // --------------------------------------
-        //          ‚Î‚Ë‚İ‚½‚¢‚È‚â‚Â
+        //          ã°ã­ã¿ãŸã„ãªã‚„ã¤
         // --------------------------------------
 
-        // s‚Á‚Ä–ß‚é
+        // è¡Œã£ã¦æˆ»ã‚‹
         inline float EaseOutBack(float t) {
             const float c1 = 1.70158f;
             const float c3 = c1 + 1.0f;
 
-            // (t-1) ‚ğŒvZ
+            // (t-1) ã‚’è¨ˆç®—
             float t1 = t - 1.0f;
             return 1.0f + c3 * FLOAT_CAST(pow(t1, 3)) + c1 * FLOAT_CAST(pow(t1, 2));
         }
 
-        // ƒoƒEƒ“ƒh‚·‚é‚â‚Â
+        // ãƒã‚¦ãƒ³ãƒ‰ã™ã‚‹ã‚„ã¤
         inline float EaseOutBounce(float t) {
             const float n1 = 7.5625f;
             const float d1 = 2.75f;
@@ -153,7 +153,7 @@ namespace Helper
         }
 
         /// <summary>
-        /// w’è‚³‚ê‚½ƒ^ƒCƒv‚ÌƒC[ƒWƒ“ƒOˆ—‚ğs‚¤
+        /// æŒ‡å®šã•ã‚ŒãŸã‚¿ã‚¤ãƒ—ã®ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°å‡¦ç†ã‚’è¡Œã†
         /// </summary>
         /// <param name="_type"></param>
         /// <param name="_t"></param>
@@ -208,31 +208,31 @@ namespace Helper
     };
 
     //-----------------------------------------
-    /*       •¶š—ñ‚Ì•ÏŠ·    */
+    /*       æ–‡å­—åˆ—ã®å¤‰æ›    */
     //-----------------------------------------
     namespace ConvertString
     {
         //*---------------------------------------------------------------------------------------
-        //*y?zstring‚©‚çwstring‚Ö‚Ì•ÏŠ·
+        //*ã€?ã€‘stringã‹ã‚‰wstringã¸ã®å¤‰æ›
         //*----------------------------------------------------------------------------------------
         inline std::wstring StringToWstring(const std::string& str)
         {
             std::wstring ret;
-            //ˆê“x–Ú‚ÌŒÄ‚Ño‚µ‚Í•¶š—ñ”‚ğ’m‚é‚½‚ß
+            //ä¸€åº¦ç›®ã®å‘¼ã³å‡ºã—ã¯æ–‡å­—åˆ—æ•°ã‚’çŸ¥ã‚‹ãŸã‚
             int len = MultiByteToWideChar(CP_UTF8,
                 0,
-                str.c_str(),//“ü—Í•¶š—ñ
+                str.c_str(),//å…¥åŠ›æ–‡å­—åˆ—
                 static_cast<int>(str.length()),
                 nullptr,
                 0
             );
             assert(len >= 0);
-            ret.resize(len);    //•¶š”•ªŠm•Û‚·‚é
+            ret.resize(len);    //æ–‡å­—æ•°åˆ†ç¢ºä¿ã™ã‚‹
 
-            //“ñ“x–Ú‚ÌŒÄ‚Ño‚µ‚Í•ÏŠ·
+            //äºŒåº¦ç›®ã®å‘¼ã³å‡ºã—ã¯å¤‰æ›
             MultiByteToWideChar(CP_UTF8,
                 0,
-                str.c_str(),//“ü—Í•¶š—ñ
+                str.c_str(),//å…¥åŠ›æ–‡å­—åˆ—
                 static_cast<int>(str.length()),
                 ret.data(),
                 static_cast<int>(ret.size())
@@ -241,16 +241,16 @@ namespace Helper
         }
 
         //*---------------------------------------------------------------------------------------
-        //*y?zwstring‚©‚çstring‚Ö‚Ì•ÏŠ·
+        //*ã€?ã€‘wstringã‹ã‚‰stringã¸ã®å¤‰æ›
         //*----------------------------------------------------------------------------------------
         inline std::string WStringToString(const std::wstring& wstr)
         {
             std::string ret;
-            //ˆê“x–Ú‚ÌŒÄ‚Ño‚µ‚Í•¶š—ñ”‚ğ’m‚é‚½‚ß
+            //ä¸€åº¦ç›®ã®å‘¼ã³å‡ºã—ã¯æ–‡å­—åˆ—æ•°ã‚’çŸ¥ã‚‹ãŸã‚
             int len = WideCharToMultiByte(
                 CP_UTF8,
                 0,
-                wstr.c_str(),//“ü—Í•¶š—ñ
+                wstr.c_str(),//å…¥åŠ›æ–‡å­—åˆ—
                 static_cast<int>(wstr.length()),
                 nullptr,
                 0,
@@ -258,13 +258,13 @@ namespace Helper
                 nullptr
             );
             assert(len >= 0);
-            ret.resize(len);    //•¶š”•ªŠm•Û‚·‚é
+            ret.resize(len);    //æ–‡å­—æ•°åˆ†ç¢ºä¿ã™ã‚‹
 
-            //“ñ“x–Ú‚ÌŒÄ‚Ño‚µ‚Í•ÏŠ·
+            //äºŒåº¦ç›®ã®å‘¼ã³å‡ºã—ã¯å¤‰æ›
             WideCharToMultiByte(
                 CP_UTF8,
                 0,
-                wstr.c_str(),//“ü—Í•¶š—ñ
+                wstr.c_str(),//å…¥åŠ›æ–‡å­—åˆ—
                 static_cast<int>(wstr.length()),
                 ret.data(),
                 static_cast<int>(ret.size()),
@@ -276,15 +276,15 @@ namespace Helper
     };
 
     //-----------------------------------------
-    /*       ƒfƒoƒbƒOŠÖ˜A—p    */
+    /*       ãƒ‡ãƒãƒƒã‚°é–¢é€£ç”¨    */
     //-----------------------------------------
     namespace Debug
     {
         /// <summary>
-        /// ƒGƒ‰[ƒƒbƒZ[ƒW‚Ì•\¦
+        /// ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®è¡¨ç¤º
         /// </summary>
-        /// <param name="_text">–{•¶</param>
-        /// <param name="_caption">ƒ^ƒCƒgƒ‹</param>
+        /// <param name="_text">æœ¬æ–‡</param>
+        /// <param name="_caption">ã‚¿ã‚¤ãƒˆãƒ«</param>
         inline void ErrorMessage(const std::wstring& _text, const std::wstring& _caption)
         {
             MessageBoxW(NULL, _text.c_str(), _caption.c_str(), MB_OK);
