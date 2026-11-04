@@ -175,15 +175,6 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
-    Master::mpGameManager->GetFontManager()->DrawDotString(
-        0,
-        0,
-        30,
-        GetColor(255, 255, 255),
-        "すらいむ"
-    );
-
-
     // --------------------------------------------
     // 3D空間を描画する
     // --------------------------------------------
@@ -232,7 +223,6 @@ void GameScene::Draw()
     DrawString(20, 225, colorText, textColor);
     DrawString(20, 255, "子供スライムが出ないときは、床のある空いた場所へ移動してください。", GetColor(210, 210, 210));
     DrawString(20, 285, "表情 Y : a   U : b   I : c   O : d   P : e", GetColor(255, 190, 220));
-
 
 
 

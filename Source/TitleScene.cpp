@@ -36,6 +36,7 @@ void TitleScene::Draw()
 {
     DrawString(20, 20, "タイトル", GetColor(255, 255, 255));
 
+
     // 基底クラスの更新処理を呼びだす
     Scene::Draw();
 }
