@@ -22,6 +22,11 @@ void TitleScene::Initialize()
 
 void TitleScene::Update()
 {
+    if (InputManager::CheckDownKey(KEY_INPUT_RETURN))
+    {
+        Master::mpGameManager->GetSceneManager()->SetNextScene(SceneManager::SCENE_TYPE::SCENE_GAME);
+    }
+
     // 基底クラスの更新処理を呼びだす
     Scene::Update();
 }
