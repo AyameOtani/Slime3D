@@ -4,6 +4,7 @@
 
 // 作成するシーンのインクルード
 #include "GameScene.h"
+//#include "TitleScene.h"
 
 
 SceneManager::SceneManager()
@@ -71,6 +72,10 @@ void SceneManager::ChangeSceneIfNeeded()
 
 	switch (mnSceneType)
 	{
+	//case SCENE_TYPE::SCENE_TITLE:
+	//	mpCurrentScene = new TitleScene();
+	//	break;
+
 	case SCENE_TYPE::SCENE_GAME:
 		mpCurrentScene = new GameScene();
 		break;

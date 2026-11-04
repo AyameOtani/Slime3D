@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Scene.h" // シーン継承したいからインクルード
 
 class TitleScene : public Scene
@@ -19,5 +19,4 @@ public:
 	// 終了処理
 	virtual void Finalize() override;
 
-private:
 };
