@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "DxLib.h"
+#include "Utility.h"
 #include <array>
 
 class Camera
@@ -38,7 +39,9 @@ public:
     VECTOR GetPosition() const;                         // カメラ位置取得   
     VECTOR GetTarget() const;                           // 注視点取得
 
-    void SetCameraAngle(CAMERA_ANGLE angle) { m_CameraAngle = angle; }  // カメラアングルタイプの設定
+    void SetCameraAngle(CAMERA_ANGLE angle) { m_CameraAngle = angle; }                          // カメラアングルタイプの設定
+    void SetCameraFov(float fov_deg) { m_CameraFovRad = Helper::Math::DegToRad(fov_deg); }      // カメラの視野角の設定
+    void SetCameraClip(float _near, float _far) { m_CameraNear = _near; m_CameraFar = _far; }   // カメラのクリッピング距離の設定
 
 private:
     // カメラ位置と注視点を作り直す
@@ -54,7 +57,9 @@ private:
     VECTOR mPosition;   // 実際のカメラ位置   
     VECTOR mTarget;     // カメラが見る位置
 
-
+	float m_CameraFovRad;         // カメラの視野角 ラジアンで保持
+	float m_CameraNear;           // カメラの近くの距離
+	float m_CameraFar;            // カメラの遠くの距離
     CAMERA_ANGLE m_CameraAngle;   // カメラアングルタイプ  山本
     std::array<                   // カメラアングルの設定データ配列
         CameraAngleSettingData,     

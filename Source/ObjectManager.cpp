@@ -80,6 +80,8 @@ void ObjectManager::DeleteAll2D()
 		// 2Dオブジェクトでなければ削除しない
 		if (temp->GetDimension() != Object::ObjectDimension::D2)
 		{
+			// 次の要素へ進める
+			itr++;
 			continue;
 		}
 
@@ -107,6 +109,8 @@ void ObjectManager::DeleteAll3D()
 		// 3Dオブジェクトでなければ削除しない
 		if (temp->GetDimension() != Object::ObjectDimension::D3)
 		{
+			// 次の要素へ進める
+			itr++;
 			continue;
 		}
 

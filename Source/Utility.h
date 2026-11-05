@@ -26,6 +26,19 @@ public: // 定数定義
 namespace Helper
 {
     //-----------------------------------------
+    /*       数学関係補助    */
+    //-----------------------------------------
+    namespace Math
+    {
+        /* デグリーからラジアンに変換 */
+        inline float DegToRad(float deg) { return deg * (static_cast<float>(DX_PI_F) / 180.0f); }
+
+        /* ラジアンからデグリーに変換 */
+        inline float RadToDeg(float rad) { return rad * (180.0f / static_cast<float>(DX_PI_F)); }
+
+    };
+
+    //-----------------------------------------
     /*      イージング関数    */
     // 参考サイト：https://easings.net/ja
     // In : 加速
@@ -280,11 +293,12 @@ namespace Helper
     //-----------------------------------------
     namespace Debug
     {
-        /// <summary>
-        /// エラーメッセージの表示
-        /// </summary>
-        /// <param name="_text">本文</param>
-        /// <param name="_caption">タイトル</param>
+        //*---------------------------------------------------------------------------------------
+        //*【?】エラーメッセージの表示
+        //* [引数] 
+        //* _text    : 本文 
+        //* _caption : タイトル
+        //*----------------------------------------------------------------------------------------
         inline void ErrorMessage(const std::wstring& _text, const std::wstring& _caption)
         {
             MessageBoxW(NULL, _text.c_str(), _caption.c_str(), MB_OK);

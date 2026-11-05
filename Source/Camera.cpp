@@ -7,7 +7,11 @@ Camera::Camera()
     mFollowRate(0.045f),
     mPosition(VGet(0.0f, 0.0f, 0.0f)),
     mTarget(VGet(0.0f, 0.0f, 0.0f)),
-    m_CameraAngle(CAMERA_ANGLE::ANGLE_A)
+    m_CameraNear(0.1f),
+	m_CameraFar(100.0f),
+    m_CameraFovRad(Helper::Math::DegToRad(60.0f)),
+    m_CameraAngle(CAMERA_ANGLE::ANGLE_A),
+    m_CameraAngleSettingDataList()
 {
 }
 
@@ -25,11 +29,11 @@ void Camera::Initialize(
     mStageZ = playerPosition.z;
 
     // 横スクロール向けに少し狭めの視野角
-    SetupCamera_Perspective( 43.0f * DX_PI_F / 180.0f );
+    SetupCamera_Perspective(m_CameraFovRad);
 
     // 現在のゲームは1～10程度の座標なので
     // 描画範囲もそれに合わせる
-    SetCameraNearFar( 0.1f, 100.0f);
+    SetCameraNearFar(m_CameraNear, m_CameraFar);
 
     RebuildCamera();
     Apply();
@@ -146,9 +150,21 @@ void Camera::SetupCameraAngleSettingData()
     };
 }
 
-
+//*---------------------------------------------------------------------------------------
+//*【?】カメラ設定の適用
+//*
+//* [引数] なし
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
 void Camera::Apply() const
 {
+    // カメラの視野角を設定する
+    SetupCamera_Perspective(m_CameraFovRad);
+
+    // カメラのクリッピング距離を設定する
+    SetCameraNearFar(m_CameraNear, m_CameraFar);
+
+	// カメラの位置と注視点を設定する
     SetCameraPositionAndTarget_UpVecY( mPosition, mTarget );
 }
 
