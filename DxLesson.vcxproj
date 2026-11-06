@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\ExplainScene.cpp" />
+    <ClCompile Include="Source\HoverImageButton.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
     <ClCompile Include="Source\EffectManager.cpp" />
@@ -27,6 +29,7 @@
     <ClCompile Include="Source\InputManager.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Master.cpp" />
+    <ClCompile Include="Source\Mouse.cpp" />
     <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\Object2D.cpp" />
     <ClCompile Include="Source\Object3D.cpp" />
@@ -43,6 +46,8 @@
     <ClCompile Include="Source\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ExplainScene.h" />
+    <ClInclude Include="Source\HoverImageButton.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Collision.h" />
     <ClInclude Include="Source\EffectManager.h" />
@@ -50,6 +55,7 @@
     <ClInclude Include="Source\GameManager.h" />
     <ClInclude Include="Source\InputManager.h" />
     <ClInclude Include="Source\Master.h" />
+    <ClInclude Include="Source\Mouse.h" />
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\Object2D.h" />
     <ClInclude Include="Source\Object3D.h" />

@@ -5,7 +5,7 @@
 // 作成するシーンのインクルード
 #include "GameScene.h"
 #include "TitleScene.h"
-
+#include "ExplainScene.h"
 
 SceneManager::SceneManager()
 	: mnSceneType(SCENE_TYPE::SCENE_NONE)
@@ -78,6 +78,10 @@ void SceneManager::ChangeSceneIfNeeded()
 
 	case SCENE_TYPE::SCENE_GAME:
 		mpCurrentScene = new GameScene();
+		break;
+
+	case SCENE_TYPE::SCENE_EXPLAIN:
+		mpCurrentScene = new ExplainScene();
 		break;
 	}
 

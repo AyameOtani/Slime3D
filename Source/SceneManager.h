@@ -15,6 +15,7 @@ public: // enum, struct の定義
 		SCENE_TITLE,
 		SCENE_STAGESELECT,// タイトル
 		SCENE_GAME,       // ゲーム
+		SCENE_EXPLAIN,
 
 		SCENE_WINRESULT,  // 勝利シーン
 		SCENE_LOSERESULT, // 敗北
