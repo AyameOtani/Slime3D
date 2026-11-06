@@ -1,21 +1,19 @@
 ﻿#include "SlimeMesh.h"
 #include <cmath>
 
-// 元の SlimeModel.cpp の CreateMesh / UpdateMesh / RainbowColor から移した処理。
-// 数値・処理順は元のまま。本編固有の変形は SlimeModel 側に残す。
-
-const float SlimeMesh::BODY_WIDTH = 1.20f;
-const float SlimeMesh::BODY_HEIGHT = 1.75f;
+const float SlimeMesh::BODY_WIDTH = 1.20f;    // 横幅。大きくすると横に広がる
+const float SlimeMesh::BODY_HEIGHT = 1.75f;   // 高さ。小さくすると平たいスライムになる
 const float SlimeMesh::DEFAULT_RADIUS = 0.95f;
 
 namespace
 {
-    // 段の形状の区切り位置（元の UpdateMesh と同じ値）
+    // 段の形状の区切り位置
     const float BELLY_START = 0.55f;   // 最も横に広がる位置
     const float BASE_START = 0.90f;    // 丸い下半身から平らな底面へ切り替わる位置
     const float BELLY_HEIGHT = 0.32f;  // お腹の高さ（全高に対する割合）
     const float BASE_RADIUS = 0.42f;   // 底面の半径（最大幅に対する割合）
 
+    // 値を指定した最小値から最大値の範囲に収める。
     float ClampValue(float value, float minValue, float maxValue)
     {
         if (value < minValue) return minValue;
@@ -61,6 +59,7 @@ void SlimeMesh::Initialize()
     vertices.clear();
     indices.clear();
 
+    // 頂点を縦LAT段、横LON列で作る。円周の継ぎ目を閉じるため、両端の頂点を重複させる。
     vertices.resize((LAT + 1) * (LON + 1));
 
     for (int y = 0; y < LAT; ++y)
@@ -87,16 +86,19 @@ void SlimeMesh::Initialize()
     }
 }
 
+// 頂点配列を変更できる形で返す。
 std::vector<VERTEX3D>& SlimeMesh::GetVertices()
 {
     return vertices;
 }
 
+// 頂点配列を読み取り専用で返す。
 const std::vector<VERTEX3D>& SlimeMesh::GetVertices() const
 {
     return vertices;
 }
 
+// 三角形を構成する頂点番号の配列を返す。
 const std::vector<unsigned short>& SlimeMesh::GetIndices() const
 {
     return indices;
@@ -178,6 +180,7 @@ void SlimeMesh::ComputeDirection(int col, float& dirX, float& dirZ)
 
 float SlimeMesh::ComputeColorHorizontal(float dirX, float ringRadius)
 {
+    // 頂点の横方向の位置を0～1の範囲に変換する。
     return 0.5f + dirX * ringRadius / (BODY_WIDTH * 2.0f);
 }
 
@@ -214,6 +217,7 @@ void SlimeMesh::BuildBaseShape(const VECTOR& position, float radius, float scale
         return;
     }
 
+    // 縦方向の伸縮に合わせて横方向を調整し、体積の変化を抑える。
     float scaleXZ = 1.0f / sqrtf(scaleY);
 
     for (int row = 0; row <= LAT; ++row)
@@ -244,6 +248,7 @@ void SlimeMesh::BuildBaseShape(const VECTOR& position, float radius, float scale
         }
     }
 
+    // 形状を作り終えた後、各頂点の法線を計算する。
     RecalculateNormals(radius);
 }
 
@@ -300,6 +305,7 @@ void SlimeMesh::RecalculateNormals(float radius)
         }
     }
 
+    // 頭頂部と底面中央は同じ位置に集まる頂点の法線をまとめる。
     for (int pole = 0; pole < 2; ++pole)
     {
         int row = (pole == 0) ? 0 : LAT;
@@ -354,11 +360,13 @@ void SlimeMesh::RecalculateNormals(float radius)
 
 void SlimeMesh::DrawFace(int graphHandle, const VECTOR& position, float radius, const VECTOR& faceForward)
 {
+    // 表情画像が読み込めていない場合や、描画するメッシュがない場合は何もしない。
     if (graphHandle < 0 || vertices.empty() || indices.empty())
     {
         return;
     }
 
+    // 顔の向きが決まっていない場合は描画しない。
     if (VSquareSize(faceForward) < 0.000001f)
     {
         return;
@@ -366,6 +374,7 @@ void SlimeMesh::DrawFace(int graphHandle, const VECTOR& position, float radius, 
 
     VECTOR forward = VNorm(faceForward);
 
+    // 顔の向きから、顔の横方向と上方向の基準を作る。
     VECTOR worldUp = VGet(0.0f, 1.0f, 0.0f);
     VECTOR faceRight = CrossVector(worldUp, forward);
 
@@ -465,6 +474,7 @@ void SlimeMesh::DrawFace(int graphHandle, const VECTOR& position, float radius, 
             continue;
         }
 
+        // 採用した三角形の頂点を、顔専用の配列へ追加する。
         unsigned short base = static_cast<unsigned short>(faceVertices.size());
 
         faceVertices.push_back(temp[0]);
