@@ -1,0 +1,85 @@
+<mxfile host="65bd71144e">
+    <diagram id="J3WLNVzqXg6HLEZK8wI6" name="ページ-1">
+        <mxGraphModel dx="1769" dy="538" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-3" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-1" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n0X8Uj9-Es94DCir-OAf-2">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Object" vertex="1">
+                    <mxGeometry height="60" width="120" x="354" y="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-11" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-2" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="n0X8Uj9-Es94DCir-OAf-7">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Object3D" vertex="1">
+                    <mxGeometry height="60" width="120" x="354" y="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-28" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-6" style="edgeStyle=elbowEdgeStyle;html=1;endArrow=none;endFill=0;strokeWidth=1;rounded=0;elbow=vertical;" target="n0X8Uj9-Es94DCir-OAf-27" value="">
+                    <mxGeometry relative="1" x="-0.0067" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-36" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-6" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=none;endFill=0;rounded=0;curved=0;" target="n0X8Uj9-Es94DCir-OAf-35" value="">
+                    <mxGeometry relative="1" x="-0.0076" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-40" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-6" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;rounded=0;endArrow=none;endFill=0;" target="n0X8Uj9-Es94DCir-OAf-38">
+                    <mxGeometry relative="1" x="0.0021" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Slime" vertex="1">
+                    <mxGeometry height="60" width="120" x="219" y="430" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-17" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-7" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n0X8Uj9-Es94DCir-OAf-12">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-18" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-7" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n0X8Uj9-Es94DCir-OAf-6">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="CharaBase" vertex="1">
+                    <mxGeometry height="60" width="120" x="354" y="330" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Player" vertex="1">
+                    <mxGeometry height="60" width="120" x="610" y="430" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-20" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-19" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" target="n0X8Uj9-Es94DCir-OAf-6">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-29" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-19" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;elbow=vertical;" target="n0X8Uj9-Es94DCir-OAf-24">
+                    <mxGeometry relative="1" x="0.0018" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-19" parent="1" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="SlimeManager" vertex="1">
+                    <mxGeometry height="80" width="120" x="-180" y="420" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-21" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="分裂の管理、生成/破棄をObjectManagerに伝える" vertex="1">
+                    <mxGeometry height="50" width="169" x="-204.5" y="500" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-25" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-24" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="n0X8Uj9-Es94DCir-OAf-1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-24" parent="1" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="ObjectManager" vertex="1">
+                    <mxGeometry height="80" width="120" x="-35" y="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-26" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="すべてのオブジェクトを管理する&lt;br&gt;更新/描画/生成/破棄などを行う" vertex="1">
+                    <mxGeometry height="50" width="190" x="-70" y="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-27" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="SlimeVisual" vertex="1">
+                    <mxGeometry height="60" width="120" x="24.5" y="570" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-30" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="スライムの見た目部分を&lt;br&gt;ここに移す&lt;br&gt;変形や表情の変化など" vertex="1">
+                    <mxGeometry height="50" width="169" y="630" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-35" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="SlimeDefinition" vertex="1">
+                    <mxGeometry height="60" width="120" x="219" y="570" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-37" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="スライムの状態管理&lt;div&gt;現在の分裂の段階など&lt;/div&gt;" vertex="1">
+                    <mxGeometry height="50" width="169" x="194.5" y="630" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-38" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="SlimeController" vertex="1">
+                    <mxGeometry height="60" width="120" x="400" y="570" as="geometry"/>
+                </mxCell>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-39" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="スライムの行動を決定/制御する" vertex="1">
+                    <mxGeometry height="50" width="184.5" x="367.75" y="630" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
