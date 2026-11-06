@@ -37,6 +37,7 @@
     <ClCompile Include="Source\ResourceManager.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\SceneManager.cpp" />
+    <ClCompile Include="Source\SlimeMesh.cpp" />
     <ClCompile Include="Source\SlimeModel.cpp" />
     <ClCompile Include="Source\SoundManager.cpp" />
     <ClCompile Include="Source\Stage.cpp" />
@@ -44,6 +45,7 @@
     <ClCompile Include="Source\TextureAnimation.cpp" />
     <ClCompile Include="Source\GameScene.cpp" />
     <ClCompile Include="Source\TitleScene.cpp" />
+    <ClCompile Include="Source\TitleSlimeModel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ExplainScene.h" />
@@ -63,6 +65,7 @@
     <ClInclude Include="Source\ResourceManager.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneManager.h" />
+    <ClInclude Include="Source\SlimeMesh.h" />
     <ClInclude Include="Source\SlimeModel.h" />
     <ClInclude Include="Source\SoundManager.h" />
     <ClInclude Include="Source\Stage.h" />
@@ -70,6 +73,7 @@
     <ClInclude Include="Source\TextureAnimation.h" />
     <ClInclude Include="Source\GameScene.h" />
     <ClInclude Include="Source\TitleScene.h" />
+    <ClInclude Include="Source\TItleSlimeModel.h" />
     <ClInclude Include="Source\Utility.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -21,11 +21,8 @@ namespace SlimeRaySettings
 
 namespace
 {
-    // 横幅。大きくすると横に広がる
-    const float BODY_WIDTH = 1.20f;
-
-    // 高さ。小さくすると平たいスライムになる
-    const float BODY_HEIGHT = 1.75f;
+    // 横幅。大きくすると横に広がる（実体は SlimeMesh::BODY_WIDTH）
+    const float BODY_WIDTH = SlimeMesh::BODY_WIDTH;
 
     // 赤ちゃんの基準サイズ。以前の0.48から0.22へ縮小。
     const float BABY_SCALE = 0.22f;
@@ -39,28 +36,6 @@ namespace
         float t = heightRate < 0.0f ? 0.0f : (heightRate > 1.0f ? 1.0f : heightRate);
 
         return GetColorU8(static_cast<int>(bottom[c][0] + (top[c][0] - bottom[c][0]) * t), static_cast<int>(bottom[c][1] + (top[c][1] - bottom[c][1]) * t), static_cast<int>(bottom[c][2] + (top[c][2] - bottom[c][2]) * t), 255);
-    }
-
-    // 上から赤・橙・黄・緑・水色・青・紫をすべて通る。
-    // 高さを主成分にして、頭と底でも虹の端の色が欠けないようにする。
-    COLOR_U8 RainbowColor(float horizontal, float heightRate)
-    {
-        const int colors[7][3] = {
-            {245, 35, 45}, {255, 125, 15}, {250, 230, 20},
-            {30, 205, 65}, {10, 200, 235}, {35, 75, 240}, {155, 35, 225}
-        };
-
-        float h = heightRate < 0.0f ? 0.0f : (heightRate > 1.0f ? 1.0f : heightRate);
-        float t = 1.0f - h + (horizontal - 0.5f) * 0.32f * sinf(h * DX_PI_F);
-        t = t < 0.0f ? 0.0f : (t > 1.0f ? 1.0f : t);
-        float segment = t * 6.0f;
-        int i = static_cast<int>(segment);
-
-        if (i > 5) i = 5;
-
-        float f = segment - i;
-
-        return GetColorU8(static_cast<int>(colors[i][0] + (colors[i + 1][0] - colors[i][0]) * f), static_cast<int>(colors[i][1] + (colors[i + 1][1] - colors[i][1]) * f), static_cast<int>(colors[i][2] + (colors[i + 1][2] - colors[i][2]) * f), 255);
     }
 
     const float BABY_WIDTH = 1.18f;
@@ -767,7 +742,7 @@ float SlimeModel::Clamp(float value, float minValue, float maxValue)
 void SlimeModel::Initialize()
 {
     ResetBody();
-    CreateMesh();
+    mesh.Initialize();
     babyWorlds[this] = BabyWorld();
     babyWorlds[this].babies.reserve(MAX_BABIES);
 
@@ -834,38 +809,6 @@ void SlimeModel::ResetBody()
 
     dentDirection = VGet(0.0f, 0.0f, 0.0f);
 }
-
-void SlimeModel::CreateMesh()
-{
-    vertices.clear();
-    indices.clear();
-
-    vertices.resize((LAT + 1) * (LON + 1));
-
-    for (int y = 0; y < LAT; ++y)
-    {
-        for (int x = 0; x < LON; ++x)
-        {
-            // 行番号×1行の点数＋列番号で、2次元の位置を1つの番号に変換する。
-            // i0・i1が今の段の隣り合う点、i2・i3が次の段の点。
-            int i0 = y * (LON + 1) + x;
-            int i1 = i0 + 1;
-            int i2 = i0 + (LON + 1);
-            int i3 = i2 + 1;
-
-            // 4つの点を2枚の三角形に分ける。indicesには座標ではなく頂点番号を保存する。
-            // 最初は(i0,i2,i1)、次は(i1,i2,i3)。並べる順番が面の向きに関わる。
-            indices.push_back(static_cast<unsigned short>(i0));
-            indices.push_back(static_cast<unsigned short>(i2));
-            indices.push_back(static_cast<unsigned short>(i1));
-
-            indices.push_back(static_cast<unsigned short>(i1));
-            indices.push_back(static_cast<unsigned short>(i2));
-            indices.push_back(static_cast<unsigned short>(i3));
-        }
-    }
-}
-
 
 void SlimeModel::SelectColorByKeyboard()
 {
@@ -1493,7 +1436,7 @@ void SlimeModel::Update(const std::vector<BoxCollider>& boxes)
 
 void SlimeModel::UpdateMesh(const std::vector<BoxCollider>& boxes)
 {
-    if (vertices.empty())
+    if (mesh.GetVertices().empty())
     {
         return;
     }
@@ -1507,88 +1450,33 @@ void SlimeModel::UpdateMesh(const std::vector<BoxCollider>& boxes)
     float swayX = sway * SWAY_X;
     float swayZ = sway * SWAY_Z;
 
-
-    int index = 0;
-
     for (int y = 0; y <= LAT; ++y)
     {
-        float v = static_cast<float>(y) / LAT;
+        // 段の形状（輪の半径・高さ・重みなど）は SlimeMesh::ComputeRing で計算する。
+        SlimeMesh::RingInfo ring;
+        SlimeMesh::ComputeRing(y, ring);
 
-        // 各高さに輪を作り、積み重ねて体にする。ringRadiusは輪の半径、heightFromBottomは底からの高さ。
-        float ringRadius = 0.0f;
-        float heightFromBottom = 0.0f;
-
-
-        // 最も横に広がる位置
-        const float BELLY_START = 0.55f;
-
-        // 丸い下半身から平らな底面へ切り替わる位置
-        const float BASE_START = 0.90f;
-
-        // お腹の高さ（全高に対する割合）
-        const float BELLY_HEIGHT = 0.32f;
-
-        // 底面の半径（最大幅に対する割合）
-        const float BASE_RADIUS = 0.42f;
-
-        if (v <= BELLY_START)
-        {
-            // ------------------------------------------------
-            // 頭の先端 → お腹
-            // 上は尖り、お腹に向かって滑らかに広がる
-            // ------------------------------------------------
-            float t = v / BELLY_START;
-
-            ringRadius = BODY_WIDTH * sinf(t * DX_PI_F * 0.5f);
-
-            heightFromBottom = BODY_HEIGHT * (BELLY_HEIGHT + (1.0f - BELLY_HEIGHT) * (1.0f - t));
-        }
-        else if (v <= BASE_START)
-        {
-            // ------------------------------------------------
-            // お腹 → 足元
-            // 楕円のカーブで下側を丸く絞る
-            // ------------------------------------------------
-            float t = (v - BELLY_START) / (BASE_START - BELLY_START);
-            float angle = t * DX_PI_F * 0.5f;
-            ringRadius = BODY_WIDTH * (BASE_RADIUS + (1.0f - BASE_RADIUS) * cosf(angle));
-
-            heightFromBottom = BODY_HEIGHT * BELLY_HEIGHT * (1.0f - sinf(angle));
-        }
-        else
-        {
-            // ------------------------------------------------
-            // 小さな平らな底面
-            // 接地部分だけ平らにして安定感を出す
-            // ------------------------------------------------
-            float t = (v - BASE_START) / (1.0f - BASE_START);
-            ringRadius = BODY_WIDTH * BASE_RADIUS * (1.0f - t);
-            heightFromBottom = 0.0f;
-        }
+        const float ringRadius = ring.ringRadius;
+        const float heightFromBottom = ring.heightFromBottom;
 
         // 底なら0、頭なら1になる高さの割合。揺らす場所・垂らす場所の強さを分ける。
-        float heightRate = heightFromBottom / BODY_HEIGHT;
+        const float heightRate = ring.heightRate;
 
         // 底面は揺らさず、上側ほど揺らす
-        float upperWeight = heightRate * heightRate;
+        const float upperWeight = ring.upperWeight;
 
         // 下側ほど垂れやすくする
-        float lowerWeight = Clamp(1.0f - heightRate / 0.45f, 0.0f, 1.0f);
-        lowerWeight *= lowerWeight;
+        const float lowerWeight = ring.lowerWeight;
 
         // 円周を流れる波ではなく、上下方向の小さな膨らみ
         float ripple = 1.0f + sinf(wobblePhase * 1.4f) * RIPPLE_POWER * wobblePower * upperWeight;
 
         for (int x = 0; x <= LON; ++x)
         {
-            float u = static_cast<float>(x) / LON;
-
-            // 両端の座標を完全に一致させる
-            float phi = (x == LON) ? 0.0f : u * DX_PI_F * 2.0f;
-
             // cosとsinで輪の周りの向きを作る。その向きに輪の半径を掛けると円周上の点になる。
-            float directionX = cosf(phi);
-            float directionZ = sinf(phi);
+            float directionX = 0.0f;
+            float directionZ = 0.0f;
+            SlimeMesh::ComputeDirection(x, directionX, directionZ);
 
             // 底面は当たり判定の下端に合わせる。
             // 縦に伸縮しても接地位置を変えない。
@@ -1646,122 +1534,13 @@ void SlimeModel::UpdateMesh(const std::vector<BoxCollider>& boxes)
             VECTOR local = normalLocal;
 
             // 本体の位置＋本体から見た頂点位置で、ステージ内の座標に変換する。
-            vertices[index].pos = VAdd(position, local);
-
-            // 法線はこの後、実際の形から再計算する
-            vertices[index].norm = VGet(0.0f, 0.0f, 0.0f);
-
-            // difは頂点の色(R,G,B,A)。Aは不透明度で、255が不透明。spcは光沢の色。
-            vertices[index].dif = RainbowColor(0.5f + directionX * ringRadius / (BODY_WIDTH * 2.0f), heightRate);
-
-            vertices[index].spc = GetColorU8(18, 18, 18, 255);
-
-            // u・vは画像を貼るための座標。今回の描画では画像を指定していない。
-            vertices[index].u = u;
-            vertices[index].v = v;
-
-            vertices[index].su = 0.0f;
-            vertices[index].sv = 0.0f;
-
-            ++index;
+            // 色・UV・法線は SlimeMesh 側で設定する（法線はこの後まとめて計算）。
+            mesh.SetVertex(y, x, VAdd(position, local), heightRate, SlimeMesh::ComputeColorHorizontal(directionX, ringRadius));
         }
     }
 
-    for (size_t i = 0; i + 2 < indices.size(); i += 3)
-    {
-        int i0 = indices[i];
-        int i1 = indices[i + 1];
-        int i2 = indices[i + 2];
-
-        VECTOR edge1 = VSub(vertices[i1].pos, vertices[i0].pos);
-        VECTOR edge2 = VSub(vertices[i2].pos, vertices[i0].pos);
-
-        // 現在のインデックス順に対して外向きになる順序
-        VECTOR faceNormal = CrossVector(edge2, edge1);
-
-        // 頭頂部や底面中央の面積ゼロの三角形は無視
-        if (VSquareSize(faceNormal) < 0.000000000001f)
-        {
-            continue;
-        }
-
-        // この面の法線を3頂点に足す。隣の面の向きも集めることで、滑らかな陰影を作る。
-        // 正規化前の外積なので、大きい面ほど強く影響する。
-        vertices[i0].norm = VAdd(vertices[i0].norm, faceNormal);
-        vertices[i1].norm = VAdd(vertices[i1].norm, faceNormal);
-        vertices[i2].norm = VAdd(vertices[i2].norm, faceNormal);
-    }
-
-    // 円周の始めと終わりは同じ場所の別頂点。向きもそろえて光の継ぎ目を目立ちにくくする。
-    const float joinDistanceSquared = radius * radius * 0.00000001f;
-
-    for (int y = 0; y <= LAT; ++y)
-    {
-        int first = y * (LON + 1);
-        int last = first + LON;
-
-        VECTOR difference = VSub(vertices[first].pos, vertices[last].pos);
-
-        // 離れている頂点の法線は統合しない
-        if (VSquareSize(difference) <= joinDistanceSquared)
-        {
-            VECTOR sum = VAdd(vertices[first].norm, vertices[last].norm);
-
-            vertices[first].norm = sum;
-            vertices[last].norm = sum;
-        }
-    }
-
-    for (int pole = 0; pole < 2; ++pole)
-    {
-        int row = (pole == 0) ? 0 : LAT;
-        int first = row * (LON + 1);
-
-        bool samePosition = true;
-
-        for (int x = 1; x < LON; ++x)
-        {
-            VECTOR difference = VSub(vertices[first + x].pos, vertices[first].pos);
-
-            if (VSquareSize(difference) > joinDistanceSquared)
-            {
-                samePosition = false;
-                break;
-            }
-        }
-
-        if (samePosition)
-        {
-            VECTOR sum = VGet(0.0f, 0.0f, 0.0f);
-
-            // 最後の頂点は先頭と重複するので数えない
-            for (int x = 0; x < LON; ++x)
-            {
-                sum = VAdd(sum, vertices[first + x].norm);
-            }
-
-            for (int x = 0; x <= LON; ++x)
-            {
-                vertices[first + x].norm = sum;
-            }
-        }
-    }
-
-    // 法線を長さ1にそろえる
-    for (size_t i = 0; i < vertices.size(); ++i)
-    {
-        if (VSquareSize(vertices[i].norm) > 0.000000000001f)
-        {
-            vertices[i].norm = VNorm(vertices[i].norm);
-        }
-        else
-        {
-            // 面がつぶれた場合の安全な予備値
-            int row = static_cast<int>(i) / (LON + 1);
-
-            vertices[i].norm = row > LAT / 2 ? VGet(0.0f, -1.0f, 0.0f) : VGet(0.0f, 1.0f, 0.0f);
-        }
-    }
+    // 法線はこの後、実際の形から再計算する
+    mesh.RecalculateNormals(radius);
 }
 
 // 表情描画
@@ -1782,6 +1561,9 @@ void SlimeModel::DrawFace()
     {
         return;
     }
+
+    const std::vector<VERTEX3D>& vertices = mesh.GetVertices();
+    const std::vector<unsigned short>& indices = mesh.GetIndices();
 
     if (vertices.empty() || indices.empty())
     {
@@ -1939,7 +1721,7 @@ void SlimeModel::DrawFace()
 // 描画
 void SlimeModel::Draw(const std::vector<BoxCollider>& boxes)
 {
-    if (vertices.empty() || indices.empty())
+    if (mesh.GetVertices().empty() || mesh.GetIndices().empty())
     {
         return;
     }
@@ -1954,8 +1736,7 @@ void SlimeModel::Draw(const std::vector<BoxCollider>& boxes)
     DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
     // 頂点配列と接続番号で三角形をまとめて描く。三角形数は接続番号の数÷3。
-    // DX_NONE_GRAPHは画像なし。TRUEは透過を有効にする指定。
-    DrawPolygonIndexed3D(vertices.data(), static_cast<int>(vertices.size()), indices.data(), static_cast<int>(indices.size() / 3), DX_NONE_GRAPH, TRUE);
+    mesh.Draw();
 
     // 後から描くものに半透明設定が残らないよう、通常の描画設定へ戻す。
     DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

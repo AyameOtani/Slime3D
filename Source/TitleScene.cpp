@@ -31,19 +31,35 @@ TitleScene::TitleScene()
 
 TitleScene::~TitleScene()
 {
-
 }
 
 
 void TitleScene::Initialize()
 {
+    // 既存の背景やボタンの初期化のほかに、モデルとカメラを初期化
+    // ステージは未定のため、ここでは読み込まない（床が無ければ基準位置の高さで接地する）
+    const VECTOR slimePosition = GetSlimePosition();
+
+    mTitleModel.Initialize();
+    mTitleModel.SetPosition(slimePosition);
+
+    // スライムを映すカメラを準備する（カメラはスライムの位置を基準にする）
+    // 初期アングルはキー9と同じアングルBにする（キー8・9・0で切り替え可能）
+    mTitleCamera.SetCameraAngle(TITLE_CAMERA_ANGLE);
+    mTitleCamera.Initialize(slimePosition);
 }
 
 
 void TitleScene::Update()
 {
     UpdateHoverButton();
-   
+
+    // モデルのジャンプ演出を更新
+    mTitleModel.Update();
+
+    // スライムの位置に合わせてカメラを更新（描画前に設定を反映する）
+    mTitleCamera.Update(GetSlimePosition());
+
     // 基底クラスの更新処理を呼びだす
     Scene::Update();
 }
@@ -76,6 +92,10 @@ void TitleScene::Draw()
 {
     DrawString(20, 20, "タイトル", GetColor(255, 255, 255));
 
+
+    // タイトル用モデルの描画
+    mTitleModel.Draw();
+
     // ボタン描画
     m_GameStart.Draw();
     m_ExplainGraph.Draw();
@@ -83,6 +103,13 @@ void TitleScene::Draw()
 
     // 基底クラスの更新処理を呼びだす
     Scene::Draw();
+}
+
+
+// タイトルのスライムの表示位置
+VECTOR TitleScene::GetSlimePosition() const
+{
+    return VGet(0.0f, 0.0f, SLIME_POS_Z);
 }
 
 
