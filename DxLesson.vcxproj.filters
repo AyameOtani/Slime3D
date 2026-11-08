@@ -16,6 +16,21 @@
     <Filter Include="ソース ファイル\Slime">
       <UniqueIdentifier>{d6532d95-3c46-4183-9c64-842ac8c03157}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\State">
+      <UniqueIdentifier>{12a9c2cb-35d5-4592-8ce6-3bb042a19375}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\State">
+      <UniqueIdentifier>{c0f50288-9986-47c9-bb18-94895f486026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Slime">
+      <UniqueIdentifier>{105a6f44-1411-46e7-82a2-321382b8b35f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Object">
+      <UniqueIdentifier>{6f42cb2c-9b92-4097-9c03-296c4d6a06c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Object">
+      <UniqueIdentifier>{b8de456a-1db9-4e91-8693-c30917ecf012}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Collision.cpp">
@@ -34,12 +49,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Master.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Object2D.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ObjectManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\ResourceManager.cpp">
@@ -75,11 +84,35 @@
     <ClCompile Include="Source\Camera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Object3D.cpp">
+    <ClCompile Include="Source\GameScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SlimeManager.cpp">
+      <Filter>ソース ファイル\Slime</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\State\CompositeState.cpp">
+      <Filter>ソース ファイル\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\State\IState.cpp">
+      <Filter>ソース ファイル\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\State\StateMachine.cpp">
+      <Filter>ソース ファイル\State</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Object.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Object2D.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Object3D.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ObjectManager.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Slime.cpp">
+      <Filter>ソース ファイル\Slime</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -96,12 +129,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Master.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Object2D.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ObjectManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\ResourceManager.h">
@@ -131,20 +158,47 @@
     <ClInclude Include="Source\EffectManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SlimeModel.h">
-      <Filter>ソース ファイル\Slime</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Stage.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Camera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Object3D.h">
+    <ClInclude Include="Source\GameScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Source\SlimeModel.h">
+      <Filter>ヘッダー ファイル\Slime</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SlimeManager.h">
+      <Filter>ヘッダー ファイル\Slime</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\State\CompositeState.h">
+      <Filter>ヘッダー ファイル\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\State\IState.h">
+      <Filter>ヘッダー ファイル\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\State\StateMachine.h">
+      <Filter>ヘッダー ファイル\State</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Object.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Object2D.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Object3D.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ObjectManager.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ObjectPool.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Slime.h">
+      <Filter>ヘッダー ファイル\Slime</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
