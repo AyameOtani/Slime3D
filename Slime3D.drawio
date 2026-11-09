@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="J3WLNVzqXg6HLEZK8wI6" name="ページ-1">
-        <mxGraphModel dx="1848" dy="520" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="2303" dy="752" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -31,17 +31,22 @@
                 <mxCell id="n0X8Uj9-Es94DCir-OAf-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Slime" vertex="1">
                     <mxGeometry height="60" width="120" x="219" y="430" as="geometry"/>
                 </mxCell>
-                <mxCell id="n0X8Uj9-Es94DCir-OAf-17" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-7" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n0X8Uj9-Es94DCir-OAf-12">
-                    <mxGeometry relative="1" as="geometry"/>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-17" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-7" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;rounded=0;curved=0;" target="n0X8Uj9-Es94DCir-OAf-12">
+                    <mxGeometry relative="1" x="0.0006" as="geometry"/>
                 </mxCell>
-                <mxCell id="n0X8Uj9-Es94DCir-OAf-18" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-7" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n0X8Uj9-Es94DCir-OAf-6">
-                    <mxGeometry relative="1" as="geometry"/>
+                <mxCell id="n0X8Uj9-Es94DCir-OAf-18" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-7" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;rounded=0;curved=0;" target="n0X8Uj9-Es94DCir-OAf-6">
+                    <mxGeometry relative="1" x="-0.0044" as="geometry"/>
                 </mxCell>
                 <mxCell id="n0X8Uj9-Es94DCir-OAf-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="CharaBase&lt;br&gt;（未定）" vertex="1">
                     <mxGeometry height="60" width="120" x="354" y="330" as="geometry"/>
                 </mxCell>
+                <mxCell id="dfW2jRCitrakbkMZAS6s-8" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-12" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;rounded=0;endArrow=none;endFill=0;" target="dfW2jRCitrakbkMZAS6s-7">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="890" y="530" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
                 <mxCell id="n0X8Uj9-Es94DCir-OAf-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Player" vertex="1">
-                    <mxGeometry height="60" width="120" x="610" y="430" as="geometry"/>
+                    <mxGeometry height="60" width="120" x="830" y="430" as="geometry"/>
                 </mxCell>
                 <mxCell id="n0X8Uj9-Es94DCir-OAf-20" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-19" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" target="n0X8Uj9-Es94DCir-OAf-6">
                     <mxGeometry relative="1" as="geometry"/>
@@ -90,6 +95,12 @@
                 </mxCell>
                 <mxCell id="dfW2jRCitrakbkMZAS6s-6" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="メンバとして保持する" vertex="1">
                     <mxGeometry height="30" width="142.25" x="280" y="520" as="geometry"/>
+                </mxCell>
+                <mxCell id="dfW2jRCitrakbkMZAS6s-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="VacuumTool" vertex="1">
+                    <mxGeometry height="60" width="120" x="830" y="610" as="geometry"/>
+                </mxCell>
+                <mxCell id="dfW2jRCitrakbkMZAS6s-10" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="掃除機" vertex="1">
+                    <mxGeometry height="50" width="169" x="805.5" y="670" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
