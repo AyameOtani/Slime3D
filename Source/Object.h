@@ -1,5 +1,6 @@
 #pragma once
 #include "DxLib.h"
+#include "Utility.h"
 
 // ***************************************************************************************
 // ---------------------------------------------------------------------------------------
@@ -49,6 +50,7 @@ protected:
 	// メンバ変数
 	//*****************************************
 	bool mbDeleteFlag;			// 削除フラグ(これがtrue になっていると自動的に削除される（ように作る）)
+	bool mbActiveFlag;			// 更新・描画をObjectManagerで行うかどうかのフラグ	※ 山本 追加 
 	Tag mnTag;					// オブジェクトを見分ける用のタグ
 	ObjectTransform mTransform;	// 座標、向き、スケールの情報をまとめたもの
 
@@ -78,6 +80,9 @@ public:
 
 	void SetDeleteFlag(bool flag) { mbDeleteFlag = flag; }  // 削除フラグ設定
 	bool IsDeleteFlag() const { return mbDeleteFlag; }      // 削除フラグ取得
+	
+	void SetActive(bool flag) { mbActiveFlag = flag; }  // アクティブフラグ設定
+	bool IsActive() const { return mbActiveFlag; }      // アクティブフラグ取得
 
 	void SetTag(Tag tag) { mnTag = tag; }  // タグ設定
 	Tag GetTag() const{ return mnTag; }    // タグ取得
