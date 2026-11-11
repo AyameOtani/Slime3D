@@ -67,13 +67,16 @@ namespace Helper
     namespace DxLib_Math
     {
         /* すべて 0 にして返す */
-        inline VECTOR VECTOR_AllZero() { return VGet(0.0f, 0.0f, 0.0f); };
+        inline VECTOR VEC_AllZero() { return VGet(0.0f, 0.0f, 0.0f); };
         
         /* すべて 1 にして返す */
-        inline VECTOR VECTOR_AllOne() { return VGet(1.0f, 1.0f, 1.0f); };
+        inline VECTOR VEC_AllOne() { return VGet(1.0f, 1.0f, 1.0f); };
         
         /* VECTOR用の線形補間 */
-        inline VECTOR VECTOR_Lerp(const VECTOR& a, const VECTOR& b, float t) { return VAdd(a, VScale(VSub(b, a), t)); }
+        inline VECTOR VEC_Lerp(const VECTOR& a, const VECTOR& b, float t) { return VAdd(a, VScale(VSub(b, a), t)); }
+
+        /* VECTORにスカラー設定 */
+        inline VECTOR VEC_GetScalar(const float scl) { return VGet(scl, scl, scl); }
     };
 
     //-----------------------------------------

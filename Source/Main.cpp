@@ -61,6 +61,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		return -1;
 	}
 
+	// ============================================
+	// エフェクトの読み込み
+	// ============================================
+	Master::mpEffectManager->LoadEffect("Resource/Effect/ImpactUponLanding.efkefc", "ImpactUponLanding");
+	Master::mpEffectManager->LoadEffect("Resource/Effect/SlimeExplosion.efkefc", "SlimeExplosion");
+
+
+
+
+
 	// 描画先画面を裏画面に設定する
 	SetDrawScreen(DX_SCREEN_BACK);
 

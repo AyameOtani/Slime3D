@@ -58,6 +58,9 @@ void Slime::Update()
 	{
 		RequestReturn();
 
+		int handle = Master::mpEffectManager->PlayEffect3D("SlimeExplosion");
+		Master::mpEffectManager->SetPosEffect3D(handle,crntPos);
+		Master::mpEffectManager->SetScaleEffect3D(handle, VEC_GetScalar(1.0f));
 
 		SlimeDef::SlimeSpawnParams spawn;
 		spawn.position = VGet(0.0f, 0.0f, 0.0f);
@@ -94,7 +97,7 @@ void Slime::ResetForReuse()
 	mTransform.Reset();	
 
 	// èÛë‘ÉäÉZÉbÉg
-	m_Runtime.velocity = VECTOR_AllZero();
+	m_Runtime.velocity = VEC_AllZero();
 	m_Runtime.radius = 0.0f;
 	m_Runtime.mergeCooldown = 0.0f;
 	m_Runtime.isGrounded = false;
