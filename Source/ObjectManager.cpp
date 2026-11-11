@@ -26,6 +26,12 @@ void ObjectManager::Update()
 	// std::list...双方向連結リスト（要素の前後の要素にアクセスすることが簡単）
 	for (std::list<Object*>::iterator itr = mObjectList.begin(); itr != mObjectList.end(); itr++)
 	{
+		// アクティブ状態かを確かめる
+		if (!(*itr)->IsActive())
+		{
+			continue;
+		}
+
 		(*itr)->Update();
 	}
 
@@ -42,6 +48,12 @@ void ObjectManager::Draw()
 	// auto... 型推論。　＝より右側の型を勝手に推測してくれる便利なやつ
 	for (auto itr = mObjectList.begin(); itr != mObjectList.end(); itr++)
 	{
+		// アクティブ状態かを確かめる
+		if (!(*itr)->IsActive())
+		{
+			continue;
+		}
+
 		(*itr)->Draw();
 	}
 

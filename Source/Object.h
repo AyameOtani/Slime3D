@@ -36,6 +36,14 @@ public:
 		VECTOR position;   // 座標
 		VECTOR direction;  // 向き
 		VECTOR scale;	   // 拡縮
+
+		// 一括パラメータリセット
+		void Reset()
+		{
+			position = VGet(0.0f, 0.0f, 0.0f);
+			direction = VGet(0.0f, 0.0f, 0.0f);
+			scale = VGet(1.0f, 1.0f, 1.0f);
+		}
 	};
 
 	// オブジェクトの次元を表す列挙型
