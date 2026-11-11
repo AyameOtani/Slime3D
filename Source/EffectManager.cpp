@@ -62,6 +62,8 @@ bool EffectManager::Setup()
 	// Effekseerを使用する場合、2DゲームでもZバッファを使用する。
 	SetWriteZBuffer3D(TRUE);
 
+	m_EffectHandleMap.clear();
+
 
 	return true;
 }
@@ -171,7 +173,7 @@ int EffectManager::LoadEffect(const std::string& filePath, const std::string& ke
 	}
 
 	// すでに何か読み込まれている
-	if (m_EffectHandleMap[key] != -1) {
+	if (m_EffectHandleMap.find(key) != m_EffectHandleMap.end()) {
 		return false;
 	}
 	int handle = LoadEffekseerEffect(filePath.c_str(), magnification);
