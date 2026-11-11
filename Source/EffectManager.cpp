@@ -4,6 +4,7 @@
 namespace
 {
 	constexpr int MAX_PARTICLE = 8000;	// 最大パーティクル数
+	constexpr int MAX_EFFECT = 512;	// 最大エフェクト数
 };
 
 //*---------------------------------------------------------------------------------------
@@ -60,7 +61,6 @@ bool EffectManager::Setup()
 	// Zバッファへの書き込みを有効にする。
 	// Effekseerを使用する場合、2DゲームでもZバッファを使用する。
 	SetWriteZBuffer3D(TRUE);
-
 
 
 	return true;
@@ -157,26 +157,41 @@ void EffectManager::EffectDraw2D()
 //*
 //* [引数] 
 //* filePath      : ファイルパス
+//* key           : 取り出すためのキー
 //* magnification : 指定された値に拡大してエフェクトが読み込まれる らしいけど、基本は設定しなくてOK
 //* 
 //* [返値] 
 //* エフェクトのハンドル 
 //*----------------------------------------------------------------------------------------
-int EffectManager::LoadEffect(const std::string& filePath, float magnification)
+int EffectManager::LoadEffect(const std::string& filePath, const std::string& key, float magnification)
 {
-	 int handle = LoadEffekseerEffect(filePath.c_str(), magnification);
+	//最大数オーバー
+	if (m_EffectHandleMap.size() >= MAX_EFFECT) {
+		return false;
+	}
 
-	 if (handle == -1)
-	 {
-		 MessageBox(NULL, "エフェクトが読み込めませんでした", "EffectManager", MB_OK);
-		 assert(false);
-	 }
+	// すでに何か読み込まれている
+	if (m_EffectHandleMap[key] != -1) {
+		return false;
+	}
+	int handle = LoadEffekseerEffect(filePath.c_str(), magnification);
 
-	 return handle;
+	//エフェクトの読込
+	m_EffectHandleMap[key] = handle;
+
+	if (handle == -1)
+	{
+		MessageBox(NULL, "エフェクトが読み込めませんでした", "EffectManager", MB_OK);
+		assert(false);
+	}
+
+	return handle;
 }
 
 //*---------------------------------------------------------------------------------------
 //*【?】3Dエフェクトの再生
+//*		読み込み時に設定したキー文字列からエフェクトリソースのハンドルを探し再生させる 
+//*		返値 のエフェクトインスタンスハンドルを使用して、位置やスケールなどの設定関数にアクセスする
 //*
 //* [引数] 
 //* effectHandle      : エフェクトハンドル
@@ -184,9 +199,9 @@ int EffectManager::LoadEffect(const std::string& filePath, float magnification)
 //* [返値] 
 //* エフェクトのハンドル : -1 失敗
 //*----------------------------------------------------------------------------------------
-int EffectManager::PlayEffect3D(int effectHandle)
+int EffectManager::PlayEffect3D(const std::string& key)
 {
-	int handle = PlayEffekseer3DEffect(effectHandle);
+	int handle = PlayEffekseer3DEffect(m_EffectHandleMap[key]);
 	if (handle == -1)
 	{
 		MessageBox(NULL, "エフェクトの再生ができませんでした", "EffectManager", MB_OK);
@@ -262,4 +277,35 @@ void EffectManager::SetDynamicParameterEffect3D(int playingEffectHandle, int32_t
 bool EffectManager::IsPlayingEffect3D(int playingEffectHandle)
 {
 	return IsEffekseer3DEffectPlaying(playingEffectHandle);
+}
+
+//*----------------------------------------------------------------------------------------
+//*【?】エフェクトの全体色を設定
+//*----------------------------------------------------------------------------------------
+void EffectManager::SetColorEffect3D(int playingEffectHandle, int r, int g, int b, int a)
+{
+	SetColorPlayingEffekseer3DEffect(playingEffectHandle, r, g, b, a);
+}
+
+//*----------------------------------------------------------------------------------------
+//*【?】エフェクトを停止する
+//*----------------------------------------------------------------------------------------
+void EffectManager::StopEffect(int playingEffectHandle)
+{
+	StopEffekseer3DEffect(playingEffectHandle);
+}
+
+//*----------------------------------------------------------------------------------------
+//*【?】すべてのエフェクトを停止する
+//*----------------------------------------------------------------------------------------
+void EffectManager::StopAllEffect()
+{
+	//
+	// Dxlib側に専用処理がなかったので、Effekseerの管理クラスから直接呼ぶ
+	//
+	::Effekseer::ManagerRef manager = GetEffekseer3DManager();
+	if (manager != nullptr)
+	{
+		manager->StopAllEffects();
+	}
 }
