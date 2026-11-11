@@ -19,12 +19,14 @@ private:
 
     // 固定データ定義
     // スライムの種類増加に対応できるよう配列で保持
-    Slime::SlimeDefinition 
-        m_SlimeDefinition[UINT_CAST(Slime::SLIME_TYPE::NUM)];
+    SlimeDef::SlimeDefinition 
+        m_SlimeDefinition[UINT_CAST(SlimeDef::SLIME_TYPE::NUM)];
 
     // スライムプール
     std::unique_ptr<ObjectPool<Slime>> m_pSlimePool;
 
+    // 生成したスライムたち
+    std::vector<Slime*> m_SpawnedSlimes;        
 private:
     // コピー禁止
     SlimeManager(const SlimeManager&) = delete;
@@ -37,10 +39,10 @@ public:
     ~SlimeManager();
 
     bool Setup();   // 初期化
-    void Term();    // 終了
+    void Finalize();    // 終了
+    void ProcessReturnRequests();   // プールへの返却状態をチェックする
 
-    void SpawnSlime();      // スライムの生成
-    void ReleaseSlime();    // スライムの返却
+    bool SpawnSlime(const SlimeDef::SlimeSpawnParams& spawnParams);      // スライムの生成
     void MergerSlime();     // スライムの合体
 };
 
