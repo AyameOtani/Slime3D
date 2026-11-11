@@ -23,6 +23,7 @@
     <ClCompile Include="Source\Collision.cpp" />
     <ClCompile Include="Source\EffectManager.cpp" />
     <ClCompile Include="Source\FontManager.cpp" />
+    <ClCompile Include="Source\GameDefinitions.cpp" />
     <ClCompile Include="Source\GameManager.cpp" />
     <ClCompile Include="Source\InputManager.cpp" />
     <ClCompile Include="Source\Main.cpp" />
@@ -37,6 +38,7 @@
     <ClCompile Include="Source\Slime.cpp" />
     <ClCompile Include="Source\SlimeManager.cpp" />
     <ClCompile Include="Source\SlimeModel.cpp" />
+    <ClCompile Include="Source\SlimeVisual.cpp" />
     <ClCompile Include="Source\SoundManager.cpp" />
     <ClCompile Include="Source\Stage.cpp" />
     <ClCompile Include="Source\State\CompositeState.cpp" />
@@ -52,6 +54,7 @@
     <ClInclude Include="Source\Collision.h" />
     <ClInclude Include="Source\EffectManager.h" />
     <ClInclude Include="Source\FontManager.h" />
+    <ClInclude Include="Source\GameDefinitions.h" />
     <ClInclude Include="Source\GameManager.h" />
     <ClInclude Include="Source\InputManager.h" />
     <ClInclude Include="Source\Master.h" />
@@ -66,6 +69,7 @@
     <ClInclude Include="Source\Slime.h" />
     <ClInclude Include="Source\SlimeManager.h" />
     <ClInclude Include="Source\SlimeModel.h" />
+    <ClInclude Include="Source\SlimeVisual.h" />
     <ClInclude Include="Source\SoundManager.h" />
     <ClInclude Include="Source\Stage.h" />
     <ClInclude Include="Source\State\CompositeState.h" />

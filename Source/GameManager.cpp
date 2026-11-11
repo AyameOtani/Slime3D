@@ -7,12 +7,16 @@ GameManager::GameManager()
 	mpSoundManager = std::make_unique<SoundManager>();
 	mpResourceManager = std::make_unique<ResourceManager>();
 	mpFontManager = std::make_unique<FontManager>();
+	mpSlimeManager = std::make_unique<SlimeManager>();
 
 	// 初期化
 	mpFontManager->Initialize();
 	// サウンドの初期化
 	mpSoundManager->Initialize();
 	mpSceneManager->Initialize();
+
+	// スライムの初期化
+	mpSlimeManager->Setup();
 }
 
 
@@ -23,6 +27,9 @@ GameManager::~GameManager()
 	// フォントの終了処理
 	mpFontManager->Finalize();
 	mpSceneManager->Finalize();
+
+	// スライムの終了処理
+	mpSlimeManager->Finalize();
 }
 
 
@@ -30,6 +37,9 @@ void GameManager::Update()
 {
 	// シーンの更新
 	Master::mpGameManager->GetSceneManager()->Update();
+
+	// スライムのプール返却処理
+	Master::mpGameManager->GetSlimeManager()->ProcessReturnRequests();
 }
 
 SceneManager* GameManager::GetSceneManager()
@@ -50,4 +60,9 @@ ResourceManager* GameManager::GetResourceManager()
 FontManager* GameManager::GetFontManager()
 {
 	return mpFontManager.get();
+}
+
+SlimeManager* GameManager::GetSlimeManager()
+{
+	return mpSlimeManager.get();
 }

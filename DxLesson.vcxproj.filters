@@ -31,6 +31,18 @@
     <Filter Include="ヘッダー ファイル\Object">
       <UniqueIdentifier>{b8de456a-1db9-4e91-8693-c30917ecf012}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Definitions">
+      <UniqueIdentifier>{8aa77c08-8c01-4aee-87d7-cd9db8175925}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Definitions">
+      <UniqueIdentifier>{e805cf9f-0fe9-4221-91f4-15681398c0c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene">
+      <UniqueIdentifier>{9cc1253d-add6-4497-a444-35642ceb15b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Scene">
+      <UniqueIdentifier>{ab85d9bd-cd00-46d1-8c35-26b108aaf54a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Collision.cpp">
@@ -54,19 +66,10 @@
     <ClCompile Include="Source\ResourceManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SoundManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Texture.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\TitleScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\TextureAnimation.cpp">
@@ -82,9 +85,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Camera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\SlimeManager.cpp">
@@ -114,6 +114,24 @@
     <ClCompile Include="Source\Slime.cpp">
       <Filter>ソース ファイル\Slime</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SlimeVisual.cpp">
+      <Filter>ソース ファイル\Slime</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameDefinitions.cpp">
+      <Filter>ソース ファイル\Definitions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TitleScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneManager.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Collision.h">
@@ -134,12 +152,6 @@
     <ClInclude Include="Source\ResourceManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SoundManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -147,9 +159,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\TitleScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\TextureAnimation.h">
@@ -162,9 +171,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Camera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\SlimeModel.h">
@@ -199,6 +205,24 @@
     </ClInclude>
     <ClInclude Include="Source\Slime.h">
       <Filter>ヘッダー ファイル\Slime</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SlimeVisual.h">
+      <Filter>ヘッダー ファイル\Slime</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameDefinitions.h">
+      <Filter>ヘッダー ファイル\Definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TitleScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneManager.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
