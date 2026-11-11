@@ -15,8 +15,8 @@ GameManager::GameManager()
 	mpSoundManager->Initialize();
 	mpSceneManager->Initialize();
 
-	// スライムの初期化
-	mpSlimeManager->Setup();
+	// スライムの初期化はここでは行わない
+	// シーン側の初期化で行う
 }
 
 

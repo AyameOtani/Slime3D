@@ -77,12 +77,18 @@ void GameScene::Initialize()
     SlimeInitialize();
 
     // ============================================
+    // スライム管理クラスの初期化  山本
+    // ============================================
+    Master::mpGameManager->GetSlimeManager()->Setup();
+
+    // ============================================
     // ステージの作成  山本
     // ============================================
 
     // 横スクロールカメラ
     m_Camera.Initialize(slime.GetPosition());
     m_Camera.SetFollowRate(0.045f);
+
 
     //
     // ステージの読み込み。見た目・当たり判定・塗装をStageで管理する。

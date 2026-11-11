@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="J3WLNVzqXg6HLEZK8wI6" name="ページ-1">
-        <mxGraphModel dx="2303" dy="752" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1255" dy="360" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -57,6 +57,9 @@
                 <mxCell id="n0X8Uj9-Es94DCir-OAf-19" parent="1" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="SlimeManager" vertex="1">
                     <mxGeometry height="80" width="120" x="-180" y="420" as="geometry"/>
                 </mxCell>
+                <mxCell id="YxpuWQBkKre_IV-M89xD-2" edge="1" parent="1" source="n0X8Uj9-Es94DCir-OAf-19" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="YxpuWQBkKre_IV-M89xD-1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
                 <mxCell id="n0X8Uj9-Es94DCir-OAf-21" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="分裂の管理、生成/破棄をObjectManagerに伝える" vertex="1">
                     <mxGeometry height="50" width="169" x="-204.5" y="500" as="geometry"/>
                 </mxCell>
@@ -101,6 +104,9 @@
                 </mxCell>
                 <mxCell id="dfW2jRCitrakbkMZAS6s-10" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="掃除機" vertex="1">
                     <mxGeometry height="50" width="169" x="805.5" y="670" as="geometry"/>
+                </mxCell>
+                <mxCell id="YxpuWQBkKre_IV-M89xD-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="ObjectPool" vertex="1">
+                    <mxGeometry height="60" width="120" x="-330" y="480" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
