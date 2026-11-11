@@ -1,6 +1,8 @@
 #include "Slime.h"
+#include "Master.h"
 
 using namespace Game::Slime;
+using namespace Helper::DxLib_Math;
 
 //*---------------------------------------------------------------------------------------
 //*【?】コンストラクタ
@@ -35,6 +37,7 @@ void Slime::Init(const SlimeSizeDefinition* definition, const SLIME_SPLIT_PHASE 
 {
 	m_pSizeDefinition = definition;
 	m_Runtime.splitPhase = splitPhase;
+	m_Runtime.radius = m_pSizeDefinition->radius;
 }
 
 //*---------------------------------------------------------------------------------------
@@ -45,7 +48,25 @@ void Slime::Init(const SlimeSizeDefinition* definition, const SLIME_SPLIT_PHASE 
 //*----------------------------------------------------------------------------------------
 void Slime::Update()
 {
+	VECTOR moveDir = VGet(0.0f, 0.3f, 1.0f);
+	m_Runtime.velocity = VScale(moveDir, m_pSizeDefinition->moveSpeed);
+	VECTOR crntPos = mTransform.position;
+	VECTOR newPos = VAdd(crntPos, m_Runtime.velocity);
+	mTransform.position = newPos;
 
+	if (m_Elapsed >= 1.0f)
+	{
+		RequestReturn();
+
+
+		SlimeDef::SlimeSpawnParams spawn;
+		spawn.position = VGet(0.0f, 0.0f, 0.0f);
+		spawn.type = SLIME_TYPE::NORMAL;
+		spawn.splitPhase = SLIME_SPLIT_PHASE::PHASE_0;
+		Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+	}
+
+	m_Elapsed += 0.01f;
 }
 
 //*---------------------------------------------------------------------------------------
@@ -56,7 +77,8 @@ void Slime::Update()
 //*----------------------------------------------------------------------------------------
 void Slime::Draw()
 {
-
+	VECTOR crntPos = mTransform.position;
+	DrawSphere3D(crntPos, m_Runtime.radius, 32, GetColor(255, 128, 128), GetColor(255, 255, 255), true);
 }
 
 
@@ -72,9 +94,16 @@ void Slime::ResetForReuse()
 	mTransform.Reset();	
 
 	// 状態リセット
-	m_Runtime.size = 0.0f;
-	m_Runtime.speed = 0.0f;
+	m_Runtime.velocity = VECTOR_AllZero();
+	m_Runtime.radius = 0.0f;
+	m_Runtime.mergeCooldown = 0.0f;
+	m_Runtime.isGrounded = false;
+	m_Runtime.type = SLIME_TYPE::NORMAL;
 	m_Runtime.splitPhase = SLIME_SPLIT_PHASE::PHASE_0;
+
+	m_ReturnRequested = false;
+
+	m_Elapsed = 0.0f;
 }
 
 //*---------------------------------------------------------------------------------------

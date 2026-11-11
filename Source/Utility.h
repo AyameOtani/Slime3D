@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include <cassert>
 #include <string>
+#include <algorithm>
+#include <cmath>
+
 // プログラム内で共通して使用する関数定義などをここに記述しておく
 //　関数なども記述していく
 
@@ -36,6 +39,41 @@ namespace Helper
         /* ラジアンからデグリーに変換 */
         inline float RadToDeg(float rad) { return rad * (180.0f / static_cast<float>(DX_PI_F)); }
 
+        /* 値を指定範囲内に制限する */
+        inline float Clamp(float value, float min, float max) { return std::clamp(value, min, max); }
+        
+        /* 線形補間 */
+        inline float Lerp(float start, float end, float t) { return (1 - t) * start + t * end; }
+
+        /* 補間の始点と終点を滑らかにする */
+        inline float SmoothStep(float t)
+        {
+            t = std::clamp(t, 0.0f, 1.0f);
+            return t * t * (3.0f - 2.0f * t);
+        }
+
+        /* 指定範囲の乱数取得（rand()なので精度は...）
+        ※ なるべくxメルセンヌ・ツイスタの乱数生成を使用した方が良い */
+        inline float RandRange(float _min, float _max)
+        {
+            float r = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+            return _min + r * (_max - _min);
+        }
+    };
+
+    //-----------------------------------------
+    /*       DxLib専用 数学関係補助    */
+    //-----------------------------------------
+    namespace DxLib_Math
+    {
+        /* すべて 0 にして返す */
+        inline VECTOR VECTOR_AllZero() { return VGet(0.0f, 0.0f, 0.0f); };
+        
+        /* すべて 1 にして返す */
+        inline VECTOR VECTOR_AllOne() { return VGet(1.0f, 1.0f, 1.0f); };
+        
+        /* VECTOR用の線形補間 */
+        inline VECTOR VECTOR_Lerp(const VECTOR& a, const VECTOR& b, float t) { return VAdd(a, VScale(VSub(b, a), t)); }
     };
 
     //-----------------------------------------

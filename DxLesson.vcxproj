@@ -69,6 +69,7 @@
     <ClInclude Include="Source\Slime.h" />
     <ClInclude Include="Source\SlimeManager.h" />
     <ClInclude Include="Source\SlimeModel.h" />
+    <ClInclude Include="Source\SlimeState\Slime_StateHeader.h" />
     <ClInclude Include="Source\SlimeVisual.h" />
     <ClInclude Include="Source\SoundManager.h" />
     <ClInclude Include="Source\Stage.h" />

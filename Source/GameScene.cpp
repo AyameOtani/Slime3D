@@ -111,6 +111,12 @@ void GameScene::Initialize()
     boxes = m_Stage.GetBoxes();
    
 
+    SlimeDef::SlimeSpawnParams spawn;
+    spawn.position = VGet(0.0f, 0.0f, 0.0f);
+    spawn.type = SlimeDef::SLIME_TYPE::NORMAL;
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
     // push_backは、一覧の末尾にデータを1個追加する命令
     // 各箱は「最小座標・最大座標・色」の順に指定している
     //

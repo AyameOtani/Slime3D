@@ -46,7 +46,7 @@ bool SlimeManager::Setup()
             // 1.”¼Œa 2.ˆÚ“®‘¬“x 3.‡‘ÌŽžŠÔ
              
             // –¢•ª—ôó‘Ô
-            { 0.0f, 0.0f, 0.0f },
+            { 5.0f, 0.5f, 10.0f },
             
             // ‚P’iŠK–Ú
             { 0.0f, 0.0f, 0.0f },
@@ -104,8 +104,10 @@ bool SlimeManager::Setup()
 void SlimeManager::Finalize()
 {
     // ƒv[ƒ‹‚ÌŠJ•ú
-    m_pSlimePool->clear();
-
+    if (m_pSlimePool)
+    {
+        m_pSlimePool->clear();
+    }
     m_SpawnedSlimes.clear();
 }
 

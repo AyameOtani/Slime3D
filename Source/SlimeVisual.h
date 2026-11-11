@@ -18,5 +18,6 @@ public:
 	~SlimeVisual();
 
 
+	void Reset();
 };
 

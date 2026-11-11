@@ -62,8 +62,14 @@ namespace Game
 		/// @brief 実行時に変化するデータ
 		struct SlimeRuntime
 		{
-			float speed = 0.0f;					// 現在の速度
-			float size = 0.0f;					// 現在のサイズ
+			VECTOR velocity;					// 移動速度
+			float radius = 0.0f;				// 現在の半径
+			float mergeCooldown = 0.0f;			// 合体できるまでの残り時間
+			bool isGrounded = false;			// 接地状態
+			
+			SLIME_TYPE type						// スライムの種類
+				= SLIME_TYPE::NORMAL;			
+			
 			SLIME_SPLIT_PHASE splitPhase		// 現在の分裂段階
 				= SLIME_SPLIT_PHASE::PHASE_0;	
 		};

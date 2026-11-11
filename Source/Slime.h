@@ -1,6 +1,7 @@
 #pragma once
 #include "Object3D.h"
 #include "GameDefinitions.h"
+#include "SlimeVisual.h"
 
 namespace SlimeDef = Game::Slime;
 
@@ -16,7 +17,11 @@ class Slime : public Object3D
 private:
 	SlimeDef::SlimeRuntime m_Runtime;						// ランタイムデータ
 	const SlimeDef::SlimeSizeDefinition* m_pSizeDefinition; // サイズごとの固定定義データの参照
+	SlimeVisual m_Visual;	
 	bool m_ReturnRequested;									// プールに返却をリクエスト
+
+
+	float m_Elapsed = 0.0f;
 
 public:
 	Slime();
