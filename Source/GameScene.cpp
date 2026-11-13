@@ -82,14 +82,18 @@ void GameScene::Initialize()
     Master::mpGameManager->GetSlimeManager()->Setup();
 
     // ============================================
-    // ステージの作成  山本
+    // カメラのセットアップ  山本
     // ============================================
 
     // 横スクロールカメラ
     m_Camera.Initialize(slime.GetPosition());
     m_Camera.SetFollowRate(0.045f);
+    m_Camera.SetControlMode(Camera::CONTROL_MODE::TPS); //TPSモードに
+    m_Camera.SetTPSDistance(10.0f);
 
-
+    // ============================================
+    // ステージの作成  山本
+    // ============================================
     //
     // ステージの読み込み。見た目・当たり判定・塗装をStageで管理する。
     //

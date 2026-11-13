@@ -1,20 +1,44 @@
 ﻿#include "Camera.h"
 #include "Utility.h"
 
+namespace
+{
+    constexpr float TARGET_OFFSET_Y = 1.25f;    // 注視点の位置を少し上にずらす補正
+    constexpr float PITCH_CLAMP_MAX = 80.0f;    // 上下の向きの制限 最大角度
+    constexpr float PITCH_CLAMP_MIN = -80.0f;   // 上下の向きの制限 最小角度
+}
+
+//*---------------------------------------------------------------------------------------
+//*【?】コンストラクタ
+//*----------------------------------------------------------------------------------------
 Camera::Camera()
-    : mCameraX(0.0f),
-    mStageZ(0.0f),
-    mFollowRate(0.045f),
-    mPosition(VGet(0.0f, 0.0f, 0.0f)),
-    mTarget(VGet(0.0f, 0.0f, 0.0f)),
-    m_CameraNear(0.1f),
-	m_CameraFar(100.0f),
-    m_CameraFovRad(Helper::Math::DegToRad(60.0f)),
-    m_CameraAngle(CAMERA_ANGLE::ANGLE_A),
-    m_CameraAngleSettingDataList()
+    : mCameraX(0.0f)
+    , mStageZ(0.0f)
+    , mFollowRate(0.045f)
+    , mPosition(VGet(0.0f, 0.0f, 0.0f))
+    , mTarget(VGet(0.0f, 0.0f, 0.0f))
+    , m_CameraNear(0.1f)
+	, m_CameraFar(100.0f)
+    , m_CameraFovRad(Helper::Math::DegToRad(60.0f))
+    , m_CameraAngle(CAMERA_ANGLE::ANGLE_A)
+    , m_CameraAngleSettingDataList()
+    , m_ControlMode(CONTROL_MODE::FIXED)
+    , m_Yaw(0.0f)
+    , m_Pitch(Helper::Math::DegToRad(-20.0f))
+    , m_TpsDistance(10.0f)
+    , m_MouseSensitivity(0.003f)
+    , m_MouseLookReady(false)
 {
 }
 
+//*---------------------------------------------------------------------------------------
+//*【?】初期化処理
+//*
+//* [引数] 
+//* playerPosition : プレイヤーの位置
+//* 
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
 void Camera::Initialize(
     const VECTOR& playerPosition)
 {
@@ -35,23 +59,84 @@ void Camera::Initialize(
     // 描画範囲もそれに合わせる
     SetCameraNearFar(m_CameraNear, m_CameraFar);
 
+    // マウスの表示を消す
+    SetMouseDispFlag(FALSE);
+
     RebuildCamera();
     Apply();
 }
 
+//*---------------------------------------------------------------------------------------
+//*【?】更新処理
+//*
+//* [引数] 
+//* playerPosition : プレイヤーの位置
+//* 
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
 void Camera::Update( const VECTOR& playerPosition)
 {
-    // プレイヤーのX位置へ少しずつ近づける
-    //
-    // すぐに同じ位置へ移動させず、
-    // 遅れて追いかけることで
-    // 横スクロールゲームらしい滑らかなカメラになる
+    float mouseDeltaX = 0.0f;
+    float mouseDeltaY = 0.0f;
+
+    if (m_ControlMode == CONTROL_MODE::TPS &&
+        GetWindowActiveFlag() != FALSE)
+    {
+        // 中央
+        const int centerX = Utility::SCREEN_WIDTH / 2;
+        const int centerY = Utility::SCREEN_HEIGHT / 2;
+
+        int mouseX = 0;
+        int mouseY = 0;
+
+        if (GetMousePoint(&mouseX, &mouseY) == 0)
+        {
+            // 初回は移動量を使わず、中央へ戻すだけにする
+            if (m_MouseLookReady)
+            {
+                mouseDeltaX = static_cast<float>(mouseX - centerX);
+                mouseDeltaY = static_cast<float>(mouseY - centerY);
+            }
+
+            // 次のフレームの移動量を測るため、中央へ戻す
+            m_MouseLookReady =
+                SetMousePoint(centerX, centerY) == 0;
+        }
+        else
+        {
+            m_MouseLookReady = false;
+        }
+    }
+    else
+    {
+        m_MouseLookReady = false;
+    }
+
+
+    // 固定アングル用の追従位置は更新し続ける
+    // TPSから戻したときも、現在のX位置を追従できる
     mCameraX += (playerPosition.x - mCameraX) * mFollowRate;
 
-    RebuildCamera();
+    if (m_ControlMode == CONTROL_MODE::TPS)
+    {
+        RebuildTpsCamera(playerPosition, mouseDeltaX, mouseDeltaY);
+    }
+    else
+    {
+        // 現在の固定アングル処理
+        RebuildCamera();
+    }
+
+    // どちらのモードも、現在の反映処理を使う
     Apply();
 }
 
+//*---------------------------------------------------------------------------------------
+//*【?】カメラ情報の構築
+//*
+//* [引数] なし
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
 void Camera::RebuildCamera()
 {
     // --------------------------------------------------------
@@ -89,6 +174,48 @@ void Camera::RebuildCamera()
 
     mTarget = VGet(mCameraX + targetOffset.x, targetOffset.y, mStageZ + targetOffset.z);
 }
+
+
+//*---------------------------------------------------------------------------------------
+//*【?】TPS操作用のカメラ情報を構築
+//*
+//* [引数] なし
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
+void Camera::RebuildTpsCamera(const VECTOR& playerPosition, float mouseDeltaX, float mouseDeltaY)
+{
+    // 左右の向き
+    // 角度が増え続けないよう、-180～180度の間に制限する
+    m_Yaw = std::remainder(
+        m_Yaw + mouseDeltaX * m_MouseSensitivity,
+        2.0f * DX_PI_F
+    );
+
+    m_Pitch -= mouseDeltaY * m_MouseSensitivity;
+
+    // 上下の向きを制限する
+    m_Pitch = Helper::Math::Clamp(
+        m_Pitch,
+        Helper::Math::DegToRad(PITCH_CLAMP_MIN),
+        Helper::Math::DegToRad(PITCH_CLAMP_MAX)
+    );
+
+    // 注視点の位置を少し上にする
+    mTarget = VAdd(playerPosition, VGet(0.0f, TARGET_OFFSET_Y, 0.0f));
+
+    // カメラの見ている方向
+    const float cosPitch = std::cos(m_Pitch);
+    const VECTOR foward = VGet(
+        std::sin(m_Yaw) * cosPitch,
+        std::sin(m_Pitch),
+        std::cos(m_Yaw) * cosPitch
+    );
+
+    // 位置
+    mPosition = VSub(mTarget, VScale(foward, m_TpsDistance));
+}
+
+
 
 //*---------------------------------------------------------------------------------------
 //*【?】カメラアングル用データのセットアップ [山本]
