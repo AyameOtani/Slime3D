@@ -7,6 +7,7 @@
 #include "ResourceManager.h"
 #include "FontManager.h"
 #include "SlimeManager.h"
+#include "TimeManager.h"
 
 // ゲームで使用するManagerをまとめて管理するクラス
 // Masterで呼ぶことによって全て使えるようにかつ、コードがすっきりする。 大谷
@@ -25,6 +26,7 @@ public:
 	FontManager* GetFontManager();
 
 	SlimeManager* GetSlimeManager();
+	TimeManager* GetTimeManager();
 
 private:
 
@@ -35,4 +37,8 @@ private:
 
 	// スライム管理クラス  山本
 	std::unique_ptr<SlimeManager> mpSlimeManager;
+
+	// 時間管理クラス  山本
+	std::unique_ptr<TimeManager> mpTimeManager;
+
 };

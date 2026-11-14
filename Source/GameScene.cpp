@@ -92,6 +92,12 @@ void GameScene::Initialize()
     m_Camera.SetTPSDistance(10.0f);
 
     // ============================================
+    // プレイヤーのセットアップ
+    // ============================================
+    m_pPlayer =  new Player();
+    m_pPlayer->Init();
+
+    // ============================================
     // ステージの作成  山本
     // ============================================
     //
@@ -120,30 +126,6 @@ void GameScene::Initialize()
     spawn.type = SlimeDef::SLIME_TYPE::NORMAL;
     spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
     Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
-
-    // push_backは、一覧の末尾にデータを1個追加する命令
-    // 各箱は「最小座標・最大座標・色」の順に指定している
-    //
-    // このプログラムでは、
-    // X：横方向、Y：高さ方向、Z：奥行き方向として扱う
-
-    // 地面
-    // Xは-5.0～5.0、Yは-0.5～0.0、Zは-5.0～3.5
-    // 上面の高さがY=0.0になる、薄くて広い箱
-    //boxes.push_back({ VGet(-5.0f,-0.5f,-5.0f), VGet(5.0f,0.0f,3.5f), GetColor(85,100,90) });
-
-    // Zが正の方向にある壁
-    // 高さは3.0、Z方向の厚さは0.4
-    //boxes.push_back({ VGet(-2.2f,0.0f,2.8f), VGet(2.2f,3.0f,3.2f),  GetColor(100,115,110) });
-
-    // Xが負の側にある障害物
-    // 地面からの高さは1.0
-    //boxes.push_back({ VGet(-3.8f,0.0f,-1.0f), VGet(-2.2f,1.0f,0.5f), GetColor(110,105,95) });
-
-    // Xが正の側にある障害物
-    // 地面からの高さは0.8
-    //boxes.push_back({ VGet(2.0f,0.0f,-2.8f), VGet(2.65f,0.8f,-1.0f), GetColor(115,100,85) });
-
 }
 
 
@@ -165,27 +147,20 @@ void GameScene::Update()
     // --------------------------------------------
     // カメラの位置と向きを決める
     // --------------------------------------------
-    m_Camera.Update(slime.GetPosition());
+    m_Camera.Update(m_pPlayer->GetPosition());
 
-    //// 更新後のスライムの位置を取得する
-    //VECTOR p = slime.GetPosition();
+    float deltaTime = Master::mpGameManager->GetTimeManager()->get_DeltaTime();
+    VECTOR cameraForward = m_Camera.GetLookForward();   // カメラの向き
 
-    //// カメラが注目する位置を作る
-    //// XとZはスライムの座標の20％、高さは常に1.0にする
-    //// スライムがX方向に1.0動くと、注目位置は0.2動く
-    //VECTOR target = VGet(p.x * 0.20f, 1.0f, p.z * 0.20f);
-
-    //// 注目位置からXに+7.5、Yに+5.5、Zに-10.0離れた場所に
-    //// カメラを置き、targetの方向を向ける
-    //// VAddは2つのVECTORを足し算する関数
-    //// UpVecYは、Y軸の正方向をカメラの上向きの基準にする指定
-    //SetCameraPositionAndTarget_UpVecY(VAdd(target, VGet(7.5f, 5.5f, -10.0f)), target);
-
-
+    // プレイヤーの移動パラメータ設定
+    m_pPlayer->SetMoveParameters(cameraForward, deltaTime);
 
 
 	// 基底クラスの更新処理を呼びだす
 	Scene::Update();
+
+    // カメラの位置を新しいプレイヤーの座標で設定しなおす
+    m_Camera.RefreshFollowPosition(m_pPlayer->GetPosition());
 }
 
 

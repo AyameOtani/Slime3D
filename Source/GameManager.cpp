@@ -8,6 +8,7 @@ GameManager::GameManager()
 	mpResourceManager = std::make_unique<ResourceManager>();
 	mpFontManager = std::make_unique<FontManager>();
 	mpSlimeManager = std::make_unique<SlimeManager>();
+	mpTimeManager = std::make_unique<TimeManager>();
 
 	// 初期化
 	mpFontManager->Initialize();
@@ -17,6 +18,9 @@ GameManager::GameManager()
 
 	// スライムの初期化はここでは行わない
 	// シーン側の初期化で行う
+
+	// 時間管理クラスの初期化
+	mpTimeManager->Init();
 }
 
 
@@ -40,6 +44,9 @@ void GameManager::Update()
 
 	// スライムのプール返却処理
 	Master::mpGameManager->GetSlimeManager()->ProcessReturnRequests();
+
+	// 時間更新
+	Master::mpGameManager->GetTimeManager()->Update();
 }
 
 SceneManager* GameManager::GetSceneManager()
@@ -65,4 +72,9 @@ FontManager* GameManager::GetFontManager()
 SlimeManager* GameManager::GetSlimeManager()
 {
 	return mpSlimeManager.get();
+}
+
+TimeManager* GameManager::GetTimeManager()
+{
+	return mpTimeManager.get();
 }

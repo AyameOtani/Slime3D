@@ -3,6 +3,7 @@
 #include "SlimeModel.h"
 #include "Stage.h"
 #include "Camera.h"
+#include "Player.h"
 
 class GameScene : public Scene
 {
@@ -32,8 +33,12 @@ private:
 	// スライムを管理するオブジェクトを作る
 	SlimeModel slime;
 
+	// プレイヤー
+	Player *m_pPlayer;
+
 	// ステージ  山本
 	Stage m_Stage;
+
 	// カメラ  山本
 	Camera m_Camera;
 

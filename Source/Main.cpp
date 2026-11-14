@@ -64,7 +64,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	// ============================================
 	// エフェクトの読み込み
 	// ============================================
-	Master::mpEffectManager->LoadEffect("Resource/Effect/ImpactUponLanding.efkefc", "ImpactUponLanding");
+	Master::mpEffectManager->LoadEffect("Resource/Effect/ImpactUponLanding_Slime.efkefc", "ImpactUponLanding_Slime");
+	Master::mpEffectManager->LoadEffect("Resource/Effect/ImpactUponLanding_Player.efkefc", "ImpactUponLanding_Player");
 	Master::mpEffectManager->LoadEffect("Resource/Effect/SlimeExplosion.efkefc", "SlimeExplosion");
 
 

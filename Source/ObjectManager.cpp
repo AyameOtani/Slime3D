@@ -9,7 +9,7 @@ ObjectManager::ObjectManager()
 // デストラクタ
 ObjectManager::~ObjectManager()
 {
-
+	mObjectList.clear();
 }
 
 // 更新
