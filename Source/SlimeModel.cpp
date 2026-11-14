@@ -1094,10 +1094,10 @@ void SlimeModel::UpdateBody(const std::vector<BoxCollider>& boxes)
     // 移動入力
     VECTOR input = VGet(0.0f, 0.0f, 0.0f);
 
-    if (CheckHitKey(KEY_INPUT_W)) input.z += 1.0f;
-    if (CheckHitKey(KEY_INPUT_S)) input.z -= 1.0f;
-    if (CheckHitKey(KEY_INPUT_A)) input.x -= 1.0f;
-    if (CheckHitKey(KEY_INPUT_D)) input.x += 1.0f;
+    //if (CheckHitKey(KEY_INPUT_W)) input.z += 1.0f;
+    //if (CheckHitKey(KEY_INPUT_S)) input.z -= 1.0f;
+    //if (CheckHitKey(KEY_INPUT_A)) input.x -= 1.0f;
+    //if (CheckHitKey(KEY_INPUT_D)) input.x += 1.0f;
 
     if (VSize(input) > 0.001f)
     {
