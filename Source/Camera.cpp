@@ -4,7 +4,7 @@
 namespace
 {
     constexpr float TARGET_OFFSET_Y = 1.25f;    // 注視点の位置を少し上にずらす補正
-    constexpr float PITCH_CLAMP_MAX = 80.0f;    // 上下の向きの制限 最大角度
+    constexpr float PITCH_CLAMP_MAX = 10.0f;    // 上下の向きの制限 最大角度
     constexpr float PITCH_CLAMP_MIN = -80.0f;   // 上下の向きの制限 最小角度
 }
 
@@ -25,7 +25,7 @@ Camera::Camera()
     , m_ControlMode(CONTROL_MODE::FIXED)
     , m_Yaw(0.0f)
     , m_Pitch(Helper::Math::DegToRad(-20.0f))
-    , m_TpsDistance(10.0f)
+    , m_TpsDistance(8.0f)
     , m_MouseSensitivity(0.003f)
     , m_MouseLookReady(false)
 {
@@ -179,7 +179,11 @@ void Camera::RebuildCamera()
 //*---------------------------------------------------------------------------------------
 //*【?】TPS操作用のカメラ情報を構築
 //*
-//* [引数] なし
+//* [引数] 
+//* playerPosition : プレイヤーの位置
+//* mouseDeltaX    : マウスのX
+//* mouseDeltaY    : マウスのY 
+//* 
 //* [返値] なし
 //*----------------------------------------------------------------------------------------
 void Camera::RebuildTpsCamera(const VECTOR& playerPosition, float mouseDeltaX, float mouseDeltaY)
@@ -275,6 +279,22 @@ void Camera::SetupCameraAngleSettingData()
             0.0f
         ),
     };
+}
+
+//*---------------------------------------------------------------------------------------
+//*【?】位置を再反映させる
+//*
+//* [引数] なし
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
+void Camera::RefreshFollowPosition(const VECTOR& playerPosition)
+{
+    if (m_ControlMode == CONTROL_MODE::TPS)
+    {
+        // マウス入力は再取得せず、追従位置だけ作り直す
+        RebuildTpsCamera(playerPosition, 0.0f, 0.0f);
+        Apply();
+    }
 }
 
 //*---------------------------------------------------------------------------------------

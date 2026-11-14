@@ -50,22 +50,28 @@ public:
     void Initialize( const VECTOR& playerPosition);     // 最初の準備    
     void Update( const VECTOR& playerPosition);         // 毎フレーム更新
     void Apply() const;                                 // カメラ設定をDxLibへ反映    
-    void SetFollowRate( float rate );                   // 追従速度変更    
-    VECTOR GetPosition() const;                         // カメラ位置取得   
-    VECTOR GetTarget() const;                           // 注視点取得
-
+    void RefreshFollowPosition(const VECTOR& playerPosition) ;      // カメラの位置を更新
+    void SetFollowRate( float rate );                               // 追従速度変更    
+    VECTOR GetPosition() const;                                     // カメラ位置取得   
+    VECTOR GetTarget() const;                                       // 注視点取得
     void SetCameraAngle(CAMERA_ANGLE angle) { m_CameraAngle = angle; }                          // カメラアングルタイプの設定
     void SetCameraFov(float fov_deg) { m_CameraFovRad = Helper::Math::DegToRad(fov_deg); }      // カメラの視野角の設定
     void SetCameraClip(float _near, float _far) { m_CameraNear = _near; m_CameraFar = _far; }   // カメラのクリッピング距離の設定
+    void SetControlMode(CONTROL_MODE mode) { m_ControlMode = mode; }                            // 操作タイプの設定
+    CONTROL_MODE GetControlMode() const { return m_ControlMode; }                               // 操作タイプの取得
+    void SetTPSDistance(float dist) { m_TpsDistance = dist; };                                  // TPS操作時の対象からの距離設定
+    float GetTPSDistance()const { return m_TpsDistance; }                                       // TPS操作時の対象からの距離取得
+    void SetMouseSensitivity(float sensitivity) { m_MouseSensitivity = sensitivity; };          // マウス感度の設定
+    float GetMouseSensitivity()const { return m_MouseSensitivity; }                             // マウス感度の取得
 
-    void SetControlMode(CONTROL_MODE mode) { m_ControlMode = mode; }    // 操作タイプの設定
-    CONTROL_MODE GetControlMode() const { return m_ControlMode; }       // 操作タイプの取得
+    // カメラの向きを取得する
+    VECTOR GetLookForward()const {
+        return VSub(
+            mTarget,
+            mPosition
+        );
+    };
 
-    void SetTPSDistance(float dist) { m_TpsDistance = dist; };  // TPS操作時の対象からの距離
-    float GetTPSDistance()const { return m_TpsDistance; }
-
-    void SetMouseSensitivity(float sensitivity) { m_MouseSensitivity = sensitivity; };  // マウス感度の設定
-    float GetMouseSensitivity()const { return m_MouseSensitivity; }
 private:
     // カメラ位置と注視点を作り直す
     void RebuildCamera();
