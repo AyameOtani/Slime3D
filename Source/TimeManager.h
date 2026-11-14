@@ -3,10 +3,9 @@
 #include <functional>
 
 /// <summary>
-/// タイマー構造体
-/// 遅延処理を行うためのもの
+/// 遅延処理を行うためのタスク
 ///</summary>
-struct Timer
+struct ScheduledTask
 {
 	float _remainingTime;				// 残り時間
 	std::function<void()> _callback;	// コールバック関数
@@ -25,15 +24,13 @@ struct Timer
 class TimeManager
 {
 private:
-	float  m_DeltaTime;
-	float m_TimeScale;		// 現在のタイムスケール（倍率）
+	float m_DeltaTime;		// デルタタイム
+	float m_TimeScale;		// 現在のタイムスケール（倍率）※スローモーションとか作れます
 	float m_HitStopTimer;	// 停止時間用タイマー
 	float m_HitStopScale;	// 停止時間のスケール（倍率）
-	std::chrono::steady_clock::time_point m_PrevTime;
-
-	std::vector<Timer> m_Timers; // タイマー（遅延処理）のリスト 
-
-	float m_GameElapsedTime;	// ゲーム開始時からの経過時間
+	float m_GameElapsedTime;// ゲーム開始時からの経過時間
+	std::chrono::steady_clock::time_point m_PrevTime;	// 前回時間の保持用
+	std::vector<ScheduledTask> m_ScheduledTasks;		// タイマー（遅延処理）のリスト 
 
 public:
 	TimeManager();
@@ -49,9 +46,9 @@ public:
 	void set_TimeScale(float _scale) { m_TimeScale = _scale; }	// タイムスケール（倍率）の設定
 
 	void TriggerHitStop(float _duration, float _scale = 0.5f);
-
-
-	void AddTimer(float _executionDelay, std::function<void()> _callback); // 遅延処理用のタイマーを追加
+	
+	// 遅延処理用のタスクを登録
+	void RegisterScheduleTask(float _executionDelay, std::function<void()> _callback);
 
 
 private:
@@ -60,6 +57,6 @@ private:
 	TimeManager& operator=(const TimeManager&) = delete;
 	// ------------------------------------------------------
 
-	void TimersUpdate();
+	void ScheduleTaskUpdate();
 };
 

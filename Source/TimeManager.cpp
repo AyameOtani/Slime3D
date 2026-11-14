@@ -81,8 +81,8 @@ void TimeManager::Update()
 		m_DeltaTime = MAX_DELTA_TIME;
 	}
 
-	// タイマー処理更新
-	TimersUpdate();
+	// スケジュールタスク更新
+	ScheduleTaskUpdate();
 }
 //*---------------------------------------------------------------------------------------
 //*【?】ヒットストップ
@@ -106,14 +106,14 @@ void TimeManager::TriggerHitStop(float _duration, float _scale)
 	}
 }
 //*---------------------------------------------------------------------------------------
-//*【?】遅延処理用のタイマーを更新
+//*【?】遅延処理タスクの更新
 //*
 //* [引数] なし 
 //* [返値] なし 
 //*----------------------------------------------------------------------------------------
-void TimeManager::TimersUpdate()
+void TimeManager::ScheduleTaskUpdate()
 {
-	for (auto it = m_Timers.begin(); it != m_Timers.end(); )
+	for (auto it = m_ScheduledTasks.begin(); it != m_ScheduledTasks.end(); )
 	{
 		it->_remainingTime -= m_DeltaTime;
 		if (it->_remainingTime <= 0.0f)
@@ -124,7 +124,7 @@ void TimeManager::TimersUpdate()
 				it->_callback();
 			}
 			// タイマーをリストから削除
-			it = m_Timers.erase(it);
+			it = m_ScheduledTasks.erase(it);
 		}
 		else
 		{
@@ -133,7 +133,7 @@ void TimeManager::TimersUpdate()
 	}
 }
 //*---------------------------------------------------------------------------------------
-//*【?】遅延処理用のタイマーを追加
+//*【?】遅延処理タスクの登録
 //*
 //* [引数]
 //* _duration : 遅延時間（秒）
@@ -142,11 +142,11 @@ void TimeManager::TimersUpdate()
 //* [返値]
 //* なし 
 //*----------------------------------------------------------------------------------------
-void TimeManager::AddTimer(float _executionDelay, std::function<void()> _callback)
+void TimeManager::RegisterScheduleTask(float _executionDelay, std::function<void()> _callback)
 {
-	Timer newTimer;
-	newTimer._remainingTime = _executionDelay;
-	newTimer._callback = _callback;
+	ScheduledTask newTask;
+	newTask._remainingTime = _executionDelay;
+	newTask._callback = _callback;
 
-	m_Timers.push_back(newTimer);
+	m_ScheduledTasks.push_back(newTask);
 }
