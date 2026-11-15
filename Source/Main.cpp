@@ -18,6 +18,7 @@
 // Master クラスの静的メンバ変数定義
 GameManager* Master::mpGameManager = nullptr;
 EffectManager* Master::mpEffectManager = nullptr;
+Debugger* Master::mpDebugger = nullptr;
 
 
 /**
@@ -51,15 +52,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	Master::mpGameManager = new GameManager();
 
 	Master::mpEffectManager = new EffectManager();
-
+	Master::mpDebugger = new Debugger();
 
 	// ============================================
 	// エフェクトのセットアップ
 	// ============================================
 	if (!Master::mpEffectManager->Setup())
 	{
+		Helper::Debug::ErrorMessage(L"エフェクトの初期化に失敗しました", L"Main");
 		return -1;
 	}
+
 
 	// ============================================
 	// エフェクトの読み込み
@@ -69,6 +72,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	Master::mpEffectManager->LoadEffect("Resource/Effect/SlimeExplosion.efkefc", "SlimeExplosion");
 
 
+
+	// ============================================
+	// デバッガーのセットアップ
+	// ============================================
+	if (!Master::mpDebugger->Setup(
+		DxLib::GetMainWindowHandle(),
+		(ID3D11Device*)DxLib::GetUseDirect3D11Device(),
+		(ID3D11DeviceContext*)DxLib::GetUseDirect3D11DeviceContext()))
+	{
+		Helper::Debug::ErrorMessage(L"デバッガーの初期化に失敗しました", L"Main");
+		return -1;
+	}
 
 
 
@@ -154,6 +169,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		//画面を初期化する
 		ClearDrawScreen();
 
+		// ============================================
+		// デバッグ描画の開始
+		// ============================================
+		Master::mpDebugger->BeginFrame(Utility::SCREEN_WIDTH, Utility::SCREEN_HEIGHT, false);
+
 		int time = GetNowCount();
 
 		// Managerクラスの更新
@@ -168,6 +188,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		// エフェクトの描画
 		Master::mpEffectManager->EffectDraw3D();
 
+		// ============================================
+		// デバッグ描画の終了
+		// ============================================
+		Master::mpDebugger->EndFrame();
 
 		// 裏画面の内容を表画面に映す
 		ScreenFlip();
@@ -196,6 +220,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	// エフェクトの終了
 	Master::mpEffectManager->Release();
+
+	delete Master::mpEffectManager;
+	delete Master::mpDebugger;
 
 	// DXライブラリ使用の終了
 	DxLib_End();

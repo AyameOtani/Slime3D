@@ -289,14 +289,6 @@ void GameScene::Draw()
 
     // 説明文
     DrawSlimeDescription(slime);
-
-
-    std::string playerPosStr =
-        "X : " + std::to_string(m_pPlayer->GetPosition().x) +
-        "Y : " + std::to_string(m_pPlayer->GetPosition().y) +
-        "Z : " + std::to_string(m_pPlayer->GetPosition().z);
-
-    DrawString(700, 10, playerPosStr.c_str(), GetColor(210, 210, 210));
 }
 
 //*---------------------------------------------------------------------------------------
