@@ -8,12 +8,14 @@
 //*----------------------------------------------------------------------------------------
 Object3D::Object3D(const VECTOR initPos)
 	: Object(initPos)
+	, m_IsWriteShadow(false)
 {
 	// 現在のシーンの ObjectManager に自身（）this を追加
 	//Master::mpGameManager->GetSceneManager()->GetCurrentScene()->GetObjectManager()->AddObject(this);
 }
 Object3D::Object3D()
 	: Object()
+	, m_IsWriteShadow(false)
 {
 	// 現在のシーンの ObjectManager に自身（）this を追加
 	//Master::mpGameManager->GetSceneManager()->GetCurrentScene()->GetObjectManager()->AddObject(this);

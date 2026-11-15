@@ -34,6 +34,9 @@ public:
 	// 描画
 	void Draw();
 
+	// シャドウ書き込み用描画
+	void DrawShadow();
+
 
 public:        // 2D系の関数宣言
 	// オブジェクトの追加

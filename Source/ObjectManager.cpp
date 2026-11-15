@@ -1,4 +1,5 @@
 #include "OBjectManager.h"
+#include "Object3D.h"
 
 // コンストラクタ
 ObjectManager::ObjectManager()
@@ -55,6 +56,44 @@ void ObjectManager::Draw()
 		}
 
 		(*itr)->Draw();
+	}
+
+
+
+	// auto i;　だけだと使えない
+	// auto i = 0; 初期化してあげると使える
+}
+
+// シャドウ書き込み用描画
+void ObjectManager::DrawShadow()
+{
+	for (auto itr = mObjectList.begin(); itr != mObjectList.end(); itr++)
+	{
+		Object* obj = (*itr);
+
+		// アクティブ状態かを確かめる
+		if (!obj->IsActive())
+		{
+			continue;
+		}
+
+		// 3Dオブジェクトかどうか
+		if (obj->GetDimension() != Object::ObjectDimension::D3)
+		{
+			continue;
+		}
+
+		// 3Dオブジェクトということがわかれば、キャスト
+		Object3D* obj3D = static_cast<Object3D*>(obj);
+
+		// シャドウ書き込みが有効か
+		if (!obj3D->GetIsWriteShadow())
+		{
+			continue;
+		}
+
+
+		obj3D->DrawShadow();
 	}
 
 

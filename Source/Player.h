@@ -29,6 +29,7 @@ public:
 	void Init();
 	void Update()override;
 	void Draw()override;
+	void DrawShadow()override;
 
 	void SetIsCameraRelativeMove(bool flag) { m_IsCameraRelativeMove = flag; }	// ƒJƒƒ‰‚ÌŒü‚«‚É‡‚í‚¹‚ÄˆÚ“®•ûŒü‚ğ•Ï‚¦‚é‚©‚Ìƒtƒ‰ƒOİ’è
 
