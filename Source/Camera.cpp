@@ -79,6 +79,35 @@ void Camera::Update( const VECTOR& playerPosition)
     float mouseDeltaX = 0.0f;
     float mouseDeltaY = 0.0f;
 
+    //
+    // F1を押しているときは、マウスカーソルを表示し、カメラの視点操作をしない
+    //
+    bool isKeyF1 = CheckHitKey(KEY_INPUT_F1);
+    if (isKeyF1)
+    {
+        SetMouseDispFlag(TRUE);
+        return;
+    }
+    else
+    {
+        SetMouseDispFlag(FALSE);
+    }
+
+    //
+    // カメラの操作タイプ切り替え
+    //
+    bool isKeyF2 = CheckHitKey(KEY_INPUT_F2);
+    bool isKeyF3 = CheckHitKey(KEY_INPUT_F3);
+    if (isKeyF2)
+    {
+        m_ControlMode = CONTROL_MODE::FIXED;
+    }
+    if (isKeyF3)
+    {
+        m_ControlMode = CONTROL_MODE::TPS;
+    }
+
+
     if (m_ControlMode == CONTROL_MODE::TPS &&
         GetWindowActiveFlag() != FALSE)
     {
@@ -112,6 +141,8 @@ void Camera::Update( const VECTOR& playerPosition)
         m_MouseLookReady = false;
     }
 
+
+    mStageZ = playerPosition.z;
 
     // 固定アングル用の追従位置は更新し続ける
     // TPSから戻したときも、現在のX位置を追従できる

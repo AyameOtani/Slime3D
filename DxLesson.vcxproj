@@ -19,8 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="External\Imgui\backends\imgui_impl_dx11.cpp" />
+    <ClCompile Include="External\Imgui\backends\imgui_impl_win32.cpp" />
+    <ClCompile Include="External\Imgui\imgui.cpp" />
+    <ClCompile Include="External\Imgui\imgui_draw.cpp" />
+    <ClCompile Include="External\Imgui\imgui_tables.cpp" />
+    <ClCompile Include="External\Imgui\imgui_widgets.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
+    <ClCompile Include="Source\Debugger\Debugger.cpp" />
     <ClCompile Include="Source\EffectManager.cpp" />
     <ClCompile Include="Source\FontManager.cpp" />
     <ClCompile Include="Source\GameDefinitions.cpp" />
@@ -56,6 +63,7 @@
   <ItemGroup>
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Collision.h" />
+    <ClInclude Include="Source\Debugger\Debugger.h" />
     <ClInclude Include="Source\EffectManager.h" />
     <ClInclude Include="Source\FontManager.h" />
     <ClInclude Include="Source\GameDefinitions.h" />
@@ -178,7 +186,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>プロジェクトに追加すべきファイル_VC用;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>External\Imgui;プロジェクトに追加すべきファイル_VC用;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -196,7 +204,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>プロジェクトに追加すべきファイル_VC用;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>External\Imgui;プロジェクトに追加すべきファイル_VC用;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
