@@ -42,6 +42,7 @@ bool SlimeManager::Setup()
     //
     m_SlimeDefinition[UINT_CAST(SLIME_TYPE::NORMAL)] =
     {
+        // NORMAL
         {
             // 1.”¼Œa 2.ˆÚ“®‘¬“x 3.‡‘ÌŽžŠÔ
              
@@ -49,13 +50,13 @@ bool SlimeManager::Setup()
             { 1.0f, 0.1f, 10.0f },
             
             // ‚P’iŠK–Ú
-            { 0.0f, 0.0f, 0.0f },
+            { 0.5f, 0.3f, 7.0f },
             
             // ‚Q’iŠK–Ú
-            { 0.0f, 0.0f, 0.0f },
+            { 0.3f, 0.45f, 7.0f },
             
             // ‚R’iŠK–Ú
-            { 0.0f, 0.0f, 0.0f },
+            { 0.2f, 0.55f, 6.0f },
         },
     };
 
@@ -194,7 +195,7 @@ bool SlimeManager::SpawnSlime(const SlimeDef::SlimeSpawnParams& spawnParams)
 
     
     // ‰Šú‰»‚È‚Ç
-    obj->Init(&definition, spawnParams.splitPhase);
+    obj->Init(&definition, spawnParams.splitPhase, spawnParams.type);
     obj->SetPosition(spawnParams.position);
     obj->SetDirection(spawnParams.direction);
     obj->SetActive(true);

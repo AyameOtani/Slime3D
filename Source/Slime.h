@@ -21,13 +21,11 @@ private:
 	bool m_ReturnRequested;									// プールに返却をリクエスト
 
 
-	float m_Elapsed = 0.0f;
-
 public:
 	Slime();
 	~Slime();
 
-	void Init(const SlimeDef::SlimeSizeDefinition* definition, const SlimeDef::SLIME_SPLIT_PHASE splitPhase);
+	void Init(const SlimeDef::SlimeSizeDefinition* definition, const SlimeDef::SLIME_SPLIT_PHASE splitPhase, const SlimeDef::SLIME_TYPE type);
 	void Update()override;
 	void Draw()override;
 

@@ -30,12 +30,14 @@ Slime::~Slime()
 //* [引数]
 //* definition : スライムの固定データの参照
 //* splitPhase : 分裂の状態 
+//* type       : スライムの種別 
 //* 
 //* [返値]なし
 //*----------------------------------------------------------------------------------------
-void Slime::Init(const SlimeSizeDefinition* definition, const SLIME_SPLIT_PHASE splitPhase)
+void Slime::Init(const SlimeSizeDefinition* definition, const SLIME_SPLIT_PHASE splitPhase, const SlimeDef::SLIME_TYPE type)
 {
 	m_pSizeDefinition = definition;
+	m_Runtime.type = type;
 	m_Runtime.splitPhase = splitPhase;
 	m_Runtime.radius = m_pSizeDefinition->radius;
 }
@@ -53,23 +55,6 @@ void Slime::Update()
 	VECTOR crntPos = mTransform.position;
 	VECTOR newPos = VAdd(crntPos, m_Runtime.velocity);
 	mTransform.position = newPos;
-
-	if (m_Elapsed >= 1.0f)
-	{
-		RequestReturn();
-
-		int handle = Master::mpEffectManager->PlayEffect3D("SlimeExplosion");
-		Master::mpEffectManager->SetPosEffect3D(handle,crntPos);
-		Master::mpEffectManager->SetScaleEffect3D(handle, VEC_GetScalar(1.0f));
-
-		SlimeDef::SlimeSpawnParams spawn;
-		spawn.position = VGet(0.0f, 0.0f, 0.0f);
-		spawn.type = SLIME_TYPE::NORMAL;
-		spawn.splitPhase = SLIME_SPLIT_PHASE::PHASE_0;
-		Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
-	}
-
-	m_Elapsed += 0.01f;
 }
 
 //*---------------------------------------------------------------------------------------
@@ -105,8 +90,6 @@ void Slime::ResetForReuse()
 	m_Runtime.splitPhase = SLIME_SPLIT_PHASE::PHASE_0;
 
 	m_ReturnRequested = false;
-
-	m_Elapsed = 0.0f;
 }
 
 //*---------------------------------------------------------------------------------------
