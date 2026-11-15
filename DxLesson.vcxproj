@@ -33,6 +33,8 @@
     <ClCompile Include="Source\Object3D.cpp" />
     <ClCompile Include="Source\ObjectManager.cpp" />
     <ClCompile Include="Source\Player.cpp" />
+    <ClCompile Include="Source\Rendering\RendererManager.cpp" />
+    <ClCompile Include="Source\Rendering\ShadowMap.cpp" />
     <ClCompile Include="Source\ResourceManager.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\SceneManager.cpp" />
@@ -66,6 +68,8 @@
     <ClInclude Include="Source\ObjectManager.h" />
     <ClInclude Include="Source\ObjectPool.h" />
     <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\Rendering\RendererManager.h" />
+    <ClInclude Include="Source\Rendering\ShadowMap.h" />
     <ClInclude Include="Source\ResourceManager.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneManager.h" />

@@ -84,6 +84,7 @@ bool SlimeManager::Setup()
         {
             Slime* obj = new Slime();
             obj->SetActive(false);
+            obj->SetIsWriteShadow(true);
             return obj;
         },
         SLIME_POOL_DEFAULT_CAPACITY,    // ‰Šú¶¬”
