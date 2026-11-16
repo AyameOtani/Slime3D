@@ -11,6 +11,8 @@
 #include <vector>
 #include <utility>
 
+using namespace Game;
+
 namespace
 {
     Stage* activeStage = nullptr;

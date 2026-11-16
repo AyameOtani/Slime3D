@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "DxLib.h"
 #include "SlimeModel.h"
+#include "GameDefinitions.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -18,7 +19,7 @@ public:
     void Update(const SlimeModel& slime);
     void Draw();
     const std::string& GetError() const;
-    const std::vector<BoxCollider>& GetBoxes() const;
+    const std::vector<Game::BoxCollider>& GetBoxes() const;
     static Stage* Active();
     bool FindFloor(float x, float z, float minY, float maxY, float& y, VECTOR* normal = nullptr) const;
     bool BabyCanStand(float x, float z, float currentY, float radius, float& y) const;

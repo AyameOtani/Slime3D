@@ -9,6 +9,8 @@
 #include <cassert>
 #include <vector>
 
+using namespace Game;
+
 
 // ============================================
 // 地面や壁など、ステージを構成する箱を描画する
@@ -145,11 +147,12 @@ void GameScene::Initialize()
     m_Camera.SetFollowRate(0.045f);
     m_Camera.SetControlMode(Camera::CONTROL_MODE::TPS); //TPSモードに
     m_Camera.SetTPSDistance(10.0f);
+    m_Camera.SetCameraClip(0.1f, 100.0f);
 
     // ============================================
     // プレイヤーのセットアップ
     // ============================================
-    m_pPlayer =  new Player();
+    m_pPlayer =  new PlayerObject();
     m_pPlayer->Init();
     m_pPlayer->SetIsWriteShadow(true);  // シャドウ書き込みON
 
@@ -189,9 +192,186 @@ void GameScene::Initialize()
    
 
     SlimeDef::SlimeSpawnParams spawn;
-    spawn.position = VGet(0.0f, 0.0f, 0.0f);
+    spawn.position = VGet(0.0f, 10.0f, 0.0f);
     spawn.type = SlimeDef::SLIME_TYPE::NORMAL;
     spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+    
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_1;
+    spawn.color = 1;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_2;
+    spawn.color = 2;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+    
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_3;
+    spawn.color = 3;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_1;
+    spawn.color = 1;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_2;
+    spawn.color = 2;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_3;
+    spawn.color = 3;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_1;
+    spawn.color = 1;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_2;
+    spawn.color = 2;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_3;
+    spawn.color = 3;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn); 
+    
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+    
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_1;
+    spawn.color = 1;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_2;
+    spawn.color = 2;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+    
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_3;
+    spawn.color = 3;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_1;
+    spawn.color = 1;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_2;
+    spawn.color = 2;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_3;
+    spawn.color = 3;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_1;
+    spawn.color = 1;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_2;
+    spawn.color = 2;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_3;
+    spawn.color = 3;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);   
+    
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+    
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_1;
+    spawn.color = 1;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_2;
+    spawn.color = 2;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+    
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_3;
+    spawn.color = 3;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_1;
+    spawn.color = 1;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_2;
+    spawn.color = 2;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_3;
+    spawn.color = 3;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_1;
+    spawn.color = 1;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_2;
+    spawn.color = 2;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_3;
+    spawn.color = 3;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn); 
+    
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+    
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_1;
+    spawn.color = 1;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_2;
+    spawn.color = 2;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+    
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_3;
+    spawn.color = 3;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_1;
+    spawn.color = 1;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_2;
+    spawn.color = 2;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_3;
+    spawn.color = 3;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_1;
+    spawn.color = 1;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_2;
+    spawn.color = 2;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_3;
+    spawn.color = 3;
     Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
 }
 

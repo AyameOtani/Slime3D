@@ -3,7 +3,8 @@
 #include "SlimeModel.h"
 #include "Stage.h"
 #include "Camera.h"
-#include "Player.h"
+#include "PlayerObject.h"
+#include "GameDefinitions.h"
 #include "Rendering/ShadowMap.h"
 
 class GameScene : public Scene
@@ -30,7 +31,7 @@ private:
 	SlimeModel slime;
 
 	// プレイヤー
-	Player *m_pPlayer;
+	PlayerObject *m_pPlayer;
 
 	// ステージ  山本
 	Stage m_Stage;
@@ -43,5 +44,5 @@ private:
 
 	// 地面や壁などに使う箱の一覧
    // 描画に加え、スライム側の処理にもこの一覧を渡す
-	std::vector<BoxCollider> boxes;
+	std::vector<Game::BoxCollider> boxes;
 };

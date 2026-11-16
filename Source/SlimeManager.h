@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include "Slime.h"
+#include "SlimeObject.h"
 #include "ObjectPool.h"
 
 // ***************************************************************************************
@@ -14,8 +14,8 @@
 class SlimeManager
 {
 private:
-    static constexpr int SLIME_POOL_CAPACITY = 1024;        // プールの最大容量
-    static constexpr int SLIME_POOL_DEFAULT_CAPACITY = 256; // デフォルトで生成している数 
+    static constexpr int SLIME_POOL_CAPACITY = 2048;        // プールの最大容量
+    static constexpr int SLIME_POOL_DEFAULT_CAPACITY = 512; // デフォルトで生成している数 
 
     // 固定データ定義
     // スライムの種類増加に対応できるよう配列で保持
@@ -23,10 +23,10 @@ private:
         m_SlimeDefinition[UINT_CAST(SlimeDef::SLIME_TYPE::NUM)];
 
     // スライムプール
-    std::unique_ptr<ObjectPool<Slime>> m_pSlimePool;
+    std::unique_ptr<ObjectPool<SlimeObject>> m_pSlimePool;
 
     // 生成したスライムたち
-    std::vector<Slime*> m_SpawnedSlimes;        
+    std::vector<SlimeObject*> m_SpawnedSlimes;        
 private:
     // コピー禁止
     SlimeManager(const SlimeManager&) = delete;

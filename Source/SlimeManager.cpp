@@ -1,4 +1,5 @@
 #include "SlimeManager.h"
+#include "Master.h"
 
 using namespace Game::Slime;
 
@@ -47,16 +48,16 @@ bool SlimeManager::Setup()
             // 1.半径 2.移動速度 3.合体時間
              
             // 未分裂状態
-            { 1.0f, 0.1f, 10.0f },
+            { 1.0f, 3.0f, 10.0f },
             
             // １段階目
-            { 0.5f, 0.3f, 7.0f },
+            { 0.8f, 5.0f, 7.0f },
             
             // ２段階目
-            { 0.3f, 0.45f, 7.0f },
+            { 0.5f, 6.5f, 7.0f },
             
             // ３段階目
-            { 0.2f, 0.55f, 6.0f },
+            { 0.2f, 7.0f, 6.0f },
         },
     };
 
@@ -65,9 +66,9 @@ bool SlimeManager::Setup()
     // スライムプールのセットアップ
     // 
     //////////////////////////////////////////////////////////////////////////////////////////
-    m_pSlimePool = std::make_unique<ObjectPool<Slime>>(
+    m_pSlimePool = std::make_unique<ObjectPool<SlimeObject>>(
         // 取得時に実行 ******************************************************************************************
-        [&](Slime* obj) 
+        [&](SlimeObject* obj) 
         {
             // 状態の初期化
             obj->ResetForReuse();       
@@ -76,14 +77,14 @@ bool SlimeManager::Setup()
             obj->SetActive(true);
         },
         // 返却時に実行 ******************************************************************************************
-        [](Slime* obj)
+        [](SlimeObject* obj)
         {
             obj->SetActive(false);
         },
         // 生成時に実行 ******************************************************************************************
-        [&]()->Slime*
+        [&]()->SlimeObject*
         {
-            Slime* obj = new Slime();
+            SlimeObject* obj = new SlimeObject();
             obj->SetActive(false);
             obj->SetIsWriteShadow(true);
             return obj;
@@ -127,13 +128,19 @@ void SlimeManager::ProcessReturnRequests()
         return;
     }
 
+    Master::mpDebugger->BeginDebugWindow(u8"スライムプール",0);
+    Master::mpDebugger->DG_BulletTextValue(u8"現在出現しているスライム数：", INT_CAST(m_SpawnedSlimes.size()));
+    Master::mpDebugger->DG_BulletTextValue(u8"現在のプール内の生成数：", INT_CAST(m_pSlimePool->get_CrntCreateNum()));
+    Master::mpDebugger->EndDebugWindow();
+
+
     //
     // プールへの返却フラグの確認
     //
     for (auto it = m_SpawnedSlimes.begin();
         it != m_SpawnedSlimes.end();)
     {
-        Slime* obj = *it;
+        SlimeObject* obj = *it;
 
         // フラグが立ってないなら、次へ
         if (!obj->IsReturnRequested())
@@ -180,7 +187,7 @@ bool SlimeManager::SpawnSlime(const SlimeDef::SlimeSpawnParams& spawnParams)
     }
 
     // プールからスライムオブジェクトを取得する
-    Slime* obj = m_pSlimePool->get();
+    SlimeObject* obj = m_pSlimePool->get();
 
     // 取得できなかった
     if (!obj)
@@ -195,10 +202,12 @@ bool SlimeManager::SpawnSlime(const SlimeDef::SlimeSpawnParams& spawnParams)
 
     
     // 初期化など
-    obj->Init(&definition, spawnParams.splitPhase, spawnParams.type);
+    obj->Init(&definition, spawnParams.splitPhase, spawnParams.type,spawnParams.color);
     obj->SetPosition(spawnParams.position);
     obj->SetDirection(spawnParams.direction);
+    obj->RefreshVisual();
     obj->SetActive(true);
+
 
     // 生成したスライムを保持する
     m_SpawnedSlimes.push_back(obj);

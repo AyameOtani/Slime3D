@@ -6,6 +6,7 @@
 #include <tuple>
 #include <deque>
 
+using namespace Game;
 
 // 床判定の追加　大谷
 namespace SlimeRaySettings

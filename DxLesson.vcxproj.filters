@@ -43,6 +43,30 @@
     <Filter Include="ヘッダー ファイル\Scene">
       <UniqueIdentifier>{ab85d9bd-cd00-46d1-8c35-26b108aaf54a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Player">
+      <UniqueIdentifier>{d216ea1c-cd07-4d6d-8d06-bc2318b1b3d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="外部ライブラリ">
+      <UniqueIdentifier>{1f656bb0-c051-4a6a-b952-5da0290d413c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="外部ライブラリ\ImGui">
+      <UniqueIdentifier>{050a8ea1-e32a-4b98-9c0c-00c00adc8086}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Player">
+      <UniqueIdentifier>{b4e00c37-e47b-4531-ae0b-6346e6820d1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Rendering">
+      <UniqueIdentifier>{35154814-5c75-4d1a-9f03-9d76170b95ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Rendering">
+      <UniqueIdentifier>{4a369f2f-7bfb-4453-a00c-dbe965ab3ce8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Debug">
+      <UniqueIdentifier>{22b67603-1733-4330-97d1-474efc5edcc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Debug">
+      <UniqueIdentifier>{d1344a64-a803-47f5-8f71-2f539eed02be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Collision.cpp">
@@ -111,7 +135,7 @@
     <ClCompile Include="Source\ObjectManager.cpp">
       <Filter>ソース ファイル\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Slime.cpp">
+    <ClCompile Include="Source\SlimeObject.cpp">
       <Filter>ソース ファイル\Slime</Filter>
     </ClCompile>
     <ClCompile Include="Source\SlimeVisual.cpp">
@@ -131,6 +155,39 @@
     </ClCompile>
     <ClCompile Include="Source\SceneManager.cpp">
       <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TimeManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="External\Imgui\imgui.cpp">
+      <Filter>外部ライブラリ\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\Imgui\imgui_draw.cpp">
+      <Filter>外部ライブラリ\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\Imgui\backends\imgui_impl_dx11.cpp">
+      <Filter>外部ライブラリ\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\Imgui\backends\imgui_impl_win32.cpp">
+      <Filter>外部ライブラリ\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\Imgui\imgui_tables.cpp">
+      <Filter>外部ライブラリ\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\Imgui\imgui_widgets.cpp">
+      <Filter>外部ライブラリ\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayerObject.cpp">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\RendererManager.cpp">
+      <Filter>ソース ファイル\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\ShadowMap.cpp">
+      <Filter>ソース ファイル\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Debugger\Debugger.cpp">
+      <Filter>ソース ファイル\Debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -203,7 +260,7 @@
     <ClInclude Include="Source\ObjectPool.h">
       <Filter>ヘッダー ファイル\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Slime.h">
+    <ClInclude Include="Source\SlimeObject.h">
       <Filter>ヘッダー ファイル\Slime</Filter>
     </ClInclude>
     <ClInclude Include="Source\SlimeVisual.h">
@@ -223,6 +280,24 @@
     </ClInclude>
     <ClInclude Include="Source\GameScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TimeManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayerObject.h">
+      <Filter>ヘッダー ファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SlimeState\Slime_StateHeader.h">
+      <Filter>ヘッダー ファイル\Slime</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\ShadowMap.h">
+      <Filter>ヘッダー ファイル\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\RendererManager.h">
+      <Filter>ヘッダー ファイル\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Debugger\Debugger.h">
+      <Filter>ヘッダー ファイル\Debug</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

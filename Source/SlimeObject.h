@@ -7,31 +7,38 @@ namespace SlimeDef = Game::Slime;
 
 // ***************************************************************************************
 // ---------------------------------------------------------------------------------------
-/* --- @:Slime Class --- */
+/* --- @:SlimeObject Class --- */
 //
 // 【?】スライムの処理を行うクラス
 //
 // ***************************************************************************************
-class Slime : public Object3D
+class SlimeObject : public Object3D
 {
 private:
 	SlimeDef::SlimeRuntime m_Runtime;						// ランタイムデータ
 	const SlimeDef::SlimeSizeDefinition* m_pSizeDefinition; // サイズごとの固定定義データの参照
 	SlimeVisual m_Visual;	
 	bool m_ReturnRequested;									// プールに返却をリクエスト
-
-
+	float elapsed = 0.0f;
 public:
-	Slime();
-	~Slime();
+	SlimeObject();
+	~SlimeObject();
 
-	void Init(const SlimeDef::SlimeSizeDefinition* definition, const SlimeDef::SLIME_SPLIT_PHASE splitPhase, const SlimeDef::SLIME_TYPE type);
+	void Init(const SlimeDef::SlimeSizeDefinition* definition, const SlimeDef::SLIME_SPLIT_PHASE splitPhase, const SlimeDef::SLIME_TYPE type, int color);
 	void Update()override;
 	void Draw()override;
+	void DrawShadow()override;
 
+	void RefreshVisual();										// 状態の初期化を行う（オブジェクトプール用）
 	void ResetForReuse();										// 状態の初期化を行う（オブジェクトプール用）
 	void RequestReturn();										// プールへの返却をリクエスト
 
 	bool IsReturnRequested()const { return m_ReturnRequested; }	// プール返却リクエストフラグ
+
+	void SetFace(int face);	// 表情の設定
+	const SlimeDef::SlimeRuntime& GetRuntime() const { return m_Runtime; }	// ランタイムデータの取得
+	float GetMoveSpeed() const {											// 移動速度の取得
+		return m_pSizeDefinition ? m_pSizeDefinition->moveSpeed : 0.0f;
+	}
 };
 

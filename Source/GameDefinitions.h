@@ -12,6 +12,14 @@ namespace Game
 	static constexpr float SHADOW_SIZE_Y = 2048.0f;
 
 
+	struct BoxCollider
+	{
+		VECTOR minPos;
+		VECTOR maxPos;
+		unsigned int color;
+	};
+
+
 	// ---------------------------------------------------------------------------------------
 	// 
 	//		スライム用定義
@@ -67,9 +75,13 @@ namespace Game
 		struct SlimeRuntime
 		{
 			VECTOR velocity;					// 移動速度
+			VECTOR groundNormal					// 地面の法線
+				= VGet(0.0f, 1.0f, 0.0f);
 			float radius = 0.0f;				// 現在の半径
 			float mergeCooldown = 0.0f;			// 合体できるまでの残り時間
 			bool isGrounded = false;			// 接地状態
+			bool isMoveDir = false;
+			int color = 1;						// 1=赤、2=青、3=緑
 			
 			SLIME_TYPE type						// スライムの種類
 				= SLIME_TYPE::NORMAL;			
@@ -85,6 +97,7 @@ namespace Game
 			Slime::SLIME_TYPE type = Slime::SLIME_TYPE::NORMAL;	// スライムの種類
 			Slime::SLIME_SPLIT_PHASE splitPhase					// 分裂状態
 				= Slime::SLIME_SPLIT_PHASE::PHASE_0;
+			int color = 1;										// 1=赤、2=青、3=緑
 
 			VECTOR position = VGet(0.0f, 0.0f, 0.0f);			// 位置
 			VECTOR direction = VGet(0.0f, 0.0f, 1.0f);			// 向き
