@@ -1,4 +1,5 @@
 #include "OBjectManager.h"
+#include "Object3D.h"
 
 // コンストラクタ
 ObjectManager::ObjectManager()
@@ -9,7 +10,7 @@ ObjectManager::ObjectManager()
 // デストラクタ
 ObjectManager::~ObjectManager()
 {
-
+	mObjectList.clear();
 }
 
 // 更新
@@ -26,6 +27,12 @@ void ObjectManager::Update()
 	// std::list...双方向連結リスト（要素の前後の要素にアクセスすることが簡単）
 	for (std::list<Object*>::iterator itr = mObjectList.begin(); itr != mObjectList.end(); itr++)
 	{
+		// アクティブ状態かを確かめる
+		if (!(*itr)->IsActive())
+		{
+			continue;
+		}
+
 		(*itr)->Update();
 	}
 
@@ -42,7 +49,51 @@ void ObjectManager::Draw()
 	// auto... 型推論。　＝より右側の型を勝手に推測してくれる便利なやつ
 	for (auto itr = mObjectList.begin(); itr != mObjectList.end(); itr++)
 	{
+		// アクティブ状態かを確かめる
+		if (!(*itr)->IsActive())
+		{
+			continue;
+		}
+
 		(*itr)->Draw();
+	}
+
+
+
+	// auto i;　だけだと使えない
+	// auto i = 0; 初期化してあげると使える
+}
+
+// シャドウ書き込み用描画
+void ObjectManager::DrawShadow()
+{
+	for (auto itr = mObjectList.begin(); itr != mObjectList.end(); itr++)
+	{
+		Object* obj = (*itr);
+
+		// アクティブ状態かを確かめる
+		if (!obj->IsActive())
+		{
+			continue;
+		}
+
+		// 3Dオブジェクトかどうか
+		if (obj->GetDimension() != Object::ObjectDimension::D3)
+		{
+			continue;
+		}
+
+		// 3Dオブジェクトということがわかれば、キャスト
+		Object3D* obj3D = static_cast<Object3D*>(obj);
+
+		// シャドウ書き込みが有効か
+		if (!obj3D->GetIsWriteShadow())
+		{
+			continue;
+		}
+
+
+		obj3D->DrawShadow();
 	}
 
 

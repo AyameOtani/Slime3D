@@ -3,12 +3,12 @@
 #include "SlimeModel.h"
 #include "Stage.h"
 #include "Camera.h"
+#include "Player.h"
+#include "Rendering/ShadowMap.h"
 
 class GameScene : public Scene
 {
-
 public:
-
 	GameScene();
 
 	virtual ~GameScene();
@@ -26,20 +26,22 @@ public:
 	virtual void Finalize() override;
 
 private:
-	// ============================================
-	 // スライムの作成とモデルの読み込み
-	 // ============================================
 	// スライムを管理するオブジェクトを作る
 	SlimeModel slime;
 
+	// プレイヤー
+	Player *m_pPlayer;
+
 	// ステージ  山本
 	Stage m_Stage;
+
 	// カメラ  山本
 	Camera m_Camera;
+
+	// シャドウマップ
+	ShadowMap m_ShadowMap;
 
 	// 地面や壁などに使う箱の一覧
    // 描画に加え、スライム側の処理にもこの一覧を渡す
 	std::vector<BoxCollider> boxes;
-
-
 };

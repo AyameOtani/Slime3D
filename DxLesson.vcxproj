@@ -19,12 +19,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <ClCompile Include="Source\ExplainScene.cpp" />
     <ClCompile Include="Source\HoverImageButton.cpp" />
+=======
+    <ClCompile Include="External\Imgui\backends\imgui_impl_dx11.cpp" />
+    <ClCompile Include="External\Imgui\backends\imgui_impl_win32.cpp" />
+    <ClCompile Include="External\Imgui\imgui.cpp" />
+    <ClCompile Include="External\Imgui\imgui_draw.cpp" />
+    <ClCompile Include="External\Imgui\imgui_tables.cpp" />
+    <ClCompile Include="External\Imgui\imgui_widgets.cpp" />
+>>>>>>> main
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
+    <ClCompile Include="Source\Debugger\Debugger.cpp" />
     <ClCompile Include="Source\EffectManager.cpp" />
     <ClCompile Include="Source\FontManager.cpp" />
+    <ClCompile Include="Source\GameDefinitions.cpp" />
     <ClCompile Include="Source\GameManager.cpp" />
     <ClCompile Include="Source\InputManager.cpp" />
     <ClCompile Include="Source\Main.cpp" />
@@ -34,16 +45,29 @@
     <ClCompile Include="Source\Object2D.cpp" />
     <ClCompile Include="Source\Object3D.cpp" />
     <ClCompile Include="Source\ObjectManager.cpp" />
+    <ClCompile Include="Source\Player.cpp" />
+    <ClCompile Include="Source\Rendering\RendererManager.cpp" />
+    <ClCompile Include="Source\Rendering\ShadowMap.cpp" />
     <ClCompile Include="Source\ResourceManager.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\SceneManager.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Source\SlimeMesh.cpp" />
+=======
+    <ClCompile Include="Source\Slime.cpp" />
+    <ClCompile Include="Source\SlimeManager.cpp" />
+>>>>>>> main
     <ClCompile Include="Source\SlimeModel.cpp" />
+    <ClCompile Include="Source\SlimeVisual.cpp" />
     <ClCompile Include="Source\SoundManager.cpp" />
     <ClCompile Include="Source\Stage.cpp" />
+    <ClCompile Include="Source\State\CompositeState.cpp" />
+    <ClCompile Include="Source\State\IState.cpp" />
+    <ClCompile Include="Source\State\StateMachine.cpp" />
     <ClCompile Include="Source\Texture.cpp" />
     <ClCompile Include="Source\TextureAnimation.cpp" />
     <ClCompile Include="Source\GameScene.cpp" />
+    <ClCompile Include="Source\TimeManager.cpp" />
     <ClCompile Include="Source\TitleScene.cpp" />
     <ClCompile Include="Source\TitleSlimeModel.cpp" />
   </ItemGroup>
@@ -52,8 +76,10 @@
     <ClInclude Include="Source\HoverImageButton.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Collision.h" />
+    <ClInclude Include="Source\Debugger\Debugger.h" />
     <ClInclude Include="Source\EffectManager.h" />
     <ClInclude Include="Source\FontManager.h" />
+    <ClInclude Include="Source\GameDefinitions.h" />
     <ClInclude Include="Source\GameManager.h" />
     <ClInclude Include="Source\InputManager.h" />
     <ClInclude Include="Source\Master.h" />
@@ -62,16 +88,31 @@
     <ClInclude Include="Source\Object2D.h" />
     <ClInclude Include="Source\Object3D.h" />
     <ClInclude Include="Source\ObjectManager.h" />
+    <ClInclude Include="Source\ObjectPool.h" />
+    <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\Rendering\RendererManager.h" />
+    <ClInclude Include="Source\Rendering\ShadowMap.h" />
     <ClInclude Include="Source\ResourceManager.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneManager.h" />
+<<<<<<< HEAD
     <ClInclude Include="Source\SlimeMesh.h" />
+=======
+    <ClInclude Include="Source\Slime.h" />
+    <ClInclude Include="Source\SlimeManager.h" />
+>>>>>>> main
     <ClInclude Include="Source\SlimeModel.h" />
+    <ClInclude Include="Source\SlimeState\Slime_StateHeader.h" />
+    <ClInclude Include="Source\SlimeVisual.h" />
     <ClInclude Include="Source\SoundManager.h" />
     <ClInclude Include="Source\Stage.h" />
+    <ClInclude Include="Source\State\CompositeState.h" />
+    <ClInclude Include="Source\State\IState.h" />
+    <ClInclude Include="Source\State\StateMachine.h" />
     <ClInclude Include="Source\Texture.h" />
     <ClInclude Include="Source\TextureAnimation.h" />
     <ClInclude Include="Source\GameScene.h" />
+    <ClInclude Include="Source\TimeManager.h" />
     <ClInclude Include="Source\TitleScene.h" />
     <ClInclude Include="Source\TItleSlimeModel.h" />
     <ClInclude Include="Source\Utility.h" />
@@ -164,7 +205,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>プロジェクトに追加すべきファイル_VC用;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>External\Imgui;プロジェクトに追加すべきファイル_VC用;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -182,7 +223,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>プロジェクトに追加すべきファイル_VC用;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>External\Imgui;プロジェクトに追加すべきファイル_VC用;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>

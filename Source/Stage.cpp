@@ -464,7 +464,7 @@ bool Stage::Initialize(const char* path,float scale,VECTOR position)
 
     impl->order.resize(impl->triangles.size());std::iota(impl->order.begin(),impl->order.end(),0);
     impl->Build(0,static_cast<int>(impl->order.size()));
-    impl->InitRestoration(path);
+    //impl->InitRestoration(path);  // を塗るわけではないので、色を消すのは削除
     activeStage=this;
 
     return true;

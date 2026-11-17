@@ -3,6 +3,7 @@
 #include "ObjectManager.h"
 #include "GameManager.h"
 #include "EffectManager.h"
+#include "Debugger/Debugger.h"
 
 
 //
@@ -24,5 +25,6 @@ public:
 
 
 	static EffectManager* mpEffectManager; // エフェクトマネージャーのポインタ
+	static Debugger* mpDebugger; // デバッガーポインタ
 
 };

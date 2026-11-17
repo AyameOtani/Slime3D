@@ -29,13 +29,61 @@ void DrawWorld(const std::vector<BoxCollider>& boxes)
 	}
 }
 
+void DrawSlimeDescription(SlimeModel& slime)
+{
+    // --------------------------------------------
+    // 操作説明を画面に表示する
+    // --------------------------------------------
+    // DrawStringの最初の2つの値は、画面上の表示位置
+    // 画面左上が(0, 0)で、右へ行くほどX、下へ行くほどYが増える
+    // GetColorは、赤・緑・青を0～255で指定して色を作る
+
+    // 移動とジャンプの操作説明
+    DrawString(20, 20, "WASD : 移動 / SPACE : ジャンプ", GetColor(255, 255, 255));
+
+    // 操作説明
+    DrawString(20, 60, "A / D : 左右移動   W / S : 奥・手前   SPACE : ジャンプ", GetColor(255, 255, 255));
+    DrawString(20, 85, "Kを押しながら移動 : 通った部分を虹色に塗る   ESC : 終了", GetColor(255, 190, 220));
+    DrawString(20, 115, "1 : 赤色を選ぶ", GetColor(255, 110, 110));
+    DrawString(20, 140, "2 : 青色を選ぶ", GetColor(100, 180, 255));
+    DrawString(20, 165, "3 : 緑色を選ぶ", GetColor(120, 255, 150));
+    DrawString(20, 195, "Z長押し : 連続生成  X : 120体まで追加", GetColor(255, 235, 130));
+
+    // 現在選択中の色を表示する。
+    // この関数は前回のSlimeModel.hに定義している。
+    const int color = slime.GetSelectedColor();
+    const char* colorText = "選択中 : 赤";
+    unsigned int textColor = GetColor(255, 110, 110);
+    if (color == 2)
+    {
+        colorText = "選択中 : 青";
+        textColor = GetColor(100, 180, 255);
+    }
+    else if (color == 3)
+    {
+        colorText = "選択中 : 緑";
+        textColor = GetColor(120, 255, 150);
+    }
+    DrawString(20, 225, colorText, textColor);
+    DrawString(20, 255, "子供スライムが出ないときは、床のある空いた場所へ移動してください。", GetColor(210, 210, 210));
+    DrawString(20, 285, "表情 Y : a   U : b   I : c   O : d   P : e", GetColor(255, 190, 220));
+
+}
 
 
+//*---------------------------------------------------------------------------------------
+//*【?】コンストラクタ
+//*----------------------------------------------------------------------------------------
 GameScene::GameScene()
 	: Scene()     // 基底クラスのコンストラクタを呼び出しておく
+    , m_ShadowMap(Game::SHADOW_SIZE_X, Game::SHADOW_SIZE_Y)
+    , m_pPlayer(nullptr)
 {
 }
 
+//*---------------------------------------------------------------------------------------
+//*【?】デストラクタ
+//*----------------------------------------------------------------------------------------
 GameScene::~GameScene()
 {
 
@@ -68,6 +116,13 @@ bool GameScene::SlimeInitialize()
     return true;
 }
 
+
+//*---------------------------------------------------------------------------------------
+//*【?】初期化処理
+//*
+//* [引数] なし
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
 void GameScene::Initialize()
 {
     // スライムを初期状態にする
@@ -77,13 +132,41 @@ void GameScene::Initialize()
     SlimeInitialize();
 
     // ============================================
-    // ステージの作成  山本
+    // スライム管理クラスの初期化  山本
+    // ============================================
+    Master::mpGameManager->GetSlimeManager()->Setup();
+
+    // ============================================
+    // カメラのセットアップ  山本
     // ============================================
 
     // 横スクロールカメラ
     m_Camera.Initialize(slime.GetPosition());
     m_Camera.SetFollowRate(0.045f);
+    m_Camera.SetControlMode(Camera::CONTROL_MODE::TPS); //TPSモードに
+    m_Camera.SetTPSDistance(10.0f);
 
+    // ============================================
+    // プレイヤーのセットアップ
+    // ============================================
+    m_pPlayer =  new Player();
+    m_pPlayer->Init();
+    m_pPlayer->SetIsWriteShadow(true);  // シャドウ書き込みON
+
+    // ============================================
+    // シャドウのセットアップ
+    // ============================================
+    m_ShadowMap.Setup();
+    m_ShadowMap.SetLightDirection(GetLightDirection()); // 影を落とす方向
+    m_ShadowMap.SetAdjustDepth(0.003f); // 深度補正
+    const float DrawAreaSize = 50.0f;
+    VECTOR DrawAreaMinPos = VGet(-DrawAreaSize, -6.0f, -DrawAreaSize);
+    VECTOR DrawAreaMaxPos = VGet(DrawAreaSize, 6.0f, DrawAreaSize);
+    m_ShadowMap.SetDrawArea(DrawAreaMinPos, DrawAreaMaxPos); // 影の範囲
+
+    // ============================================
+    // ステージの作成  山本
+    // ============================================
     //
     // ステージの読み込み。見た目・当たり判定・塗装をStageで管理する。
     //
@@ -105,32 +188,20 @@ void GameScene::Initialize()
     boxes = m_Stage.GetBoxes();
    
 
-    // push_backは、一覧の末尾にデータを1個追加する命令
-    // 各箱は「最小座標・最大座標・色」の順に指定している
-    //
-    // このプログラムでは、
-    // X：横方向、Y：高さ方向、Z：奥行き方向として扱う
-
-    // 地面
-    // Xは-5.0～5.0、Yは-0.5～0.0、Zは-5.0～3.5
-    // 上面の高さがY=0.0になる、薄くて広い箱
-    //boxes.push_back({ VGet(-5.0f,-0.5f,-5.0f), VGet(5.0f,0.0f,3.5f), GetColor(85,100,90) });
-
-    // Zが正の方向にある壁
-    // 高さは3.0、Z方向の厚さは0.4
-    //boxes.push_back({ VGet(-2.2f,0.0f,2.8f), VGet(2.2f,3.0f,3.2f),  GetColor(100,115,110) });
-
-    // Xが負の側にある障害物
-    // 地面からの高さは1.0
-    //boxes.push_back({ VGet(-3.8f,0.0f,-1.0f), VGet(-2.2f,1.0f,0.5f), GetColor(110,105,95) });
-
-    // Xが正の側にある障害物
-    // 地面からの高さは0.8
-    //boxes.push_back({ VGet(2.0f,0.0f,-2.8f), VGet(2.65f,0.8f,-1.0f), GetColor(115,100,85) });
-
+    SlimeDef::SlimeSpawnParams spawn;
+    spawn.position = VGet(0.0f, 0.0f, 0.0f);
+    spawn.type = SlimeDef::SLIME_TYPE::NORMAL;
+    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
+    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
 }
 
 
+//*---------------------------------------------------------------------------------------
+//*【?】更新処理
+//*
+//* [引数] なし
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
 void GameScene::Update()
 {
     // --------------------------------------------
@@ -149,35 +220,37 @@ void GameScene::Update()
     // --------------------------------------------
     // カメラの位置と向きを決める
     // --------------------------------------------
-    m_Camera.Update(slime.GetPosition());
+    m_Camera.Update(m_pPlayer->GetPosition());
 
-    //// 更新後のスライムの位置を取得する
-    //VECTOR p = slime.GetPosition();
+    float deltaTime = Master::mpGameManager->GetTimeManager()->get_DeltaTime();
+    VECTOR cameraForward = m_Camera.GetLookForward();   // カメラの向き
 
-    //// カメラが注目する位置を作る
-    //// XとZはスライムの座標の20％、高さは常に1.0にする
-    //// スライムがX方向に1.0動くと、注目位置は0.2動く
-    //VECTOR target = VGet(p.x * 0.20f, 1.0f, p.z * 0.20f);
-
-    //// 注目位置からXに+7.5、Yに+5.5、Zに-10.0離れた場所に
-    //// カメラを置き、targetの方向を向ける
-    //// VAddは2つのVECTORを足し算する関数
-    //// UpVecYは、Y軸の正方向をカメラの上向きの基準にする指定
-    //SetCameraPositionAndTarget_UpVecY(VAdd(target, VGet(7.5f, 5.5f, -10.0f)), target);
-
-
+    // プレイヤーの移動パラメータ設定
+    m_pPlayer->SetMoveParameters(cameraForward, deltaTime);
 
 
 	// 基底クラスの更新処理を呼びだす
 	Scene::Update();
+
+    // カメラの位置を新しいプレイヤーの座標で設定しなおす
+    m_Camera.RefreshFollowPosition(m_pPlayer->GetPosition());
 }
 
 
+//*---------------------------------------------------------------------------------------
+//*【?】描画処理
+//*
+//* [引数] なし
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
 void GameScene::Draw()
 {
     // --------------------------------------------
-    // 3D空間を描画する
+    // シャドウマップへの書き込みON
     // --------------------------------------------
+    // 影に書き込む対象を描画
+    m_ShadowMap.ShadowMapWriteBegin();
+
     // スライムを描画する
     // 描画処理にもステージの箱の一覧を渡している
     slime.Draw(boxes);
@@ -185,54 +258,49 @@ void GameScene::Draw()
     // ステージの描画 山本
     m_Stage.Draw();
 
+    // シャドウに書き込むオブジェクトの描画
+    this->GetObjectManager()->DrawShadow();
+
+
     // --------------------------------------------
-    // 操作説明を画面に表示する
+    // シャドウマップへの書き込みOFF
     // --------------------------------------------
-    // DrawStringの最初の2つの値は、画面上の表示位置
-    // 画面左上が(0, 0)で、右へ行くほどX、下へ行くほどYが増える
-    // GetColorは、赤・緑・青を0～255で指定して色を作る
-
-    // 移動とジャンプの操作説明
-    DrawString(20, 20, "WASD : 移動 / SPACE : ジャンプ", GetColor(255, 255, 255));
+    m_ShadowMap.ShadowMapWriteEnd();
 
 
-
-    // 操作説明
-    DrawString(20, 60, "A / D : 左右移動   W / S : 奥・手前   SPACE : ジャンプ", GetColor(255, 255, 255));
-    DrawString(20, 85, "Kを押しながら移動 : 通った部分を虹色に塗る   ESC : 終了", GetColor(255, 190, 220));
-    DrawString(20, 115, "1 : 赤色を選ぶ", GetColor(255, 110, 110));
-    DrawString(20, 140, "2 : 青色を選ぶ", GetColor(100, 180, 255));
-    DrawString(20, 165, "3 : 緑色を選ぶ", GetColor(120, 255, 150));
-    DrawString(20, 195, "Z長押し : 連続生成  X : 120体まで追加", GetColor(255, 235, 130));
-
-    // 現在選択中の色を表示する。
-    // この関数は前回のSlimeModel.hに定義している。
-    const int color = slime.GetSelectedColor();
-    const char* colorText = "選択中 : 赤";
-    unsigned int textColor = GetColor(255, 110, 110);
-    if (color == 2)
-    {
-        colorText = "選択中 : 青";
-        textColor = GetColor(100, 180, 255);
-    }
-    else if (color == 3)
-    {
-        colorText = "選択中 : 緑";
-        textColor = GetColor(120, 255, 150);
-    }
-    DrawString(20, 225, colorText, textColor);
-    DrawString(20, 255, "子供スライムが出ないときは、床のある空いた場所へ移動してください。", GetColor(210, 210, 210));
-    DrawString(20, 285, "表情 Y : a   U : b   I : c   O : d   P : e", GetColor(255, 190, 220));
-
-
+    // --------------------------------------------
+    // シャドウマップのバインド
+    // --------------------------------------------
+    m_ShadowMap.ShadowMapBind();
+    slime.Draw(boxes);
+    m_Stage.Draw();
 
     // 基底クラスの更新処理を呼びだす
     Scene::Draw();
+
+    // --------------------------------------------
+    // シャドウマップのバインド解除
+    // --------------------------------------------
+    m_ShadowMap.ShadowMapUnbind();
+    
+    
+    // シャドウマップテスト描画
+    m_ShadowMap.TestDraw(1420.0, 780.0f, 1920.0f, 1080.0f);
+
+    // 説明文
+    DrawSlimeDescription(slime);
 }
 
-
+//*---------------------------------------------------------------------------------------
+//*【?】終了処理
+//*
+//* [引数] なし
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
 void GameScene::Finalize()
 {
 	// BGM停止
 	//Master::mpSoundManager->StopBGM();
+
+    m_ShadowMap.Finalize();
 }
