@@ -1,20 +1,23 @@
 ﻿#pragma once
 #include "Scene.h" // シーン継承したいからインクルード
 #include "HoverImageButton.h"
+#include "Utility.h"
 
 // タイトルで表示するモデル関係のインクルード
 #include "TitleSlimeModel.h"
-#include "TItleStageModel.h"
 
-// タイトル用カメラ（スライムを映すため）
-#include "Camera.h"
+// タイトルで表示するステージ
+#include "TitleStageModel.h"
+
+// タイトル用カメラ（注視点を固定して回転させる）
+#include "TitleCamera.h"
 
 
 // ホバーボタンのリソースパスを定義する名前空間
 namespace  HoverImagePath
 {
 	static const std::string GameStartButton = "Resource/Button/game_start.png"; // ゲームスタートボタンの画像パス
-	static const std::string ExplainButton = "Resource/Button/explain.png";		 // 操作説明ボタンの画像パス
+	static const std::string ExplainButton = "Resource/Button/game_end.png";		 // 操作説明ボタンの画像パス
 }
 
 
@@ -38,11 +41,12 @@ public:
 
 private:
 	// タイトルで表示するオブジェクト関係
-	TitleSlimeModel mTitleModel;
 	TitleStageModel mTitleStage;
 
-	// タイトル用カメラ（スライムの位置を映す）
-	Camera mTitleCamera;
+	TitleSlimeModel mTitleModel;
+
+	// タイトル用カメラ（スライムの位置を注視し、水平に回転させる）
+	TitleCamera mTitleCamera;
 
 
 	// ホバーボタン関係 大谷
@@ -51,9 +55,6 @@ private:
 
 	// タイトルのスライムの表示位置（奥行き）
 	static constexpr float SLIME_POS_Z = 300.0f;
-
-	// タイトルのカメラアングル（キー9で切り替わるアングルB：後ろ斜め上から）
-	static constexpr Camera::CAMERA_ANGLE TITLE_CAMERA_ANGLE = Camera::CAMERA_ANGLE::ANGLE_B;
 
 	// タイトルのスライムの表示位置を返す
 	VECTOR GetSlimePosition() const;

@@ -62,6 +62,7 @@
     <ClCompile Include="Source\TextureAnimation.cpp" />
     <ClCompile Include="Source\GameScene.cpp" />
     <ClCompile Include="Source\TimeManager.cpp" />
+    <ClCompile Include="Source\TitleCamera.cpp" />
     <ClCompile Include="Source\TitleScene.cpp" />
     <ClCompile Include="Source\TitleSlimeModel.cpp" />
     <ClCompile Include="Source\TitleStageModel.cpp" />
@@ -105,6 +106,7 @@
     <ClInclude Include="Source\TextureAnimation.h" />
     <ClInclude Include="Source\GameScene.h" />
     <ClInclude Include="Source\TimeManager.h" />
+    <ClInclude Include="Source\TitleCamera.h" />
     <ClInclude Include="Source\TitleScene.h" />
     <ClInclude Include="Source\TItleSlimeModel.h" />
     <ClInclude Include="Source\TitleStageModel.h" />

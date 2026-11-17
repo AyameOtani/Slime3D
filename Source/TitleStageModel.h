@@ -26,9 +26,9 @@ public:
     TitleStageModel(const TitleStageModel&) = delete;
     TitleStageModel& operator=(const TitleStageModel&) = delete;
 
-    void Initialize();                                // 初期化（ステージの読み込み）
+    void Initialize();                                // 初期化
     void Draw();                                      // ステージ描画
-    void Finalize();                                  // 終了処理（ステージの解放）
+    void Finalize();                                  // 終了処理
 
     bool IsLoaded() const;                            // ステージが読み込めているかどうか
 

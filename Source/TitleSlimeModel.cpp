@@ -255,18 +255,11 @@ void TitleSlimeModel::DrawFace(const VECTOR& drawPosition, float radius)
     // 顔画像が読み込まれていない場合は描画しない
     if (mFaceHandle < 0) return;
 
-    // --------------------------------------------------------
-    // カメラの方向を取得
-    // --------------------------------------------------------
+    // 顔の向きを固定する（手前のZ方向）
+    const VECTOR faceForward = VGet(0.0f, 0.0f, -1.0f);
 
-    // スライムの位置からカメラの位置への方向ベクトルを求める
-    VECTOR toCamera = VSub(GetCameraPosition(), drawPosition);
-
-    // 上下方向の傾きをなくし、水平方向だけを向くようにする
-    toCamera.y = 0.0f;
-
-    // カメラの方向に合わせて顔を描画する
-    mSlimeMesh.DrawFace(mFaceHandle, drawPosition, radius, toCamera);
+    // 顔を描画する
+    mSlimeMesh.DrawFace(mFaceHandle, drawPosition, radius, faceForward);
 }
 
 //*---------------------------------------------------------------------------------------

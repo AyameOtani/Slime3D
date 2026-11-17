@@ -3,7 +3,6 @@
 #include "Master.h"
 #include "inputManager.h"
 
-
 TitleScene::TitleScene()
     : Scene()     // 基底クラスのコンストラクタを呼び出しておく
 
@@ -36,7 +35,7 @@ TitleScene::~TitleScene()
 
 void TitleScene::Initialize()
 {
-    // ステージを先に読み込む（スライムの床判定で Stage::Active() を使うため）
+    // ステージを先に読み込む
     mTitleStage.Initialize();
 
     // スライムの初期化と位置設定
@@ -44,10 +43,7 @@ void TitleScene::Initialize()
     mTitleModel.Initialize();
     mTitleModel.SetPosition(slimePosition);
 
-    // スライムを映すカメラを準備する
-    // 描画距離を広げて、奥（z=300付近）のステージも映るようにする
-    // 初期アングルはキー9と同じアングルBにする（キー8・9・0で切り替え可能）
-    mTitleCamera.SetCameraAngle(TITLE_CAMERA_ANGLE);
+    // タイトル用カメラを初期化する
     mTitleCamera.Initialize(slimePosition);
 }
 
@@ -59,8 +55,8 @@ void TitleScene::Update()
     // モデルのジャンプ演出を更新
     mTitleModel.Update();
 
-    // スライムの位置に合わせてカメラを更新（描画前に設定を反映する）
-    mTitleCamera.Update(GetSlimePosition());
+    // カメラを水平方向に回転させる
+    mTitleCamera.Update();
 
     // 基底クラスの更新処理を呼びだす
     Scene::Update();
