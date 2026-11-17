@@ -4,6 +4,7 @@
 
 // タイトルで表示するモデル関係のインクルード
 #include "TitleSlimeModel.h"
+#include "TItleStageModel.h"
 
 // タイトル用カメラ（スライムを映すため）
 #include "Camera.h"
@@ -38,6 +39,7 @@ public:
 private:
 	// タイトルで表示するオブジェクト関係
 	TitleSlimeModel mTitleModel;
+	TitleStageModel mTitleStage;
 
 	// タイトル用カメラ（スライムの位置を映す）
 	Camera mTitleCamera;

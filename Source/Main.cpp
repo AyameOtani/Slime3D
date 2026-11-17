@@ -19,12 +19,8 @@
 // Master クラスの静的メンバ変数定義
 GameManager* Master::mpGameManager = nullptr;
 EffectManager* Master::mpEffectManager = nullptr;
-<<<<<<< HEAD
 Mouse m_Mouse;
-=======
 Debugger* Master::mpDebugger = nullptr;
-
->>>>>>> main
 
 /**
 * @fn WinMain
@@ -193,15 +189,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		// エフェクトの描画
 		Master::mpEffectManager->EffectDraw3D();
 
-<<<<<<< HEAD
 		// マウスの更新
 		m_Mouse.Update();
-=======
 		// ============================================
 		// デバッグ描画の終了
 		// ============================================
 		Master::mpDebugger->EndFrame();
->>>>>>> main
 
 		// 裏画面の内容を表画面に映す
 		ScreenFlip();
