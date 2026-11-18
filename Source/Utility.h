@@ -77,6 +77,11 @@ namespace Helper
 
         /* VECTORにスカラー設定 */
         inline VECTOR VEC_GetScalar(const float scl) { return VGet(scl, scl, scl); }
+
+        /* 反射 */
+        inline VECTOR VEC_Reflect(const VECTOR& inVec, const VECTOR& normal) {
+            return VSub(inVec, VScale(normal, (2.0f * VDot(inVec, normal))));
+        }
     };
 
     //-----------------------------------------

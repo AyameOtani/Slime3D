@@ -201,24 +201,25 @@ void SlimeVisual::Setup()
 //*【?】更新
 //*
 //* [引数]
-//* slime : スライムの参照
+//* slime     : スライムの参照
+//* deltaTime : デルタタイム
 //* 
 //* [返値]なし
 //*----------------------------------------------------------------------------------------
-void SlimeVisual::Update(const SlimeObject& slime)
+void SlimeVisual::Update(const SlimeObject& slime, float deltaTime)
 {
     const auto& runtime = slime.GetRuntime();
+
+    UpdateDeformation(slime, deltaTime);
 
     if (runtime.splitPhase ==
         Game::Slime::SLIME_SPLIT_PHASE::PHASE_0)
     {
-        UpdateRainbowDeformation(slime);
         UpdateFaceDirection(slime);
     }
     else
     {
         ++m_VisualAge;
-        m_ChildPhase += 0.16f;
     }
 
     RefreshMesh(slime);
@@ -517,7 +518,7 @@ void SlimeVisual::CreateChildMesh(int color)
             VECTOR n = v > 0.90f ? VGet(0.0f, -1.0f, 0.0f) : VGet(local.x / (BABY_WIDTH * BABY_WIDTH), (local.y + 1.0f) / (BABY_HEIGHT * BABY_HEIGHT), local.z / (BABY_WIDTH * BABY_WIDTH));
             vertex.norm = VSquareSize(n) > 1.0e-12f ? VNorm(n) : VGet(0.0f, 1.0f, 0.0f);
             vertex.dif = SlimeColor(color, (local.y + 1.0f) / BABY_HEIGHT);
-            vertex.spc = GetColorU8(18, 18, 18, 255);
+            vertex.spc = GetColorU8(110, 110, 110, 255);
             m_ChildBodySource.push_back(vertex);
         }
     }
@@ -564,9 +565,41 @@ void SlimeVisual::CreateChildMesh(int color)
 //* 
 //* [返値]なし
 //*----------------------------------------------------------------------------------------
-void SlimeVisual::UpdateRainbowDeformation(const SlimeObject& slime)
+void SlimeVisual::UpdateDeformation(const SlimeObject& slime, float deltaTime)
 {
+    if (deltaTime <= 0.0f)
+        return;
 
+    const auto& runtime = slime.GetRuntime();
+    grounded = runtime.isGrounded;
+
+    const VECTOR& v = runtime.velocity;
+    const float speed = std::sqrt(v.x * v.x + v.z * v.z);
+    const float moveSpeed = slime.GetMoveSpeed();
+    const float moveRatio = grounded && moveSpeed > 0.0f
+        ? Math::Clamp(speed / moveSpeed, 0.0f, 1.0f)
+        : 0.0f;
+
+    wobblePower = Math::Lerp(
+        wobblePower, moveRatio, 1.0f - std::exp(-9.0f * deltaTime));
+    wobblePhase = std::fmod(
+        wobblePhase + (9.0f + 6.0f * moveRatio) * deltaTime,
+        2.0f * DX_PI_F);
+
+    const float targetScale =
+        1.0f + 0.06f * wobblePower * std::sin(wobblePhase);
+
+    // 長いフレームでもばねが暴れないよう、時間を小分けにする
+    const int steps = static_cast<int>(std::ceil(deltaTime * 120.0f));
+    const float step = deltaTime / steps;
+
+    for (int i = 0; i < steps; ++i)
+    {
+        const float acceleration =
+            180.0f * (targetScale - squashScale) - 8.0f * squashVelocity;
+        squashVelocity += acceleration * step;
+        squashScale += squashVelocity * step;
+    }
 }
 
 //*---------------------------------------------------------------------------------------
@@ -583,6 +616,7 @@ void SlimeVisual::UpdateRainbowMesh(const SlimeObject& slime)
     auto& indices = m_Body.indices;
     const VECTOR& position = slime.GetPosition();
     const float radius = slime.GetRuntime().radius;
+    const float speed = slime.GetMoveSpeed();
 
     if ( vertices.empty() || indices.empty())
     {
@@ -745,7 +779,7 @@ void SlimeVisual::UpdateRainbowMesh(const SlimeObject& slime)
             // difは頂点の色(R,G,B,A)。Aは不透明度で、255が不透明。spcは光沢の色。
             vertices[index].dif = RainbowColor(0.5f + directionX * ringRadius / (BODY_WIDTH * 2.0f), heightRate);
 
-            vertices[index].spc = GetColorU8(18, 18, 18, 255);
+            vertices[index].spc = GetColorU8(110, 110, 110, 255);
 
             // u・vは画像を貼るための座標。今回の描画では画像を指定していない。
             vertices[index].u = u;
@@ -897,8 +931,7 @@ void SlimeVisual::UpdateChildMesh(const SlimeObject& slime)
         ? 0.2f + 0.8f * m_VisualAge / 15.0f
         : 1.0f;
 
-    const float sy =
-        1.0f + sinf(m_ChildPhase) * 0.12f;
+    const float sy = squashScale;
     const float sx = 1.0f / sqrtf(sy);
 
     auto transform = [&](
@@ -1183,7 +1216,20 @@ void SlimeVisual::SetFace(int face)
     currentFace = face;
 }
 
-
+//*---------------------------------------------------------------------------------------
+//*【?】落下時の衝撃プルン
+//*
+//* [引数]
+//* impactSpeed : 衝突スピード
+//* 
+//* [返値]なし
+//*----------------------------------------------------------------------------------------
+void SlimeVisual::OnLand(float impactSpeed)
+{
+    const float strength = Math::Clamp(
+        (impactSpeed - 1.5f) / 8.5f, 0.0f, 1.0f);
+    squashVelocity -= 7.0f * strength;
+}
 
 
 

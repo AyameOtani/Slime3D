@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <unordered_set>
+#include "Paint/StagePaint.h"
 
 using namespace Game;
 
@@ -23,7 +25,13 @@ namespace
     const float PAINT_GRID = 0.12f;
     float Limit(float x, float lo, float hi) { return x < lo ? lo : (x > hi ? hi : x); }
     VECTOR Cross(VECTOR a, VECTOR b) { return VGet(a.y*b.z-a.z*b.y,a.z*b.x-a.x*b.z,a.x*b.y-a.y*b.x); }
-    struct Triangle { VECTOR p[3], normal, lo, hi; float uv[3][2] = {}; int material=-1; };
+    struct Triangle { 
+        VECTOR p[3], 
+            normal, lo, hi; 
+        float uv[3][2] = {}; 
+        int material=-1; 
+        std::array<int, 3> vertexIds{};
+    };
     struct Node { VECTOR lo, hi; int left=-1, right=-1, begin=0, end=0; };
     struct Batch { std::vector<VERTEX3D> v; std::vector<unsigned short> indices; };
     using MarkKey = std::tuple<int,int,int,int>;
@@ -153,6 +161,20 @@ namespace
         if(t.original>=0)DeleteSoftImage(t.original);
         t=RestoreTexture{};
     }
+
+    // 追加 山本
+    float DistanceSqToSegment(VECTOR point, VECTOR a, VECTOR b)
+    {
+        const VECTOR ab = VSub(b, a);
+        const float lengthSq = VSquareSize(ab);
+
+        if (lengthSq <= 0.0f)
+            return VSquareSize(VSub(point, a));
+
+        const float t = Limit(VDot(VSub(point, a), ab) / lengthSq, 0.0f, 1.0f);
+        const VECTOR closest = VAdd(a, VScale(ab, t));
+        return VSquareSize(VSub(point, closest));
+    }
 }
 
 struct Stage::Impl
@@ -169,6 +191,8 @@ struct Stage::Impl
     std::vector<RestoreTexture> textures;
     std::vector<RestoreMaterial> materials;
     float gameTime=0.0f;
+
+    StagePaint paint;   // 追加 山本
 
     bool InitTexture(int index,const char* modelPath)
     {
@@ -383,6 +407,65 @@ struct Stage::Impl
         if(n.left>=0){Query(n.left,lo,hi,visit);Query(n.right,lo,hi,visit);}
         else for(int i=n.begin;i<n.end;++i){int id=order[i];if(Overlap(lo,hi,triangles[id].lo,triangles[id].hi))visit(id);}
     }
+    template<class Visitor>
+    // 追加 山本
+    void ForEachBrushTriangle(const Game::SurfaceHit& hit, float radius,const Visitor& visit) const
+    {
+        const int start = hit.triangleId;
+
+        if (start < 0 || start >= static_cast<int>(triangles.size()) ||
+            neighbors.size() != triangles.size() ||
+            !std::isfinite(radius) || radius <= 0.0f ||
+            !std::isfinite(hit.point.x) || !std::isfinite(hit.point.y) ||
+            !std::isfinite(hit.point.z))
+        {
+            return;
+        }
+
+        const VECTOR center = hit.point;
+        const VECTOR extent = VGet(radius, radius, radius);
+        const float radiusSq = radius * radius;
+
+        // ブラシに触れる塗装対象面を集める
+        std::unordered_set<int> remaining;
+        Query(0, VSub(center, extent), VAdd(center, extent), [&](int id)
+            {
+                const Triangle& triangle = triangles[id];
+
+                // 初期版は FindFloor と同じ傾きの基準で床・斜面を選ぶ
+                if (std::fabs(triangle.normal.y) < 0.55f) return;
+
+                const VECTOR closest = Closest(center, triangle);
+                if (VSquareSize(VSub(center, closest)) <= radiusSq)
+                    remaining.insert(id);
+            });
+
+        if (remaining.erase(start) == 0) return;
+
+        std::vector<int> pending{ start };
+        while (!pending.empty())
+        {
+            const int id = pending.back();
+            pending.pop_back();
+            visit(id);
+
+            const Triangle& triangle = triangles[id];
+            for (int edge = 0; edge < 3; ++edge)
+            {
+                const int next = neighbors[id][edge];
+                const auto candidate = remaining.find(next);
+                if (candidate == remaining.end()) continue;
+
+                const VECTOR a = triangle.p[edge];
+                const VECTOR b = triangle.p[(edge + 1) % 3];
+                if (DistanceSqToSegment(center, a, b) > radiusSq) continue;
+
+                // 積んだ時点で候補から外し、別の経路からの二重訪問を防ぐ。
+                remaining.erase(candidate);
+                pending.push_back(next);
+            }
+        }
+    }
     void WriteMark(const Mark& mark)
     {
         int batchIndex=mark.slot/MARKS_PER_BATCH;
@@ -404,6 +487,50 @@ struct Stage::Impl
             b.indices[indexBase+(i-1)*3]=static_cast<unsigned short>(base);
             b.indices[indexBase+(i-1)*3+1]=static_cast<unsigned short>(base+i);
             b.indices[indexBase+(i-1)*3+2]=static_cast<unsigned short>(base+i+1);
+        }
+    }
+
+    std::vector<std::array<int, 3>> neighbors;
+
+    // 追加 山本
+    void BuildTriangleNeighbors()
+    {
+        struct EdgeRef
+        {
+            int triangleId;
+            int edge;
+        };
+
+        using EdgeKey = std::pair<int, int>;
+        std::map<EdgeKey, std::vector<EdgeRef>> edges;
+
+        neighbors.assign(triangles.size(), std::array<int, 3>{ -1, -1, -1 });
+
+        for (int id = 0; id < static_cast<int>(triangles.size()); ++id)
+        {
+            const Triangle& triangle = triangles[id];
+
+            for (int edge = 0; edge < 3; ++edge)
+            {
+                int a = triangle.vertexIds[edge];
+                int b = triangle.vertexIds[(edge + 1) % 3];
+                if (a > b) std::swap(a, b);
+
+                edges[{ a, b }].push_back({ id, edge });
+            }
+        }
+
+        for (const auto& entry : edges)
+        {
+            const auto& refs = entry.second;
+
+            // 1面だけなら外周。3面以上なら行き先が曖昧なので境界とする。
+            if (refs.size() != 2) continue;
+
+            const EdgeRef& a = refs[0];
+            const EdgeRef& b = refs[1];
+            neighbors[a.triangleId][a.edge] = b.triangleId;
+            neighbors[b.triangleId][b.edge] = a.triangleId;
         }
     }
 };
@@ -429,6 +556,8 @@ void Stage::Finalize()
     if(impl->model>=0)MV1DeleteModel(impl->model);
     impl->model=-1;impl->triangles.clear();impl->nodes.clear();impl->order.clear();
     impl->marks.clear();impl->markOrder.clear();impl->batches.clear();
+    impl->neighbors.clear();    // 追加 山本
+    impl->paint.Clear();        // 追加 山本
 }
 bool Stage::Initialize(const char* path,float scale,VECTOR position)
 {
@@ -451,6 +580,7 @@ bool Stage::Initialize(const char* path,float scale,VECTOR position)
             t.p[k]=mesh.Vertexs[v].Position;
             t.uv[k][0]=mesh.Vertexs[v].TexCoord[0].u;
             t.uv[k][1]=mesh.Vertexs[v].TexCoord[0].v;
+            t.vertexIds[k] = v; // 追加 山本
             if(!std::isfinite(t.p[k].x)||!std::isfinite(t.p[k].y)||!std::isfinite(t.p[k].z)){valid=false;break;}
             Expand(t.lo,t.hi,t.p[k]);
         }
@@ -461,11 +591,23 @@ bool Stage::Initialize(const char* path,float scale,VECTOR position)
         t.normal=VNorm(cross);impl->triangles.push_back(t);
     }
     MV1TerminateReferenceMesh(impl->model,-1,TRUE);
-
     if(!valid || impl->triangles.empty()){impl->error="Stage_error";Finalize();return false;}
 
     impl->order.resize(impl->triangles.size());std::iota(impl->order.begin(),impl->order.end(),0);
     impl->Build(0,static_cast<int>(impl->order.size()));
+    impl->BuildTriangleNeighbors(); // 追加 山元
+
+    // 追加 山本
+    for (int id = 0; id < static_cast<int>(impl->triangles.size()); ++id)
+    {
+        const Triangle& t = impl->triangles[id];
+
+        // ForEachBrushTriangle() と同じ床・斜面の条件
+        if (std::fabs(t.normal.y) < 0.55f) continue;
+
+        impl->paint.RegisterTriangle(id, t.p[0], t.p[1], t.p[2]);
+    }
+
     //impl->InitRestoration(path);  // を塗るわけではないので、色を消すのは削除
     activeStage=this;
 
@@ -511,8 +653,14 @@ bool Stage::BabyCanStand(float x,float z,float currentY,float radius,float& y)co
     });
     return !blocked;
 }
-void Stage::ResolveSphere(VECTOR& p,VECTOR& velocity,float radius,bool& grounded,float& impact,VECTOR& wall,float& wallDepth)const
+void Stage::ResolveSphere(VECTOR& p,VECTOR& velocity,float radius,bool& grounded,float& impact,VECTOR& wall,float& wallDepth, Game::SurfaceHit* groundHit)const
 {
+    if (groundHit)
+    {
+        groundHit->triangleId = -1;
+    }
+    float bestSupportY = -1.0f;
+
     impact=0;wallDepth=0;wall=VGet(0,0,0);
     for(int pass=0;pass<4;++pass)
     {
@@ -528,9 +676,31 @@ void Stage::ResolveSphere(VECTOR& p,VECTOR& velocity,float radius,bool& grounded
             float depth=(std::max)(0.0f,radius-distance);p=VAdd(p,VScale(n,depth));
             float vn=VDot(velocity,n);
 
-            if(vn<0){if(n.y>0.55f)impact=(std::max)(impact,-vn);velocity=VSub(velocity,VScale(n,vn));}
-            if(n.y>0.55f)grounded=true;
-            if(fabsf(n.y)<0.45f && depth>wallDepth){wallDepth=depth;wall=VScale(n,-1);}
+            if (vn < 0) 
+            {
+                if (n.y > 0.55f) 
+                {
+                    impact = (std::max)(impact, -vn);
+                    velocity = VSub(velocity, VScale(n, vn));
+                }
+            }
+            if (n.y > 0.55f)
+            {
+                grounded = true;
+
+                // 床の継ぎ目などで複数面に触れたら、最も上向きに支えた面を採用
+                if (groundHit && std::fabs(t.normal.y) >= 0.55f && n.y > bestSupportY)
+                {
+                    bestSupportY = n.y;
+                    groundHit->triangleId = id;
+                    groundHit->point = q;
+                    groundHit->normal = t.normal.y < 0.0f ? VScale(t.normal, -1.0f) : t.normal;
+                }
+            }
+            if(fabsf(n.y)<0.45f && depth>wallDepth)
+            {
+                wallDepth=depth;wall=VScale(n,-1);
+            }
         });
     }
 }
@@ -620,4 +790,68 @@ void Stage::Draw()
     if(impl->model<0)return;
     MV1DrawModel(impl->model);DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
     for (Batch& b : impl->batches) { DrawPolygonIndexed3D(b.v.data(), static_cast<int>(b.v.size()), b.indices.data(), static_cast<int>(b.indices.size() / 3), DX_NONE_GRAPH, TRUE); }
+}
+
+
+//*---------------------------------------------------------------------------------------
+//*【?】ペイントの描画
+//*
+//* [引数] なし
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
+void Stage::DrawPaint()
+{
+    impl->paint.Draw();
+}
+
+//*---------------------------------------------------------------------------------------
+//*【?】ペイントの適用
+//*
+//* [引数]
+//* hit    : 衝突情報
+//* radius : 範囲
+//* color  : 何色で塗るか
+//*
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
+void Stage::ApplyPaint(const SurfaceHit& hit, float radius, PAINT_COLOR color)
+{
+    impl->ForEachBrushTriangle(hit, radius, [&](int triangleId)
+        {
+            impl->paint.ApplyToTriangle(triangleId, hit.point, radius, color);
+        });
+}
+
+//*---------------------------------------------------------------------------------------
+//*【?】ペイントの掃除
+//*
+//* [引数]
+//* hit    : 衝突情報
+//* radius : 範囲
+//*
+//* [返値] 
+//* 今回消した範囲 
+//*----------------------------------------------------------------------------------------
+double Stage::CleanPaint(const SurfaceHit& hit, float radius)
+{
+    double cleanedArea = 0.0;
+
+    impl->ForEachBrushTriangle(hit, radius, [&](int triangleId)
+        {
+            cleanedArea += impl->paint.CleanTriangle(triangleId, hit.point, radius);
+        });
+
+    return cleanedArea;
+}
+
+//*---------------------------------------------------------------------------------------
+//*【?】現在の塗った範囲情報
+//*
+//* [引数] なし
+//* [返値] 
+//* 塗った範囲 
+//*----------------------------------------------------------------------------------------
+PaintCoverage Stage::GetPaintCoverage() const
+{
+    return impl->paint.GetPaintCoverage();
 }

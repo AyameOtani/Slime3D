@@ -3,6 +3,7 @@
 #include "Stage.h"
 
 using namespace Game::Slime;
+using namespace Game;
 using namespace Helper::DxLib_Math;
 using namespace Helper;
 
@@ -15,6 +16,21 @@ namespace
 	constexpr float MAX_FALL_SPEED = 10.0f;
 	constexpr float JUMP_POWER = 10.0f;
 }
+
+
+// 床判定の追加　大谷
+namespace SlimeRaySettings
+{
+	// 床判定する位置の広さ
+	constexpr float CheckRadiusRate = 0.75f;
+
+	// 床判定の下限・上限
+	constexpr float FloorCheckBelow = 1.65f;
+	constexpr float FloorCheckAbove = 0.25f;
+}
+
+
+
 
 //*---------------------------------------------------------------------------------------
 //*【?】コンストラクタ
@@ -71,6 +87,7 @@ void SlimeObject::Update()
 {
 	float deltaTime = Master::mpGameManager->GetTimeManager()->get_DeltaTime();
 	bool wasGrounded = m_Runtime.isGrounded;
+	const float radius = m_Runtime.radius;
 
 	// 移動方向の決定
 	if (!m_Runtime.isMoveDir)
@@ -113,9 +130,75 @@ void SlimeObject::Update()
 		);
 	VECTOR position = mTransform.position;
 
+
+
+
+	// ★★★ 5本のRay判定を追加しました。　大谷 ★★
+	if (Stage* stage = Stage::Active())
+	{
+		const float nextX = position.x + velocity.x * deltaTime;
+		const float nextZ = position.z + velocity.z * deltaTime;
+		const float checkRadius = radius * SlimeRaySettings::CheckRadiusRate;
+		const float minY = position.y - radius * SlimeRaySettings::FloorCheckBelow;
+		const float maxY = position.y + radius * SlimeRaySettings::FloorCheckAbove;
+
+		// 中央、前後、左右
+		const float offsets[5][2] =
+		{
+			{ 0.0f,  0.0f },
+			{ 0.0f,  1.0f },
+			{ 0.0f, -1.0f },
+			{-1.0f,  0.0f },
+			{ 1.0f,  0.0f }
+		};
+		bool canMove = true;
+
+		for (int i = 0; i < 5; ++i)
+		{
+			float rayX = nextX + offsets[i][0] * checkRadius;
+			float rayZ = nextZ + offsets[i][1] * checkRadius;
+			float floorY = 0.0f;
+
+			DrawLine3D(position, VGet(rayX, 0.0f, rayZ), GetColor(255, 0, 0));
+
+			if (!stage->FindFloor(rayX, rayZ, minY, maxY, floorY))
+			{
+				// 端まで来たら反転
+				mTransform.direction = VScale(moveDir, -1.0f);
+				velocity.x = 0.0f;
+				velocity.z = 0.0f;
+				break;
+			}
+		}
+
+		// 5本のうち1本でも床がなければ水平移動を止める
+		if (!canMove)
+		{
+			VECTOR inVec = VGet(moveDir.x, 0.0f, moveDir.z);
+			VECTOR normVec = VScale(inVec, -1.0f);
+			moveDir = VEC_Reflect(inVec, normVec);
+
+			velocity.x = 0.0f;
+			velocity.z = 0.0f;
+		}
+	}
+	// ★★★ ここまで追加しました　大谷 ★★★
+	
+	constexpr Game::PAINT_COLOR paintColors[] = {
+	Game::PAINT_COLOR::RAINBOW,
+	Game::PAINT_COLOR::RED,
+	Game::PAINT_COLOR::BLUE,
+	Game::PAINT_COLOR::GREEN
+	};
+
+	const bool hasPaintColor = m_Runtime.color >= 0 && m_Runtime.color < 4;
+	const float brushRadius = radius;				// ブラシサイズ
+	const float stampSpacing = brushRadius * 0.5f;	// 塗る感覚
+	bool paintedThisFrame = false;	// 色を塗ったか
+
 	// 一度の移動距離が大きい場合は、小分けにして衝突を調べる
 	const float travelDistance = VSize(velocity) * deltaTime;
-	const float maxStepDistance = m_Runtime.radius * 0.5f;
+	const float maxStepDistance = radius * 0.5f;
 
 	const int stepCount = (std::max)(
 		1,
@@ -125,6 +208,9 @@ void SlimeObject::Update()
 		);
 
 	const float stepTime = deltaTime / static_cast<float>(stepCount);
+	
+	// 落下衝撃
+	float landingImpact = 0.0f;
 
 	for (int i = 0; i < stepCount; ++i)
 	{
@@ -140,28 +226,65 @@ void SlimeObject::Update()
 		float wallDepth = 0.0f;
 		VECTOR wall = VGet(0.0f, 0.0f, 0.0f);
 
+		// 格納先
+		Game::SurfaceHit groundHit{};
+
 		stage->ResolveSphere(
 			position,
 			velocity,
-			m_Runtime.radius,
+			radius,
 			m_Runtime.isGrounded,
 			impact,
 			wall,
-			wallDepth
+			wallDepth,
+			&groundHit
 		);
+
+		if (!wasGrounded && m_Runtime.isGrounded)
+		{
+			landingImpact = (std::max)(landingImpact, impact);
+		}
+		wasGrounded = m_Runtime.isGrounded;
+
+		if (groundHit.triangleId < 0)
+		{
+			// 空中に出た。次に着地した場所では最初の一跡を付ける
+			m_HasPaintPoint = false;
+		}
+		else if (hasPaintColor)
+		{
+			// 塗るかどうか
+			const bool shouldStamp =
+				!m_HasPaintPoint ||
+				VSquareSize(VSub(groundHit.point, m_LastPaintPoint)) >= stampSpacing * stampSpacing;
+
+			if (shouldStamp)
+			{
+				stage->ApplyPaint(groundHit, brushRadius, paintColors[m_Runtime.color]);
+
+				// 塗った位置を記録
+				m_LastPaintPoint = groundHit.point;
+				m_HasPaintPoint = true;
+				paintedThisFrame = true;
+			}
+		}
+	}
+
+	// 落下で衝撃を受けていれば、プルンさせる
+	if (landingImpact > 0.0f)
+	{
+		m_Visual.OnLand(landingImpact);
 	}
 
 	m_Runtime.velocity = velocity;
 
 	if (position.y <= -30.0f)
 	{
+		m_HasPaintPoint = false;
 		position = VGet(0.0f, 30.0f, 0.0f);
 	}
 
 	// 押し戻し後の座標を、本体へ反映する
-	mTransform.position = position;
-
-	m_Runtime.velocity = velocity;
 	mTransform.position = position;
 
 	// 接地中に、見た目へ渡す床の法線を取得する。
@@ -187,8 +310,29 @@ void SlimeObject::Update()
 		}
 	}
 
+	//
+	// 一定時間ごとに色を塗る
+	//
+	m_PaintCooldown -= deltaTime;
+	if (paintedThisFrame && m_PaintCooldown <= 0.0f)
+	{
+		// 
+		// 色塗りエフェクト
+		//
+		int handle = Master::mpEffectManager->PlayEffect3D("Bubble");
+		Master::mpEffectManager->SetPosEffect3D(handle, position);
+		Master::mpEffectManager->SetScaleEffect3D(handle, VEC_GetScalar(m_Runtime.radius * 2.5f));
+		float r = 0, g = 0, b = 0;
+		if (m_Runtime.color == 0)r = 255;
+		else if (m_Runtime.color == 1)r = 255;
+		else if (m_Runtime.color == 2)b = 255;
+		else if (m_Runtime.color == 3)g = 255;
+		Master::mpEffectManager->SetColorEffect3D(handle, r, g, b, 255);
+		m_PaintCooldown = 0.1f;
+	}
+
 	// 見た目更新
-	m_Visual.Update(*this);
+	m_Visual.Update(*this, deltaTime);
 
 	
 	if (elapsed >= 3.0f)
@@ -209,13 +353,13 @@ void SlimeObject::Update()
 		else if (newPhase == SLIME_SPLIT_PHASE::PHASE_3)newPhase = SLIME_SPLIT_PHASE::PHASE_0;
 
 		spawn.splitPhase = newPhase;
-		spawn.color = INT_CAST(Helper::Math::RandRange(1, 4));
+		spawn.color = INT_CAST(Helper::Math::RandRange(0, 4));
 		Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
 
 		elapsed = 0.0f;
 		return;
 	}
-	elapsed += Master::mpGameManager->GetTimeManager()->get_DeltaTime();
+	elapsed += deltaTime;
 }
 
 //*---------------------------------------------------------------------------------------
@@ -280,6 +424,7 @@ void SlimeObject::ResetForReuse()
 	// 見た目リセット
 	m_Visual.Reset();
 
+	m_HasPaintPoint = false;
 	m_ReturnRequested = false;
 }
 

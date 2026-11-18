@@ -20,6 +20,10 @@ private:
 	SlimeVisual m_Visual;	
 	bool m_ReturnRequested;									// プールに返却をリクエスト
 	float elapsed = 0.0f;
+	float m_PaintCooldown = 0.0f;
+	bool m_HasPaintPoint = false;
+	VECTOR m_LastPaintPoint;	// 最後に塗った箇所
+
 public:
 	SlimeObject();
 	~SlimeObject();

@@ -8,8 +8,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 namespace Game
 {
-	static constexpr float SHADOW_SIZE_X = 2048.0f;
-	static constexpr float SHADOW_SIZE_Y = 2048.0f;
+	static constexpr float SHADOW_SIZE_X = 4096.0f;
+	static constexpr float SHADOW_SIZE_Y = 4096.0f;
 
 
 	struct BoxCollider
@@ -17,6 +17,24 @@ namespace Game
 		VECTOR minPos;
 		VECTOR maxPos;
 		unsigned int color;
+	};
+
+	/// @brief 塗る色
+	enum class PAINT_COLOR { RED, BLUE, GREEN, RAINBOW };
+
+	/// @brief 衝突した面データ
+	struct SurfaceHit
+	{
+		int triangleId;
+		VECTOR point;	
+		VECTOR normal;
+	};
+
+	/// @brief 塗る範囲
+	struct PaintCoverage
+	{
+		double dirtyArea;		// 塗った範囲
+		double paintableArea;	// 塗ることが可能な範囲
 	};
 
 

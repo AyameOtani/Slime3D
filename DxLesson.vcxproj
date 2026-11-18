@@ -39,6 +39,7 @@
     <ClCompile Include="Source\Object2D.cpp" />
     <ClCompile Include="Source\Object3D.cpp" />
     <ClCompile Include="Source\ObjectManager.cpp" />
+    <ClCompile Include="Source\Paint\StagePaint.cpp" />
     <ClCompile Include="Source\PlayerObject.cpp" />
     <ClCompile Include="Source\Rendering\RendererManager.cpp" />
     <ClCompile Include="Source\Rendering\ShadowMap.cpp" />
@@ -75,6 +76,7 @@
     <ClInclude Include="Source\Object3D.h" />
     <ClInclude Include="Source\ObjectManager.h" />
     <ClInclude Include="Source\ObjectPool.h" />
+    <ClInclude Include="Source\Paint\StagePaint.h" />
     <ClInclude Include="Source\PlayerObject.h" />
     <ClInclude Include="Source\Rendering\RendererManager.h" />
     <ClInclude Include="Source\Rendering\ShadowMap.h" />

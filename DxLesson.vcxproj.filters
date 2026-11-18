@@ -67,6 +67,12 @@
     <Filter Include="ヘッダー ファイル\Debug">
       <UniqueIdentifier>{d1344a64-a803-47f5-8f71-2f539eed02be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Stage">
+      <UniqueIdentifier>{1c200ffb-d683-4d18-80fc-6c698d2aad54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Stage">
+      <UniqueIdentifier>{c64962a0-1212-4bce-811f-3d60a77252eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Collision.cpp">
@@ -104,9 +110,6 @@
     </ClCompile>
     <ClCompile Include="Source\SlimeModel.cpp">
       <Filter>ソース ファイル\Slime</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Stage.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Camera.cpp">
       <Filter>ソース ファイル</Filter>
@@ -189,6 +192,12 @@
     <ClCompile Include="Source\Debugger\Debugger.cpp">
       <Filter>ソース ファイル\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Paint\StagePaint.cpp">
+      <Filter>ソース ファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage.cpp">
+      <Filter>ソース ファイル\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Collision.h">
@@ -222,9 +231,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\EffectManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Stage.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Camera.h">
@@ -298,6 +304,12 @@
     </ClInclude>
     <ClInclude Include="Source\Debugger\Debugger.h">
       <Filter>ヘッダー ファイル\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Paint\StagePaint.h">
+      <Filter>ヘッダー ファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage.h">
+      <Filter>ヘッダー ファイル\Stage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

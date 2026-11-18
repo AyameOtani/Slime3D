@@ -70,6 +70,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	Master::mpEffectManager->LoadEffect("Resource/Effect/ImpactUponLanding_Slime.efkefc", "ImpactUponLanding_Slime");
 	Master::mpEffectManager->LoadEffect("Resource/Effect/ImpactUponLanding_Player.efkefc", "ImpactUponLanding_Player");
 	Master::mpEffectManager->LoadEffect("Resource/Effect/SlimeExplosion.efkefc", "SlimeExplosion");
+	Master::mpEffectManager->LoadEffect("Resource/Effect/Bubble.efkefc", "Bubble");
 
 
 
@@ -124,7 +125,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	// 環境光の色を設定する
 	// 環境光は、直接ライトが当たらない部分にも与える基本的な明るさ
 	// GetColorFは、赤・緑・青・アルファを通常0.0～1.0で指定する
-	SetLightAmbColor(GetColorF(0.28f, 0.35f, 0.32f, 0.0f));
+	SetLightAmbColor(GetColorF(0.33f, 0.4f, 0.37f, 0.0f));
 
 	// ============================================
 	// 物体の表面の見え方（マテリアル）の設定
@@ -143,7 +144,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	// 自己発光色：ライトとは別に、表面自身へ加える明るさや色
 	// この値だけで、周囲の物体を照らすライトになるわけではない
-	material.Emissive = GetColorF(0.03f, 0.08f, 0.05f, 0);
+	material.Emissive = GetColorF(0.1f, 0.1f, 0.1f, 0);
 
 	// 光沢の鋭さ
 	// 大きくするほど、光が反射して明るくなる範囲が狭くなる

@@ -21,8 +21,8 @@ private:
         std::vector<VERTEX3D> vertices;      // 頂点
         std::vector<unsigned short> indices; // 頂点インデックス
     };
-	static const int LAT = 22;
-	static const int LON = 30;
+	static const int LAT = 12;
+	static const int LON = 20;
 
     // 位置・大きさ・揺れを反映する描画用
     Mesh m_Body;
@@ -38,7 +38,7 @@ private:
     int m_BuiltColor = 1;
 
     int m_VisualAge = 0;
-    float m_ChildPhase = 0.0f;
+    //float m_ChildPhase = 0.0f;
     VECTOR velocity;
     VECTOR dentDirection;
     bool grounded;
@@ -64,7 +64,7 @@ public:
 	~SlimeVisual();
 
     void Setup();
-	void Update(const SlimeObject& slime);
+	void Update(const SlimeObject& slime, float deltaTime);
     void RefreshMesh(const SlimeObject& slime); // 時間を進めず頂点を作り直す
     void Draw(const SlimeObject& slime) ;
     void DrawShadow() ;
@@ -84,7 +84,7 @@ private:
     void CreateRainbowMesh();
     void CreateChildMesh(int color);
 
-    void UpdateRainbowDeformation(const SlimeObject& slime);
+    void UpdateDeformation(const SlimeObject& slime, float deltaTime);
     void UpdateRainbowMesh(const SlimeObject& slime);
     void UpdateChildMesh(const SlimeObject& slime);
     void UpdateFaceDirection(const SlimeObject& slime);

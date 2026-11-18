@@ -202,6 +202,8 @@ void PlayerObject::Update()
 		float wallDepth = 0.0f;
 		VECTOR wall = VGet(0.0f, 0.0f, 0.0f);
 
+		// 格納先
+		Game::SurfaceHit groundHit{};
 		stage->ResolveSphere(
 			position,
 			m_Velocity,
@@ -209,8 +211,20 @@ void PlayerObject::Update()
 			m_IsGrounded,
 			impact,
 			wall,
-			wallDepth
+			wallDepth,
+			&groundHit
 		);
+
+
+		// PlayerObject.cpp の定数
+		constexpr float CLEAN_RADIUS = 2.0f;
+
+		// 現在の CleanPaint() 呼び出し
+		if (groundHit.triangleId >= 0)
+		{
+			stage->CleanPaint(groundHit, CLEAN_RADIUS);
+		}
+
 
 		// 
 		// 着地エフェクト
