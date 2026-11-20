@@ -40,6 +40,7 @@ SlimeObject::SlimeObject()
 	, m_Runtime()
 	, m_pSizeDefinition(nullptr)
 	, m_ReturnRequested(false)
+	, m_LastPaintPoint(VEC_AllZero())
 {
 
 }
@@ -129,8 +130,6 @@ void SlimeObject::Update()
 		-MAX_FALL_SPEED
 		);
 	VECTOR position = mTransform.position;
-
-
 
 
 	// ★★★ 5本のRay判定を追加しました。　大谷 ★★
@@ -452,4 +451,16 @@ void SlimeObject::RequestReturn()
 void SlimeObject::SetFace(int face)
 {
 	m_Visual.SetFace(face);
+}
+
+
+//*---------------------------------------------------------------------------------------
+//*【?】分裂する
+//*
+//* [引数] なし
+//* [返値] なし
+//*---------------------------------------------------------------------------------------
+void SlimeObject::ApplySplit()
+{
+
 }

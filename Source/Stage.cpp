@@ -534,10 +534,30 @@ struct Stage::Impl
         }
     }
 };
+
+//*---------------------------------------------------------------------------------------
+//*【?】コンストラクタ
+//*----------------------------------------------------------------------------------------
 Stage::Stage():impl(new Impl()){}
+
+//*---------------------------------------------------------------------------------------
+//*【?】デストラクタ
+//*----------------------------------------------------------------------------------------
 Stage::~Stage(){Finalize();}
+
+//*----------------------------------------------------------------------------------------
+//【?】現在有効な Stage へのポインタを返す
+//*    有効なステージがない場合はnullptr。
+//*----------------------------------------------------------------------------------------
 Stage* Stage::Active(){return activeStage;}
 
+//*---------------------------------------------------------------------------------------
+//*【?】モデルとテクスチャを解放し、
+//*     当たり判定・塗り跡・面積集計などのデータを消去する
+//*
+//* [引数] なし
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
 void Stage::Finalize()
 {
     if(activeStage==this)activeStage=nullptr;
@@ -559,6 +579,19 @@ void Stage::Finalize()
     impl->neighbors.clear();    // 追加 山本
     impl->paint.Clear();        // 追加 山本
 }
+
+//*---------------------------------------------------------------------------------------
+//*【?】モデルを読み込み、指定の倍率と位置を設定する。
+//      地形の三角形、検索用の木、面の隣接関係を作り、塗れる床・斜面を登録する
+//*
+//* [引数] 
+//* path     : ステージのファイルパス 
+//* scale    : スケール
+//* position : 配置座標
+//* 
+//* [返値] 
+//* 成功したか 
+//*----------------------------------------------------------------------------------------
 bool Stage::Initialize(const char* path,float scale,VECTOR position)
 {
     Finalize();impl->error.clear();
@@ -613,9 +646,36 @@ bool Stage::Initialize(const char* path,float scale,VECTOR position)
 
     return true;
 }
+
+//*----------------------------------------------------------------------------------------
+//* 【?】Initialize が失敗した理由を文字列で返す
+//* [引数] なし
+//* [返値] 
+//* エラー内容
+//*----------------------------------------------------------------------------------------
 const std::string& Stage::GetError()const{return impl->error;}
+
+
+//*----------------------------------------------------------------------------------------
+//*【?】ステージのボックスコライダーの取得
+//*----------------------------------------------------------------------------------------
 const std::vector<BoxCollider>& Stage::GetBoxes()const{return impl->emptyBoxes;}
 
+//*----------------------------------------------------------------------------------------
+//*【?】指定した(x, z) と高さ範囲にある床・斜面のうち、一番高い面を探索
+//*     見つかれば床の高さと、必要に応じて上向きの法線を返却
+//* 
+//* [引数]
+//* x      : X平面
+//* z      : Z平面
+//* minY   : 最小高さ
+//* maxY   : 最大高さ
+//* y      : 見つかった床の高さ
+//* normal : 上向き法線の出力
+//* 
+//* [返値] 
+//* 面が見つかったか
+//*----------------------------------------------------------------------------------------
 bool Stage::FindFloor(float x,float z,float minY,float maxY,float& y,VECTOR* normal)const
 {
     bool found=false;float best=minY;VECTOR bestNormal=VGet(0,1,0);
@@ -633,6 +693,21 @@ bool Stage::FindFloor(float x,float z,float minY,float maxY,float& y,VECTOR* nor
     });
     if(found){y=best;if(normal)*normal=bestNormal;}return found;
 }
+
+//*----------------------------------------------------------------------------------------
+//*【?】子スライムが指定位置に立てるかを調べる
+//*     中心と前後左右に足場があり、胴体が壁にめり込まなければtrue
+//* 
+//* [引数]
+//* x        : X
+//* z        : Z
+//* currentY : 現在のY
+//* radius   : 半径
+//* y        : 立てる高さ
+//* 
+//* [返値] 
+//* 立てるか
+//*----------------------------------------------------------------------------------------
 bool Stage::BabyCanStand(float x,float z,float currentY,float radius,float& y)const
 {
     if(!FindFloor(x,z,currentY-0.35f,currentY+0.12f,y))return false;
@@ -653,6 +728,21 @@ bool Stage::BabyCanStand(float x,float z,float currentY,float radius,float& y)co
     });
     return !blocked;
 }
+
+//*----------------------------------------------------------------------------------------
+//*【?】球と地形のめり込みを押し戻し、床に向かう速度を補正
+//* 
+//* [引数]
+//* p         : 位置
+//* velocity  : 速度
+//* radius    : 判定用半径
+//* grounded  : 接地しているか
+//* impact    : 着地の強さ
+//* wallDepth : めり込み量
+//* groundHit : 接地面のヒット情報
+//* 
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
 void Stage::ResolveSphere(VECTOR& p,VECTOR& velocity,float radius,bool& grounded,float& impact,VECTOR& wall,float& wallDepth, Game::SurfaceHit* groundHit)const
 {
     if (groundHit)
@@ -704,6 +794,18 @@ void Stage::ResolveSphere(VECTOR& p,VECTOR& velocity,float radius,bool& grounded
         });
     }
 }
+
+//*----------------------------------------------------------------------------------------
+//*【?】指定位置の近くにある面に塗り跡をつける
+//*     0 : 虹 1 : 赤、2 : 青 3 :緑 4 : は元色の復元を試み、近くの塗り跡を非表示にする
+//* [引数]
+//* position      : 位置
+//* contactRadius : 範囲内なら塗る為の半径
+//* brushRadius   : 塗る範囲
+//* color         : 色
+//* 
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
 void Stage::Paint(VECTOR position,float contactRadius,float brushRadius,int color)
 {
     if(impl->model<0 || brushRadius<=0 || contactRadius<0 || color<0 || color>4)return;
@@ -773,18 +875,33 @@ void Stage::Paint(VECTOR position,float contactRadius,float brushRadius,int colo
         impl->marks.emplace(key,mark);impl->markOrder.push_back(key);impl->WriteMark(mark);
     });
 }
+
+
+//*---------------------------------------------------------------------------------------
+//*【?】色の復元処理を1回につき 1/60 秒進める。
+//*
+//* [引数] なし
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
 void Stage::Update(const SlimeModel& slime)
 {
     // 既存シグネチャを維持。呼び出しごとに60fps想定で更新。
     // 可変フレームレートにするなら Stage.h 側に deltaTime 引数を追加する。
     impl->UpdateRestoration(1.0f/60.0f);
-    if(CheckHitKey(KEY_INPUT_K))
+    /*if(CheckHitKey(KEY_INPUT_K))
         Paint(slime.GetPosition(),slime.GetRadius(),slime.GetRadius()*0.65f,0);
     if(CheckHitKey(KEY_INPUT_L))
         Paint(slime.GetPosition(),slime.GetRadius(),slime.GetRadius()*0.65f,4);
     if(CheckHitKey(KEY_INPUT_L))
-        Paint(slime.GetPosition(),slime.GetRadius(),slime.GetRadius()*0.65f,4);
+        Paint(slime.GetPosition(),slime.GetRadius(),slime.GetRadius()*0.65f,4);*/
 }
+
+//*---------------------------------------------------------------------------------------
+//*【?】ステージモデルと、Paintが作った塗り跡の描画
+//*
+//* [引数] なし
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
 void Stage::Draw()
 {
     if(impl->model<0)return;

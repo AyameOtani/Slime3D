@@ -37,6 +37,8 @@ public:
 	void ResetForReuse();										// 状態の初期化を行う（オブジェクトプール用）
 	void RequestReturn();										// プールへの返却をリクエスト
 
+	void ApplySplit();	// 分裂する
+
 	bool IsReturnRequested()const { return m_ReturnRequested; }	// プール返却リクエストフラグ
 
 	void SetFace(int face);	// 表情の設定

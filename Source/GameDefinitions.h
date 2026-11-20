@@ -53,9 +53,10 @@ namespace Game
 		/// ※ 移動が早いやつとか、吸い込みにくいやつとか、種類を増やしたい場合
 		enum class SLIME_TYPE
 		{
-			NORMAL,
-
-			NUM,
+			NORMAL,		// 通常
+			JUMP,		// ジャンプするやつ
+			SHOOTING,	// ペイント弾を撃ってくるやつ
+			NUM
 		};
 
 		/// @brief 分裂の段階
@@ -68,6 +69,16 @@ namespace Game
 
 			NUM,
 		};
+
+		/// @brief スライムのステート
+		enum class SlimeState
+		{
+			Free,       // 自分で移動・ジャンプ・発射できる
+			Sucked,     // 掃除機に吸われている
+			Launched,   // 掃除機から射出された
+			Stunned,	// 気絶状態
+		};
+
 
 		// ================================
 		// 構造体
@@ -92,19 +103,24 @@ namespace Game
 		/// @brief 実行時に変化するデータ
 		struct SlimeRuntime
 		{
-			VECTOR velocity;					// 移動速度
-			VECTOR groundNormal					// 地面の法線
+			VECTOR velocity					// 移動速度
 				= VGet(0.0f, 1.0f, 0.0f);
-			float radius = 0.0f;				// 現在の半径
-			float mergeCooldown = 0.0f;			// 合体できるまでの残り時間
-			bool isGrounded = false;			// 接地状態
-			bool isMoveDir = false;
-			int color = 1;						// 1=赤、2=青、3=緑
+			VECTOR groundNormal				// 地面の法線
+				= VGet(0.0f, 1.0f, 0.0f);
+			float radius = 0.0f;			// 現在の半径
+			float mergeCooldown = 0.0f;		// 合体できるまでの残り時間
+			float actionElapsed = 0.0f;		// この個体が次にジャンプ・発射などを行うまでの経過時間
+			bool isGrounded = false;		// 接地状態
+			bool isMoveDir = false;			// 移動方向を決定したか
+			int color = 1;					// 1=赤、2=青、3=緑
 			
-			SLIME_TYPE type						// スライムの種類
-				= SLIME_TYPE::NORMAL;			
+			SlimeState state				// 状態
+				= SlimeState::Free;
+
+			SLIME_TYPE type					// スライムの種類
+				= SLIME_TYPE::NORMAL;		
 			
-			SLIME_SPLIT_PHASE splitPhase		// 現在の分裂段階
+			SLIME_SPLIT_PHASE splitPhase	// 現在の分裂段階
 				= SLIME_SPLIT_PHASE::PHASE_0;	
 		};
 
