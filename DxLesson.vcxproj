@@ -50,7 +50,6 @@
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\SceneManager.cpp" />
     <ClCompile Include="Source\SlimeMesh.cpp" />
-    <ClCompile Include="Source\Slime.cpp" />
     <ClCompile Include="Source\SlimeObject.cpp" />
     <ClCompile Include="Source\SlimeManager.cpp" />
     <ClCompile Include="Source\SlimeModel.cpp" />
@@ -94,6 +93,7 @@
     <ClInclude Include="Source\ResourceManager.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneManager.h" />
+    <ClInclude Include="Source\SlimeMesh.h" />
     <ClInclude Include="Source\SlimeObject.h" />
     <ClInclude Include="Source\SlimeManager.h" />
     <ClInclude Include="Source\SlimeModel.h" />
