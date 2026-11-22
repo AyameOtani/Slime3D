@@ -20,6 +20,7 @@ public: // 定数定義
 	static const int SCREEN_HEIGHT = 1080; // 画面の高さ
 };
 
+
 //////////////////////////////////////////////////////////////////////////////////////////
 //
 // [補助ツール群]
@@ -58,6 +59,12 @@ namespace Helper
         {
             float r = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
             return _min + r * (_max - _min);
+        }
+
+        /* ラジアンを -π ～ π の範囲に収める 大谷追加*/
+        inline float WrapRadian(float rad)
+        {
+            return std::remainder(rad, 2.0f * static_cast<float>(DX_PI_F));
         }
     };
 

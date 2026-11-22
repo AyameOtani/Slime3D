@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "DxLib.h"
 #include "GameDefinitions.h"
+#include "SlimeMesh.h"
 #include <vector>
 
 class SlimeModel
@@ -16,8 +17,8 @@ public:
     int GetSelectedColor() const { return selectedColor; }
 
 private:
-    static const int LAT = 22;
-    static const int LON = 30;
+    static const int LAT = SlimeMesh::LAT;
+    static const int LON = SlimeMesh::LON;
     struct SplitSlime
     {
         std::vector<VERTEX3D> vertices;
@@ -27,7 +28,6 @@ private:
     };
     static float Clamp(float value, float minValue, float maxValue);
     void ResetBody();
-    void CreateMesh();
     void SelectColorByKeyboard();
     void UpdateFace();
     VECTOR ClosestPoint(const VECTOR& p, const Game::BoxCollider& box);
@@ -40,8 +40,7 @@ private:
     void SpawnSplitSlime(const std::vector<Game::BoxCollider>& boxes);
     void DrawSplitSlimes();
 
-    std::vector<VERTEX3D> vertices;
-    std::vector<unsigned short> indices;
+    SlimeMesh mesh;
     std::vector<SplitSlime> splitSlimes;
     VECTOR position;
     VECTOR velocity;

@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\ExplainScene.cpp" />
+    <ClCompile Include="Source\HoverImageButton.cpp" />
     <ClCompile Include="External\Imgui\backends\imgui_impl_dx11.cpp" />
     <ClCompile Include="External\Imgui\backends\imgui_impl_win32.cpp" />
     <ClCompile Include="External\Imgui\imgui.cpp" />
@@ -35,6 +37,7 @@
     <ClCompile Include="Source\InputManager.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Master.cpp" />
+    <ClCompile Include="Source\Mouse.cpp" />
     <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\Object2D.cpp" />
     <ClCompile Include="Source\Object3D.cpp" />
@@ -46,6 +49,8 @@
     <ClCompile Include="Source\ResourceManager.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\SceneManager.cpp" />
+    <ClCompile Include="Source\SlimeMesh.cpp" />
+    <ClCompile Include="Source\Slime.cpp" />
     <ClCompile Include="Source\SlimeObject.cpp" />
     <ClCompile Include="Source\SlimeManager.cpp" />
     <ClCompile Include="Source\SlimeModel.cpp" />
@@ -59,9 +64,14 @@
     <ClCompile Include="Source\TextureAnimation.cpp" />
     <ClCompile Include="Source\GameScene.cpp" />
     <ClCompile Include="Source\TimeManager.cpp" />
+    <ClCompile Include="Source\TitleCamera.cpp" />
     <ClCompile Include="Source\TitleScene.cpp" />
+    <ClCompile Include="Source\TitleSlimeModel.cpp" />
+    <ClCompile Include="Source\TitleStageModel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ExplainScene.h" />
+    <ClInclude Include="Source\HoverImageButton.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Collision.h" />
     <ClInclude Include="Source\Debugger\Debugger.h" />
@@ -71,6 +81,7 @@
     <ClInclude Include="Source\GameManager.h" />
     <ClInclude Include="Source\InputManager.h" />
     <ClInclude Include="Source\Master.h" />
+    <ClInclude Include="Source\Mouse.h" />
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\Object2D.h" />
     <ClInclude Include="Source\Object3D.h" />
@@ -97,7 +108,10 @@
     <ClInclude Include="Source\TextureAnimation.h" />
     <ClInclude Include="Source\GameScene.h" />
     <ClInclude Include="Source\TimeManager.h" />
+    <ClInclude Include="Source\TitleCamera.h" />
     <ClInclude Include="Source\TitleScene.h" />
+    <ClInclude Include="Source\TItleSlimeModel.h" />
+    <ClInclude Include="Source\TitleStageModel.h" />
     <ClInclude Include="Source\Utility.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Stage.h"
 #include "Utility.h"
+#include "Mouse.h"
 
 /*
  @note リファレンス https://dxlib.xsrv.jp/dxfunc.html
@@ -18,8 +19,8 @@
 // Master クラスの静的メンバ変数定義
 GameManager* Master::mpGameManager = nullptr;
 EffectManager* Master::mpEffectManager = nullptr;
+Mouse m_Mouse;
 Debugger* Master::mpDebugger = nullptr;
-
 
 /**
 * @fn WinMain
@@ -189,6 +190,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		// エフェクトの描画
 		Master::mpEffectManager->EffectDraw3D();
 
+		// マウスの更新
+		m_Mouse.Update();
 		// ============================================
 		// デバッグ描画の終了
 		// ============================================
