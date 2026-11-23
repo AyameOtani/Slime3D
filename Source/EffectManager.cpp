@@ -285,7 +285,8 @@ void EffectManager::SetDynamicParameterEffect3D(int playingEffectHandle, int32_t
 //*----------------------------------------------------------------------------------------
 bool EffectManager::IsPlayingEffect3D(int playingEffectHandle)
 {
-	return IsEffekseer3DEffectPlaying(playingEffectHandle);
+	int res = IsEffekseer3DEffectPlaying(playingEffectHandle);
+	return 	res == -1 ? false : true;
 }
 
 //*----------------------------------------------------------------------------------------

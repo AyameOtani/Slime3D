@@ -28,7 +28,7 @@ public:
 
 private:
 	// スライムを管理するオブジェクトを作る
-	SlimeModel slime;
+	//SlimeModel slime;
 
 	// プレイヤー
 	PlayerObject *m_pPlayer;
@@ -45,4 +45,6 @@ private:
 	// 地面や壁などに使う箱の一覧
    // 描画に加え、スライム側の処理にもこの一覧を渡す
 	std::vector<Game::BoxCollider> boxes;
+
+	int m_EffectHandle = -1;
 };

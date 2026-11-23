@@ -129,7 +129,7 @@ void GameScene::Initialize()
 {
     // スライムを初期状態にする
     // 具体的な初期化処理はSlimeModel側に書かれている
-    slime.Initialize();
+    //slime.Initialize();
 
     SlimeInitialize();
 
@@ -137,25 +137,30 @@ void GameScene::Initialize()
     // スライム管理クラスの初期化  山本
     // ============================================
     Master::mpGameManager->GetSlimeManager()->Setup();
+    
+    // 捕獲情報リセット
+    Master::mpGameManager->GetSlimeManager()->ResetCaptureStats();
+
+
+    // ============================================
+    // プレイヤーのセットアップ
+    // ============================================
+    m_pPlayer = new PlayerObject();
+    m_pPlayer->Init();
+    m_pPlayer->SetIsWriteShadow(true);  // シャドウ書き込みON
+    m_pPlayer->SetPosition(VGet(0.0f, 10.0f, 0.0f));
 
     // ============================================
     // カメラのセットアップ  山本
     // ============================================
 
     // 横スクロールカメラ
-    m_Camera.Initialize(slime.GetPosition());
+    m_Camera.Initialize(m_pPlayer->GetPosition());
     m_Camera.SetFollowRate(0.045f);
     m_Camera.SetControlMode(Camera::CONTROL_MODE::TPS); //TPSモードに
     m_Camera.SetTPSDistance(10.0f);
     m_Camera.SetCameraClip(0.1f, 100.0f);
 
-    // ============================================
-    // プレイヤーのセットアップ
-    // ============================================
-    m_pPlayer =  new PlayerObject();
-    m_pPlayer->Init();
-    m_pPlayer->SetIsWriteShadow(true);  // シャドウ書き込みON
-    m_pPlayer->SetPosition(VGet(0.0f, 10.0f, 0.0f));
 
     // ============================================
     // シャドウのセットアップ
@@ -198,35 +203,19 @@ void GameScene::Initialize()
     spawn.type = SlimeDef::SLIME_TYPE::NORMAL;
     spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
     spawn.color = 0;
-    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
-    
-    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
-    spawn.color = 1;
+
+    // 大スライム
     Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
 
-    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
-    spawn.color = 2;
-    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
-    
-    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
-    spawn.color = 3;
-    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+    const int SpawnNum = 250;
+    for (int i = 0; i < SpawnNum; i++)
+    {
+        spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_3;
+        spawn.color = Helper::Math::RandRange(1, 4);
 
-    spawn.color = 0;
-    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
-    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
-
-    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
-    spawn.color = 1;
-    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
-
-    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
-    spawn.color = 2;
-    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
-
-    spawn.splitPhase = SlimeDef::SLIME_SPLIT_PHASE::PHASE_0;
-    spawn.color = 3;
-    Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+        // 小スライム
+        Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+    }
 }
 
 
@@ -244,12 +233,12 @@ void GameScene::Update()
 
     // ステージの箱の一覧を渡して、スライムの状態を更新する
     // 移動や衝突などの具体的な処理はSlimeModel::Update側にある
-    slime.Update(boxes);
+    //slime.Update(boxes);
     
     // --------------------------------------------
     // ステージを更新する  山本
     // --------------------------------------------
-    m_Stage.Update(slime);
+    m_Stage.Update({});
 
     // --------------------------------------------
     // カメラの位置と向きを決める
@@ -262,6 +251,48 @@ void GameScene::Update()
     // プレイヤーの移動パラメータ設定
     m_pPlayer->SetMoveParameters(cameraForward, deltaTime);
 
+
+    // --------------------------------------------
+    // 吸引処理を一旦仮でここに置く
+    // --------------------------------------------
+    Game::SuctionInput suction{};
+    if (GetWindowActiveFlag() && (GetMouseInput() & MOUSE_INPUT_LEFT) != 0
+        && VSquareSize(cameraForward) > 0.000001f)
+    {
+        VECTOR cameraFowardNorm = VNorm(cameraForward);
+        // 一旦仮ノズル
+        // プレイヤーの少し上・少し前
+        const VECTOR grip = VAdd(m_pPlayer->GetPosition(), VGet(0.0f, 0.5f, 0.0f));
+        const VECTOR nozzle = VAdd(grip, VScale(suction.forward, 0.6f));
+
+
+        if (!Master::mpEffectManager->IsPlayingEffect3D(m_EffectHandle))
+        {
+            m_EffectHandle = Master::mpEffectManager->PlayEffect3D("Vacuum");
+            Master::mpEffectManager->SendTrigger(m_EffectHandle, -1);
+        }
+        else
+        {
+            float yaw = atan2f(cameraFowardNorm.x, cameraFowardNorm.z);
+            float pitch = atan2f(-cameraForward.y, sqrtf(cameraForward.x * cameraForward.x + cameraForward.z * cameraForward.z));
+
+            Master::mpEffectManager->SetPosEffect3D(m_EffectHandle, nozzle);
+            Master::mpEffectManager->SetRotationEffect3D(m_EffectHandle, VGet(0.0f, yaw, 0.0f));
+        }
+
+        suction.active = true;
+        suction.forward = cameraFowardNorm;
+
+        suction.nozzle = nozzle;
+    }
+    else
+    {
+        if (Master::mpEffectManager->IsPlayingEffect3D(m_EffectHandle))
+        {
+            Master::mpEffectManager->SendTrigger(m_EffectHandle, 0);
+        }
+    }
+    Master::mpGameManager->GetSlimeManager()->SetSuction(suction);
 
 	// 基底クラスの更新処理を呼びだす
 	Scene::Update();
@@ -287,7 +318,7 @@ void GameScene::Draw()
 
     // スライムを描画する
     // 描画処理にもステージの箱の一覧を渡している
-    slime.Draw(boxes);
+    //slime.Draw(boxes);
 
     // ステージの描画 山本
     m_Stage.Draw();
@@ -306,7 +337,7 @@ void GameScene::Draw()
     // シャドウマップのバインド
     // --------------------------------------------
     m_ShadowMap.ShadowMapBind();
-    slime.Draw(boxes);
+    //slime.Draw(boxes);
     m_Stage.Draw();
     m_Stage.DrawPaint();
 
@@ -323,7 +354,7 @@ void GameScene::Draw()
     m_ShadowMap.TestDraw(1420.0, 780.0f, 1920.0f, 1080.0f);
 
     // 説明文
-    DrawSlimeDescription(slime);
+    //DrawSlimeDescription(slime);
 }
 
 //*---------------------------------------------------------------------------------------

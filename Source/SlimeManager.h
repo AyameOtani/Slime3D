@@ -26,7 +26,13 @@ private:
     std::unique_ptr<ObjectPool<SlimeObject>> m_pSlimePool;
 
     // 生成したスライムたち
-    std::vector<SlimeObject*> m_SpawnedSlimes;        
+    std::vector<SlimeObject*> m_SpawnedSlimes;     
+
+
+    Game::SuctionInput m_Suction;   // 吸引データ
+    int m_CapturedCount;            // 捕まえた数
+
+
 private:
     // コピー禁止
     SlimeManager(const SlimeManager&) = delete;
@@ -38,11 +44,17 @@ public:
     SlimeManager();
     ~SlimeManager();
 
-    bool Setup();   // 初期化
-    void Finalize();    // 終了
+    bool Setup();                   // 初期化
+    void Finalize();                // 終了
     void ProcessReturnRequests();   // プールへの返却状態をチェックする
 
-    bool SpawnSlime(const SlimeDef::SlimeSpawnParams& spawnParams);      // スライムの生成
-    void MergerSlime();     // スライムの合体
+    bool SpawnSlime(const SlimeDef::SlimeSpawnParams& spawnParams); // スライムの生成
+    void MergerSlime();             // スライムの合体
+    
+    void ResetCaptureStats();       // 捕獲統計をリセットする
+    void SetSuction(const Game::SuctionInput& suction) { m_Suction = suction; }
+    const Game::SuctionInput& GetSuction() const { return m_Suction; }
+    int GetCapturedCount() const { return m_CapturedCount; }
+
 };
 

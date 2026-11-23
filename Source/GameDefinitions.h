@@ -38,6 +38,19 @@ namespace Game
 	};
 
 
+	/// @brief 吸い込み口用
+	struct SuctionInput
+	{
+		bool active = false;
+
+		VECTOR nozzle					// ノズル先端のワールド座標
+			= VGet(0.0f, 0.0f, 0.0f);
+
+		VECTOR forward					// 吸引方向
+			= VGet(0.0f, 0.0f, 0.0f);
+	};
+
+
 	// ---------------------------------------------------------------------------------------
 	// 
 	//		スライム用定義
@@ -77,6 +90,7 @@ namespace Game
 			Sucked,     // 掃除機に吸われている
 			Launched,   // 掃除機から射出された
 			Stunned,	// 気絶状態
+			Captured,	// 回収された 
 		};
 
 

@@ -9,6 +9,8 @@ using namespace Game::Slime;
 SlimeManager::SlimeManager()
     : m_pSlimePool()
     , m_SlimeDefinition()
+    , m_Suction()
+    , m_CapturedCount(0)
 {
 
 }
@@ -131,6 +133,7 @@ void SlimeManager::ProcessReturnRequests()
     Master::mpDebugger->BeginDebugWindow(u8"スライムプール",0);
     Master::mpDebugger->DG_BulletTextValue(u8"現在出現しているスライム数：", INT_CAST(m_SpawnedSlimes.size()));
     Master::mpDebugger->DG_BulletTextValue(u8"現在のプール内の生成数：", INT_CAST(m_pSlimePool->get_CrntCreateNum()));
+    Master::mpDebugger->DG_BulletTextValue(u8"捕獲数：", m_CapturedCount);
     Master::mpDebugger->EndDebugWindow();
 
 
@@ -147,6 +150,12 @@ void SlimeManager::ProcessReturnRequests()
         {
             ++it;
             continue;
+        }
+
+        // 捕獲状態なら、捕獲カウントを追加
+        if (obj->GetRuntime().state == SlimeDef::SlimeState::Captured)
+        {
+            m_CapturedCount++;
         }
 
         // プールへ返却する
@@ -227,6 +236,16 @@ bool SlimeManager::SpawnSlime(const SlimeDef::SlimeSpawnParams& spawnParams)
 void SlimeManager::MergerSlime()
 {
 
+}
 
-
+//*---------------------------------------------------------------------------------------
+//*【?】捕獲情報をリセットする
+//*
+//* [引数] なし
+//* [返値] なし
+//*----------------------------------------------------------------------------------------
+void SlimeManager::ResetCaptureStats()
+{
+    m_Suction = {};
+    m_CapturedCount = 0;
 }

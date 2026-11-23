@@ -18,12 +18,12 @@ private:
 	SlimeDef::SlimeRuntime m_Runtime;						// ランタイムデータ
 	const SlimeDef::SlimeSizeDefinition* m_pSizeDefinition; // サイズごとの固定定義データの参照
 	SlimeVisual m_Visual;	
-	bool m_ReturnRequested;									// プールに返却をリクエスト
-	float elapsed = 0.0f;
 	float m_PaintCooldown = 0.0f;
 	bool m_HasPaintPoint = false;
+	bool m_ReturnRequested;									// プールに返却をリクエスト
 	VECTOR m_LastPaintPoint;	// 最後に塗った箇所
 
+	//float elapsed = 0.0f;
 public:
 	SlimeObject();
 	~SlimeObject();
@@ -46,5 +46,8 @@ public:
 	float GetMoveSpeed() const {											// 移動速度の取得
 		return m_pSizeDefinition ? m_pSizeDefinition->moveSpeed : 0.0f;
 	}
+
+private:
+	bool UpdateSmallSuction(const Game::SuctionInput& suction, float deltaTime);
 };
 

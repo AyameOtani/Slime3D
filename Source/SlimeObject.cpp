@@ -87,6 +87,27 @@ void SlimeObject::Init(const SlimeSizeDefinition* definition, const SLIME_SPLIT_
 void SlimeObject::Update()
 {
 	float deltaTime = Master::mpGameManager->GetTimeManager()->get_DeltaTime();
+
+	auto* slimes = Master::mpGameManager->GetSlimeManager();
+
+	//**********************************************************************
+	// 
+	// 吸引中の処理を行う
+	// 吸引中なら、通常の移動処理や、重力は反映させずreturn する
+	// 
+	//**********************************************************************
+	if (UpdateSmallSuction(slimes->GetSuction(), deltaTime))
+	{
+		return;
+	}
+
+
+	//**********************************************************************
+	// 
+	// ↓通常移動の処理↓
+	// 
+	//**********************************************************************
+
 	bool wasGrounded = m_Runtime.isGrounded;
 	const float radius = m_Runtime.radius;
 
@@ -333,32 +354,32 @@ void SlimeObject::Update()
 	// 見た目更新
 	m_Visual.Update(*this, deltaTime);
 
-	
-	if (elapsed >= 3.0f)
-	{
-		int handle = Master::mpEffectManager->PlayEffect3D("SlimeExplosion");
-		Master::mpEffectManager->SetPosEffect3D(handle, position);
+	//
+	//if (elapsed >= 3.0f)
+	//{
+	//	int handle = Master::mpEffectManager->PlayEffect3D("SlimeExplosion");
+	//	Master::mpEffectManager->SetPosEffect3D(handle, position);
 
-		m_ReturnRequested = true;
+	//	m_ReturnRequested = true;
 
-		SlimeDef::SlimeSpawnParams spawn;
-		spawn.position = position;
-		spawn.type = SlimeDef::SLIME_TYPE::NORMAL;
-		
-		SLIME_SPLIT_PHASE newPhase = m_Runtime.splitPhase;
-		if (newPhase == SLIME_SPLIT_PHASE::PHASE_0)newPhase = SLIME_SPLIT_PHASE::PHASE_1;
-		else if (newPhase == SLIME_SPLIT_PHASE::PHASE_1)newPhase = SLIME_SPLIT_PHASE::PHASE_2;
-		else if (newPhase == SLIME_SPLIT_PHASE::PHASE_2)newPhase = SLIME_SPLIT_PHASE::PHASE_3;
-		else if (newPhase == SLIME_SPLIT_PHASE::PHASE_3)newPhase = SLIME_SPLIT_PHASE::PHASE_0;
+	//	SlimeDef::SlimeSpawnParams spawn;
+	//	spawn.position = position;
+	//	spawn.type = SlimeDef::SLIME_TYPE::NORMAL;
+	//	
+	//	SLIME_SPLIT_PHASE newPhase = m_Runtime.splitPhase;
+	//	if (newPhase == SLIME_SPLIT_PHASE::PHASE_0)newPhase = SLIME_SPLIT_PHASE::PHASE_1;
+	//	else if (newPhase == SLIME_SPLIT_PHASE::PHASE_1)newPhase = SLIME_SPLIT_PHASE::PHASE_2;
+	//	else if (newPhase == SLIME_SPLIT_PHASE::PHASE_2)newPhase = SLIME_SPLIT_PHASE::PHASE_3;
+	//	else if (newPhase == SLIME_SPLIT_PHASE::PHASE_3)newPhase = SLIME_SPLIT_PHASE::PHASE_0;
 
-		spawn.splitPhase = newPhase;
-		spawn.color = INT_CAST(Helper::Math::RandRange(0, 4));
-		Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
+	//	spawn.splitPhase = newPhase;
+	//	spawn.color = INT_CAST(Helper::Math::RandRange(0, 4));
+	//	Master::mpGameManager->GetSlimeManager()->SpawnSlime(spawn);
 
-		elapsed = 0.0f;
-		return;
-	}
-	elapsed += deltaTime;
+	//	elapsed = 0.0f;
+	//	return;
+	//}
+	//elapsed += deltaTime;
 }
 
 //*---------------------------------------------------------------------------------------
@@ -419,6 +440,8 @@ void SlimeObject::ResetForReuse()
 	m_Runtime.type = SLIME_TYPE::NORMAL;
 	m_Runtime.splitPhase = SLIME_SPLIT_PHASE::PHASE_0;
 	m_Runtime.isMoveDir = false;
+	m_Runtime.state = SlimeDef::SlimeState::Free;	
+
 
 	// 見た目リセット
 	m_Visual.Reset();
@@ -463,4 +486,82 @@ void SlimeObject::SetFace(int face)
 void SlimeObject::ApplySplit()
 {
 
+}
+
+//*---------------------------------------------------------------------------------------
+//*【?】小スライムの吸引処理
+//*
+//* [引数] 
+//* suction   : 吸引情報 
+//* deltaTime : デルタタイム
+//* 
+//* [返値] 
+//* 
+//*---------------------------------------------------------------------------------------
+bool SlimeObject::UpdateSmallSuction(const Game::SuctionInput& suction, float deltaTime)
+{
+	using State = SlimeDef::SlimeState;
+	using Phase = SlimeDef::SLIME_SPLIT_PHASE;
+
+	constexpr float range = 8.0f;
+	constexpr float pullSpeed = 14.0f;       // 1秒あたりの移動距離
+	constexpr float captureRadius = 0.55f;
+	constexpr float cosHalfAngleSq = 0.25f; // 半角30度のcos^2
+
+	if (m_Runtime.splitPhase != Phase::PHASE_3)
+	{
+		return false;
+	}
+
+	if (m_Runtime.state != State::Free && m_Runtime.state != State::Sucked)
+	{
+		return false;
+	}
+	const VECTOR fromNozzle = VSub(GetPosition(), suction.nozzle);
+	const float distanceSq = VSquareSize(fromNozzle);
+	const float front = VDot(fromNozzle, suction.forward);
+
+	// 距離・前後・向きの3条件で、ノズル前方の円すいに入るか判定する。
+	const bool inRange = suction.active
+		&& distanceSq <= range * range
+		&& front >= 0.0f
+		&& front * front >= distanceSq * cosHalfAngleSq;
+
+	if (!inRange)
+	{
+		if (m_Runtime.state == State::Sucked)
+		{
+			m_Runtime.state = State::Free;
+			m_Runtime.velocity = VGet(0.0f, 0.0f, 0.0f);
+		}
+		return false;
+	}
+
+	m_Runtime.state = State::Sucked;
+	m_Runtime.isGrounded = false;
+	m_HasPaintPoint = false;
+
+	if (deltaTime <= 0.0f)
+	{
+		return true;
+	}
+
+	const float distance = std::sqrt(distanceSq);
+	const float step = pullSpeed * deltaTime;
+
+	// 今回の移動でノズルに届くなら、その場で捕獲を確定する。
+	// 距離0の場合もここを通るので、下の割り算は安全。
+	if (distance <= captureRadius + step)
+	{
+		m_Runtime.state = State::Captured;
+		RequestReturn();
+		return true;
+	}
+
+	const VECTOR towardNozzle = VScale(fromNozzle, -1.0f / distance);
+	m_Runtime.velocity = VScale(towardNozzle, pullSpeed);
+	SetPosition(VAdd(GetPosition(), VScale(towardNozzle, step)));
+
+	m_Visual.Update(*this, deltaTime);
+	return true;
 }

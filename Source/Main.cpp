@@ -72,6 +72,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	Master::mpEffectManager->LoadEffect("Resource/Effect/ImpactUponLanding_Player.efkefc", "ImpactUponLanding_Player");
 	Master::mpEffectManager->LoadEffect("Resource/Effect/SlimeExplosion.efkefc", "SlimeExplosion");
 	Master::mpEffectManager->LoadEffect("Resource/Effect/Bubble.efkefc", "Bubble");
+	Master::mpEffectManager->LoadEffect("Resource/Effect/Vacuum.efkefc", "Vacuum");
 
 
 
