@@ -49,7 +49,8 @@ public:
     void SetColorEffect3D(int playingEffectHandle, int r, int g, int b, int a = 255);       // 再生中のエフェクトの全体色を設定する
     void StopEffect(int playingEffectHandle);                                               // 再生中のエフェクトを停止する
     void StopAllEffect();                                                                   // すべてのエフェクトを停止する
-    
+    void SendTrigger(int playingEffectHandle, uint32_t trigger);                            // 生成停止や削除などのトリガーを送信する（[0,1,2,3]の4つのトリガーのみ）
+
 private:
     // コピー禁止
     EffectManager(const EffectManager&) = delete;

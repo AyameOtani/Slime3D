@@ -43,6 +43,13 @@ bool EffectManager::Setup()
 		return -1;
 	}
 
+	// 歪み機能の初期化
+	if (Effekseer_InitDistortion() == -1)
+	{
+		MessageBox(NULL, "ディストーション初期化失敗", "EffectManager", MB_OK);
+		DxLib_End();
+		return -1;
+	}
 	
 	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ。
 	// Effekseerを使用する場合は必ず設定する。
@@ -309,5 +316,20 @@ void EffectManager::StopAllEffect()
 	if (manager != nullptr)
 	{
 		manager->StopAllEffects();
+	}
+}
+
+//*----------------------------------------------------------------------------------------
+//*【?】トリガーを送信する
+//*----------------------------------------------------------------------------------------
+void EffectManager::SendTrigger(int playingEffectHandle, uint32_t trigger)
+{
+	//
+	// Dxlib側に専用処理がなかったので、Effekseerの管理クラスから直接呼ぶ
+	//
+	::Effekseer::ManagerRef manager = GetEffekseer3DManager();
+	if (manager != nullptr)
+	{
+		manager->SendTrigger(playingEffectHandle, trigger);
 	}
 }
